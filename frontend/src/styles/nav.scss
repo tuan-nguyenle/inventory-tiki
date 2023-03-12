@@ -1,0 +1,162 @@
+.container_sidebar {
+    display: flex;
+
+    main {
+        width: 100%;
+        padding: 20px;
+        min-height: 100vh;
+
+    }
+
+    .sidebar {
+        background: #272a2d;
+        color: #fff;
+        width: 200px;
+        position: relative;
+    }
+
+    .top_section {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+    }
+
+    .logo {
+        width: 120px;
+    }
+
+    .nav_avatar {
+        display: flex;
+        align-items: center;
+
+    }
+
+    .avatar_hover {
+        display: flex;
+        padding: 10px 5px;
+        text-decoration: none;
+        color: #f6cece;
+    }
+
+    .avatar {
+        height: 35px;
+        width: 2rem;
+        border-radius: 50%;
+    }
+
+
+    .info {
+        .NameUser {
+            padding: 5px 10px;
+        }
+    }
+
+
+
+
+
+
+
+    .bars {
+        display: flex;
+        font-size: 30px;
+        margin-left: 20px;
+    }
+
+    // .activelink {
+    //     display: flex;
+    //     color: rgb(222, 40, 40);
+    //     text-decoration: none;
+    //     padding: 10px 5px;
+    //     background: rgb(168, 166, 166);
+
+    // }
+
+    // .nonelink {
+    //     display: flex;
+    //     color: #fff;
+    //     text-decoration: none;
+    //     padding: 10px 5px;
+    // }
+
+    // .nonelink:hover {
+    //     background: lightblue;
+    //     color: #000;
+    //     transition: all 0.5s;
+    // }
+
+    // .activelink:hover {
+    //     background: lightblue;
+    //     color: #000;
+    //     transition: all 0.5s;
+    // }
+
+    .activelink {
+        display: flex;
+        color: rgb(255, 255, 255);
+        text-decoration: none;
+        padding: 10px 5px;
+        background: #007bff;
+
+    }
+
+    .nonelink {
+        display: flex;
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 5px;
+    }
+
+    .nonelink:hover {
+        background: lightblue;
+        color: #000;
+        transition: all 0.5s;
+    }
+
+    .activelink:hover {
+        background: lightblue;
+        color: #000;
+        transition: all 0.5s;
+    }
+
+    .icon {
+        font-size: 20px;
+        padding: 0px 10px;
+    }
+
+    .link_text {
+        padding: 5px;
+    }
+
+    .nonelogout {
+        display: flex;
+        color: rgb(255, 255, 255);
+        text-decoration: none;
+        padding: 10px 5px;
+        position: fixed;
+        bottom: 0;
+        background-color: red;
+        width: 199px;
+
+    }
+
+    .icon_logout {
+        font-size: 20px;
+        padding: 0px 10px;
+    }
+
+    .bad {
+
+        color: #fff;
+        background-color: #17a2b8;
+        margin-top: 7px;
+        position: absolute;
+    }
+
+    .number {
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        padding-top: 5px;
+    }
+}

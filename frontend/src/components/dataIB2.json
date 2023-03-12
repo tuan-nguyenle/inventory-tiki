@@ -1,0 +1,59 @@
+[
+    "ARADIA887960",
+    {
+        "id": "1",
+        "productcode": "234324234234",
+        "productname": "Thùng catton",
+        "category": "Sản xuất",
+        "quantity": "1"
+    },
+    {
+        "id": "2",
+        "productcode": "234324234123",
+        "productname": "Thùng tu vit 2 đầu 300 cái",
+        "category": "Dụng cụ",
+        "quantity": "1"
+    },
+    {
+        "id": "3",
+        "productcode": "23432423432",
+        "productname": "Máy cưa",
+        "category": "Dụng cụ",
+        "quantity": "2"
+    },
+    {
+        "id": "4",
+        "productcode": "123124543454",
+        "productname": "Nắp bồn cầu VEGACERA",
+        "category": "Nội thất",
+        "quantity": "3"
+    },
+    {
+        "id": "5",
+        "productcode": "234324234678",
+        "productname": "Máy nóng lạnh Tosiba",
+        "category": "Điện lạnh",
+        "quantity": "1"
+    },
+    {
+        "id": "6",
+        "productcode": "23432423407657",
+        "productname": "Thùng bộ tu vít 42 đầu 300 cái",
+        "category": "Dụng cụ",
+        "quantity": "1"
+    },
+    {
+        "id": "7",
+        "productcode": "234324243567",
+        "productname": "Máy khoan",
+        "category": "Dụng cụ",
+        "quantity": "2"
+    },
+    {
+        "id": "8",
+        "productcode": "12312443535675",
+        "productname": "Bếp điện hihihaha",
+        "category": "Nội thất",
+        "quantity": "3"
+    }
+]

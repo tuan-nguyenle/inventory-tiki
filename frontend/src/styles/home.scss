@@ -1,0 +1,177 @@
+/// Grid system
+//
+// Generate semantic grid columns with these mixins.
+.Home_body {
+    @mixin make-container($gutter: $grid-gutter-width) {
+        width: 100%;
+        padding-right: $gutter * .5;
+        padding-left: $gutter * .5;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    @mixin make-row($gutter: $grid-gutter-width) {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -$gutter * .5;
+        margin-left: -$gutter * .5;
+    }
+
+    // For each breakpoint, define the maximum width of the container in a media query
+    @mixin make-container-max-widths($max-widths: $container-max-widths, $breakpoints: $grid-breakpoints) {
+
+        @each $breakpoint,
+        $container-max-width in $max-widths {
+            @include media-breakpoint-up($breakpoint, $breakpoints) {
+                max-width: $container-max-width;
+            }
+        }
+
+        @include deprecate("The `make-container-max-widths` mixin", "v4.5.2", "v5");
+    }
+
+    @mixin make-col-ready($gutter: $grid-gutter-width) {
+        position: relative;
+        // Prevent columns from becoming too narrow when at smaller grid tiers by
+        // always setting `width: 100%;`. This works because we use `flex` values
+        // later on to override this initial width.
+        width: 100%;
+        padding-right: $gutter * .5;
+        padding-left: $gutter * .5;
+    }
+
+    @mixin make-col($size, $columns: $grid-columns) {
+        flex: 0 0 percentage(divide($size, $columns));
+        // Add a `max-width` to ensure content within each column does not blow out
+        // the width of the column. Applies to IE10+ and Firefox. Chrome and Safari
+        // do not appear to require this.
+        max-width: percentage(divide($size, $columns));
+    }
+
+    @mixin make-col-auto() {
+        flex: 0 0 auto;
+        width: auto;
+        max-width: 100%; // Reset earlier grid tiers
+    }
+
+    @mixin make-col-offset($size, $columns: $grid-columns) {
+        $num: divide($size, $columns);
+        margin-left: if($num ==0, 0, percentage($num));
+    }
+
+    // Row columns
+    //
+    // Specify on a parent element(e.g., .row) to force immediate children into NN
+    // numberof columns. Supports wrapping to new lines, but does not do a Masonry
+    // style grid.
+    @mixin row-cols($count) {
+        >* {
+            flex: 0 0 divide(100%, $count);
+            max-width: divide(100%, $count);
+        }
+    }
+
+    .info-box {
+        box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+        border-radius: 0.25rem;
+        background-color: #fff;
+        display: -ms-flexbox;
+        display: flex;
+        margin-bottom: 1rem;
+        min-height: 80px;
+        padding: 0.5rem;
+        position: relative;
+        width: 100%;
+    }
+
+    .info-box .info-box-icon {
+        border-radius: 0.25rem;
+        -ms-flex-align: center;
+        align-items: center;
+        display: -ms-flexbox;
+        display: flex;
+        font-size: 1.875rem;
+        -ms-flex-pack: center;
+        justify-content: center;
+        text-align: center;
+        width: 70px;
+    }
+
+    .bg-info,
+    .bg-info>a {
+        color: #fff !important;
+    }
+
+    .bg-info {
+        background-color: #17a2b8 !important;
+    }
+
+    .bg-info {
+        background-color: #17a2b8 !important;
+
+    }
+
+    element.style {}
+
+    .fa,
+    .far,
+    .fas {
+        font-family: "Font Awesome 5 Free";
+    }
+
+    .fab,
+    .far {
+        font-weight: 400;
+    }
+
+    .fa,
+    .fab,
+    .fad,
+    .fal,
+    .far,
+    .fas {
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        display: inline-block;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        line-height: 1;
+    }
+
+    .info-box .info-box-content {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-pack: center;
+        justify-content: center;
+        line-height: 1.8;
+        -ms-flex: 1;
+        flex: 1;
+        padding: 0 10px;
+        overflow: hidden;
+    }
+
+    .info-box .info-box-text,
+    .info-box .progress-description {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .info-box .info-box-number {
+        display: block;
+        margin-top: 0.25rem;
+        font-weight: 700;
+    }
+
+    img {
+
+        padding: 15px 10px;
+        height: 100%;
+        width: 100%;
+
+    }
+}
