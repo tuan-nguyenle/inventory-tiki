@@ -3,7 +3,7 @@ import { body, validationResult } from "express-validator";
 import {
   RequestValidationErrors,
   DatabaseConnectionError,
-} from "../middleware/errors";
+} from "../middleware/error/errors";
 
 const router = express.Router();
 
@@ -41,8 +41,8 @@ router.post(
   }
 );
 
-router.get("/change-password", () => {
-  console.log("test-changed");
+router.get("/change-password", (req: Request, res: Response) => {
+  res.status(200).send({ msg: "login success" });
 });
 
 export { router as authentication };
