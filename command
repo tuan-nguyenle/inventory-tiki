@@ -9,7 +9,7 @@ execute() {
         clean_all
         ;;
     *)
-        docker exec -it backend-backend-nodejs-1 $commands
+        docker exec -it khoa_luan-backend-nodejs-1 $commands
         ;;
     esac
 }
