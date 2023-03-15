@@ -1,5 +1,5 @@
 import { ValidationError } from "express-validator";
-import { ErrorMessage } from "./custom-error";
+import { ErrorMessage } from "./error-messages";
 
 export class DatabaseConnectionError extends ErrorMessage {
   statusCode = 500;
@@ -34,5 +34,23 @@ export class RequestValidationError extends ErrorMessage {
     return this.errors.map((err) => {
       return { message: err.msg, field: err.param };
     });
+  }
+}
+
+export class NotFoundError extends ErrorMessage {
+  statusCode = 404;
+  constructor() {
+    super("Not Found this Route");
+
+    // only have when you extends
+    Object.setPrototypeOf(this, NotFoundError.prototype);
+  }
+
+  serializeErrors() {
+    return [
+      {
+        message: "Not Found",
+      },
+    ];
   }
 }

@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import {
-  RequestValidationErrors,
   DatabaseConnectionError,
+  RequestValidationError,
 } from "../middleware/error/errors";
 
 const router = express.Router();
@@ -27,11 +27,11 @@ router.post(
         "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character"
       ),
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      throw new RequestValidationErrors(errors.array());
+      throw new RequestValidationError(errors.array());
     }
 
     console.log("test login success");
