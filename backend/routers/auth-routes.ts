@@ -1,14 +1,13 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
-import {
-  DatabaseConnectionError,
-  RequestValidationError,
-} from "../middleware/error/errors";
+import { RequestValidationError } from "../middleware/error/errors";
+import { Role } from "../models/role.model";
 
 const router = express.Router();
 
-router.get("/login", (req, res) => {
-  res.send("api login");
+router.get("/create-role", (req, res) => {
+  Role.create({ description: "staff" }, { description: "manager" });
+  res.status(200).send({ msg: "Role add success" });
   console.log("test login");
 });
 
@@ -34,15 +33,8 @@ router.post(
       throw new RequestValidationError(errors.array());
     }
 
-    console.log("test login success");
-    throw new DatabaseConnectionError();
-
     res.status(200).send({ msg: "login success" });
   }
 );
-
-router.get("/change-password", (req: Request, res: Response) => {
-  res.status(200).send({ msg: "login success" });
-});
 
 export { router as authentication };

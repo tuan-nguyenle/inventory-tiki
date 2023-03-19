@@ -4,8 +4,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    environment:
-      - DB_HOST=database-mysql
     ports:
       - 8080:8080
     expose:
@@ -18,39 +16,12 @@ services:
     stdin_open: true
     tty: true
 
-  nginx:
-    image: nginx
-    restart: always
+  mongodb:
+    image: mongo
     ports:
-      - 80:80
-    networks:
-      - inventory_tiki
+      - 27017:27017
     volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf
-  # frontend-reactjs:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile.dev
-  #   volumes:
-  #     - /app/node_modules
-  #     - ./frontend:/app/
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - inventory_tiki
-  #   stdin_open: true
-
-  database-mysql:
-    image: mysql
-    ports:
-      - 3306:3306
-    expose:
-      - 3306
-    environment:
-      MYSQL_ROOT_PASSWORD: "inventory_tiki"
-      MYSQL_DATABASE: "inventory_tiki"
-      MYSQL_USER: "tuan"
-      MYSQL_PASSWORD: "tuan_inventory"
+      - ./mongodb:/data/db
     networks:
       - inventory_tiki
 
