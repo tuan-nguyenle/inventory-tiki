@@ -1,1 +1,1 @@
-docker exec -it backend-auth $@
+docker exec -it khoa_luan-backend-1 $@
