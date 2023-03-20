@@ -54,3 +54,21 @@ export class NotFoundError extends ErrorMessage {
     ];
   }
 }
+
+export class BadRequestError extends ErrorMessage {
+  statusCode = 400;
+  constructor(public message: string) {
+    super(message);
+
+    // only have when you extends
+    Object.setPrototypeOf(this, BadRequestError.prototype);
+  }
+
+  serializeErrors() {
+    return [
+      {
+        message: this.message,
+      },
+    ];
+  }
+}

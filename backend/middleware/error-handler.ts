@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ErrorMessage } from "./error/error-messages";
+
 export const errorsHandler = (
   err: Error,
   req: Request,
@@ -7,7 +8,7 @@ export const errorsHandler = (
   next: NextFunction
 ) => {
   if (err instanceof ErrorMessage) {
-    res.status(err.statusCode).send({
+    return res.status(err.statusCode).send({
       errors: err.serializeErrors(),
     });
   }

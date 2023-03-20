@@ -1,6 +1,9 @@
 import { Role } from "../models/role.model";
 
-const findRole = async (roleDescription: string) => {
-    
+const findOneRole = async (roleDescription: string) => {
+  return await Role.findOne({
+    description: roleDescription,
+  });
 };
-export { findRole };
+
+export { findOneRole };
