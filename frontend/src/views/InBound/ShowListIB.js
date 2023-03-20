@@ -39,6 +39,7 @@ const ShowListIB = React.forwardRef((props, ref) => {
                                         <th>STT</th>
                                         <th>Product code</th>
                                         <th>Product name</th>
+                                        <th>Supplier</th>
                                         <th>Category</th>
                                         <th>Quantity</th>
                                         <th>Date</th>
@@ -60,6 +61,7 @@ const ShowListIB = React.forwardRef((props, ref) => {
                                                     <td>{i + 1}</td>
                                                     <td>{data.productcode}</td>
                                                     <td>{data.productname}</td>
+                                                    <td>{data.supplier}</td>
                                                     <td>{data.category}</td>
                                                     <td>{data.quantity}</td>
                                                     <td>{data.date}</td>

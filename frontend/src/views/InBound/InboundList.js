@@ -28,7 +28,6 @@ const InboundList = (props) => {
     const [checkcontainer, setCheckcontainer] = useState(false);
     const [data, setData] = useState([]);
     const [misssave, setMisssave] = useState([]);
-    const [currentMisssave, setCurrentMisssave] = useState([]);
     const [containerbowl, setContainerbowl] = useState(
         {
             codecontainervalidate: container,
@@ -38,6 +37,7 @@ const InboundList = (props) => {
         productcode: "",
         codecontainer: "",
         productname: "",
+        supplier: "",
         category: "",
         quantity: 1,
     });
@@ -91,6 +91,7 @@ const InboundList = (props) => {
                         productcode: newdata.productcode,
                         productname: pr.productname,
                         category: pr.category,
+                        supplier: pr.supplier,
                         date: newdate,
                         quantity: newdata.quantity,
                     }
@@ -120,6 +121,7 @@ const InboundList = (props) => {
                 productcode: newdata.productcode,
                 productname: newdata.productname,
                 category: newdata.category,
+                supplier: newdata.supplier,
                 date: newdate,
                 quantity: newdata.quantity,
             }
@@ -130,6 +132,7 @@ const InboundList = (props) => {
                 quantity: newdata.quantity,
                 productname: "",
                 category: "",
+                supplier: ""
             });
         }
     }

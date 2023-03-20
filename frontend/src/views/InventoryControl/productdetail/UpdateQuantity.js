@@ -25,7 +25,6 @@ const UpdateQuantity = (props) => {
                 <ModalBody>
                     <form>
                         <div className="row">
-                            <p>Do you want to delete it ?</p>
                             <h2 className="text-warning"><small>This action cannot be undone !</small></h2>
                         </div>
                     </form>
