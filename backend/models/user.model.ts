@@ -4,7 +4,7 @@ import { Department } from "./department.model";
 
 interface User {
   username: string;
-  name: string;
+  fullname: string;
   password: string;
   phone: string;
   actived: true;
@@ -15,7 +15,7 @@ interface User {
 const UserSchema = new Schema<User, Document>(
   {
     username: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
+    fullname: { type: String, required: true },
     password: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     actived: { type: Boolean, required: true, default: true },
