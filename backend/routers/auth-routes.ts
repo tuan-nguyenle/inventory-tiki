@@ -80,6 +80,7 @@ router.post(
       .trim()
       .matches(/((09|03|07|08|05)+([0-9]{8})\b)/g)
       .withMessage("Example 09|03|07|08|05 12345678"),
+    body("role").trim(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
