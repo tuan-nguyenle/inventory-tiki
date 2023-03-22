@@ -3,6 +3,7 @@ import express from "express";
 import { body } from "express-validator";
 import * as userController from "../controller/user.controller";
 import * as departmentController from "../controller/department.controller";
+import { Role } from "../models/role.model";
 
 const router = express.Router();
 
@@ -13,7 +14,20 @@ router.post(
   departmentController.addNewDepartment
 );
 
+// Add new New Role
+// router.post(
+//   "/api/roles",
+//   // [body("department").trim().isLength({ min: 4, max: 25 })],
+//   async () => {
+//     await new Role({
+//       description: "manager",
+//     }).save();
+//   }
+// );
+
 // Login
+
+// login
 router.post(
   "/api/login",
   [
