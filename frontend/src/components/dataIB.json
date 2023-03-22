@@ -5,27 +5,31 @@
         "productcode": "101",
         "productname": "Thùng catton",
         "category": "Sản xuất",
-        "quantity": "1"
+        "quantity": "1",
+        "supplier": "1"
     },
     {
         "id": "2",
         "productcode": "102",
         "productname": "Thùng tu vit 2 đầu 300 cái",
         "category": "Dụng cụ",
-        "quantity": "1"
+        "quantity": "1",
+        "supplier": "1"
     },
     {
         "id": "3",
         "productcode": "103",
         "productname": "Máy cưa",
         "category": "Dụng cụ",
-        "quantity": "2"
+        "quantity": "2",
+        "supplier": "1"
     },
     {
         "id": "4",
         "productcode": "104",
         "productname": "Nắp bồn cầu VEGACERA",
         "category": "Nội thất",
-        "quantity": "3"
+        "quantity": "3",
+        "supplier": "1"
     }
 ]

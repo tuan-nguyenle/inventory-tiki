@@ -3,8 +3,11 @@ import { NavLink, Outlet } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg"
 import avatar from "../../assets/images/Avatar/Loc.jpg";
 import {
-    FaBell, FaEdit, FaBars, FaTh, FaSignOutAlt, FaUsers, FaProductHunt, FaBox
+    FaBell, FaWarehouse, FaBars, FaTh, FaSignOutAlt, FaUsers, FaProductHunt, FaBox
 } from "react-icons/fa";
+import {
+    ImStatsBars, ImBin
+} from "react-icons/im";
 
 const MainIC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +27,12 @@ const MainIC = () => {
         //     number: "4"
         // },
         {
+            path: "Storage",
+            name: "Storage",
+            icon: <FaWarehouse />,
+            number: ""
+        },
+        {
             path: "ProductManagement",
             name: "Product Management",
             icon: <FaProductHunt />,
@@ -33,6 +42,18 @@ const MainIC = () => {
             path: "ShelfManagement",
             name: "Shelf Management",
             icon: <FaBox />,
+            number: ""
+        },
+        {
+            path: "DefectiveProduct",
+            name: "Defective Product",
+            icon: <ImBin />,
+            number: ""
+        },
+        {
+            path: "Statistics",
+            name: "Statistics",
+            icon: <ImStatsBars />,
             number: ""
         },
         {
