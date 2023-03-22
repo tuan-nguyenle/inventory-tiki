@@ -1,4 +1,3 @@
-import "express-async-errors";
 import { User } from "../models/user.model";
 import { Password } from "../config/cryto";
 import { findOneRole } from "./role.services";
@@ -16,4 +15,41 @@ export const addNewUser = async (userAttributes: any) => {
     departments: department?._id,
   });
   return user.save();
+};
+
+export const checkUser = async (username: string) => {
+  return await User.aggregate([
+    {
+      $match: {
+        username: username,
+      },
+    },
+    {
+      $lookup: {
+        from: "roles",
+        localField: "roles",
+        foreignField: "_id",
+        as: "Role",
+      },
+    },
+    {
+      $lookup: {
+        from: "departments",
+        localField: "departments",
+        foreignField: "_id",
+        as: "Department",
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        username: 1,
+        fullname: 1,
+        phone: 1,
+        password: 1,
+        "Role.description": 1,
+        "Department.description": 1,
+      },
+    },
+  ]);
 };

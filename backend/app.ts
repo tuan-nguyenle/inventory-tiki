@@ -1,15 +1,25 @@
+import "express-async-errors";
 import express from "express";
+import cookieSession from "cookie-session";
 import { json } from "body-parser";
 import { routes } from "./routers";
 import { errorsHandler } from "./middleware/error-handler";
 import { NotFoundError } from "./middleware/error/errors";
 import { ConnectDB } from "./config/mongodb";
-import "express-async-errors";
 
 const app = express();
 const HOST = "8080";
 
+app.set("trust proxy", true);
+
 app.use(json());
+
+app.use(
+  cookieSession({
+    signed: false,
+    secure: true,
+  })
+);
 
 app.use("/", routes);
 

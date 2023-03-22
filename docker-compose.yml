@@ -13,6 +13,7 @@ services:
       - ./backend:/app/
     networks:
       - inventory_tiki
+    restart: on-failure
     stdin_open: true
     tty: true
 
