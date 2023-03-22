@@ -31,8 +31,10 @@ const ShelfInformation = () => {
                                             <th>STT</th>
                                             <th>Shelf</th>
                                             <th>Product Name</th>
+                                            <th>Product Code</th>
+                                            <th>Supplier</th>
                                             <th>Quantity</th>
-                                            <th style={{ width: "250px" }}>Extends</th>
+                                            <th style={{ width: "10%" }}>Extends</th>
                                         </tr>
                                     </thead>
                                     <tbody id="datarow">
@@ -40,6 +42,8 @@ const ShelfInformation = () => {
                                             <td>1</td>
                                             <td>A12B1</td>
                                             <td>Thùng tu vít 2 đầu thùng 300 cái</td>
+                                            <td>102</td>
+                                            <td>1</td>
                                             <td>20</td>
                                             <td>
                                                 {edit ?
@@ -60,7 +64,8 @@ const ShelfInformation = () => {
                                                     </>
                                                     :
                                                     <div>
-                                                        <Button variant="warning" onClick={changeIconedit}>Update Quantity</Button>
+                                                        <Button style={{ marginRight: "5px" }} variant="warning" onClick={changeIconedit}>Quantity</Button>
+                                                        <Button variant="danger">Defect</Button>
                                                     </div>
 
                                                 }

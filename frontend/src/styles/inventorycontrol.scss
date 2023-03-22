@@ -3,6 +3,7 @@
         height: 5px;
         border: 3;
         box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        margin-top: 1px;
     }
 
     .nav-tabs {
@@ -32,6 +33,7 @@
     .nav-item {
         border-style: groove;
         margin-right: 5px;
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.13), 0 1px 3px rgba(0, 0, 0, 0.2);
     }
 
     .activelink2 {
@@ -77,6 +79,30 @@
         }
     }
 
+    .ant-menu {
+        background: none;
+        border: none;
+        border-radius: 0;
+
+
+        li {
+            margin-top: 10px;
+            background-color: none;
+            margin-right: 5px;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.13), 0 1px 3px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+
+            a {
+                text-decoration: none;
+            }
+        }
+    }
+
+    .ant-menu-item {
+        font-size: 15px;
+        color: #000000;
+
+    }
 }
 
 
@@ -162,4 +188,63 @@
     .card {
         margin-top: 30px
     }
+}
+
+.Stogare_body {
+    hr {
+        height: 5px;
+        border: 3;
+        box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .ant-card .ant-card-head {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        min-height: 56px;
+        margin-bottom: -1px;
+        padding: 0 24px;
+        color: rgba(0, 0, 0, 0.88);
+        font-weight: 600;
+        font-size: 18px;
+        background: #3d72f9;
+        border-bottom: 1px solid #1802bb;
+        border-radius: 8px 8px 0 0;
+        text-align: center;
+    }
+
+    .Fa {
+        font-size: 20px;
+        padding: 0px;
+        position: relative;
+        top: 30%;
+        left: 25%;
+    }
+
+    .card {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.13), 0 1px 3px rgba(0, 0, 0, 0.2);
+        font-size: 17px;
+    }
+
+    .scrollable-card {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .active1 {
+        display: flex;
+        color: rgb(255, 0, 0);
+        text-decoration: none;
+    }
+
+    .none1 {
+        display: flex;
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .detail {
+        cursor: pointer;
+    }
+
 }

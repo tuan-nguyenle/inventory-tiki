@@ -46,8 +46,8 @@ const ShelfManagement = () => {
                                                 <td>A</td>
                                                 <td>A1A1</td>
                                                 <td>
-                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
                                                     <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
+                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -55,8 +55,8 @@ const ShelfManagement = () => {
                                                 <td>A</td>
                                                 <td>A1A2</td>
                                                 <td>
-                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
                                                     <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
+                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
                                                 </td>
                                             </tr>
                                         </tbody>

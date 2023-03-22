@@ -29,6 +29,7 @@ const ListConfirn = (props) => {
                                             <th>Product code</th>
                                             <th>Product name</th>
                                             <th>Category</th>
+                                            <th>Supplier</th>
                                             <th>Quantity</th>
                                             <th>Date</th>
                                         </tr>
@@ -39,6 +40,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -47,6 +49,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -55,6 +58,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -63,6 +67,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -71,6 +76,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -79,6 +85,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -87,6 +94,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -95,6 +103,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -103,6 +112,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -111,6 +121,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -119,6 +130,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
@@ -127,6 +139,7 @@ const ListConfirn = (props) => {
                                             <td>8938510904063</td>
                                             <td>Bộ trục ròng rọc</td>
                                             <td>Linh kiện</td>
+                                            <td>1</td>
                                             <td>5</td>
                                             <td>08/03/2023</td>
                                         </tr>
