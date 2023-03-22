@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import '../../styles/loginstyle.scss';
+import { toast } from 'react-toastify';
 import logo from '../../assets/images/logo.jpg';
 import { FaArrowRight, FaEye, FaEyeSlash, FaUser, FaLock } from "react-icons/fa";
+import handleLoginAPI from "../../services/LoginServices";
+import jwt_decode from "jwt-decode";
 function Login() {
     const [eye, setEye] = useState(false);
     const changeIconEye = () => setEye(!eye);
@@ -11,12 +14,32 @@ function Login() {
     });
     const { username, password } = account;
     const changeHandler = (e) => {
-        setAccount({ ...account, [e.target.name]: [e.target.value] });
-        // console.log(account)
+        const { id, value } = e.target
+        setAccount(prevState => ({
+            ...prevState,
+            [id]: value
+        }
+        ))
+    }
+    const callAPIlogin = async () => {
+        try {
+            await handleLoginAPI(account);
+        } catch (error) {
+            console.log(error);
+        }
     }
     const HandlerSubmit = (e) => {
         e.preventDefault();
-        console.log(account);
+        if (!account.username || !account.password) {
+            toast.error("Missing ! Please fill in the missing information.");
+            return;
+        }
+        let API = callAPIlogin();
+        if (API) {
+            var token = "API";
+            var decoded = jwt_decode(token);
+            console.log(decoded);
+        }
     }
     return (
         <div className="body_login">
@@ -29,11 +52,11 @@ function Login() {
                         <form className="login">
                             <div className="login__field">
                                 <i className="login__icon"><FaUser /></i>
-                                <input name="username" type="text" className="login__input" placeholder="Username" value={username} onChange={changeHandler} />
+                                <input id="username" type="text" className="login__input" placeholder="Username" value={username} onChange={changeHandler} />
                             </div>
                             <div className="login__field">
                                 <i className="login__icon"><FaLock /></i>
-                                <input name="password" type={eye ? "text" : "password"} className="login__input" placeholder="Password" value={password} onChange={changeHandler} />
+                                <input id="password" type={eye ? "text" : "password"} className="login__input" placeholder="Password" value={password} onChange={changeHandler} />
                                 <span
                                     onClick={changeIconEye}
                                 > {eye ? <i style={{ cursor: "pointer" }}><FaEye /></i> : <i style={{ cursor: "pointer" }}><FaEyeSlash /></i>}</span>

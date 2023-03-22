@@ -55,7 +55,7 @@ export async function login(req: Request, res: Response) {
       Role: user[0].Role.description,
       Department: user[0].phone.description,
     },
-    process.env.JWT_KEY!
+    "3fa7beca57b0cdad7b39ebfa4a95b3c8be58f7e598cbdd1bf6aa3031f753ed82"
   );
 
   console.log(userJwt);
