@@ -27,7 +27,7 @@ const NavIB = () => {
             {/* <React.StrictMode> */}
             < BrowserRouter >
                 <Routes>
-                    <Route path="/" exact element={<Login />} />
+                    {/* <Route path="/" exact element={<Login />} /> */}
                     <Route path="MainIB" element={<MainIB />} >
                         <Route index element={<Home />} />
                         <Route path="User" exact element={<User />} />

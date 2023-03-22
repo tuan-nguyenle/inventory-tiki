@@ -6,12 +6,14 @@ import { routes } from "./routers";
 import { errorsHandler } from "./middleware/error-handler";
 import { NotFoundError } from "./middleware/error/errors";
 import { ConnectDB } from "./config/mongodb";
+import cors from "cors";
 
 const app = express();
 const HOST = "8080";
 
-app.set("trust proxy", true);
+// app.set("trust proxy", true);
 
+app.use(cors());
 app.use(json());
 
 app.use(

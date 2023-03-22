@@ -7,9 +7,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NavIB from "./routes/NavIB";
 import NavIC from './routes/NavIC';
+import Login from './views/Account/Login';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
+    <Login />
     <NavIB />
     <NavIC />
     <ToastContainer
