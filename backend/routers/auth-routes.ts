@@ -1,9 +1,8 @@
-import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-import { RequestValidationError } from "../middleware/error/errors";
-import { addNewDepartment } from "../controller/department.controller";
 import "express-async-errors";
-import { addNewUser } from "../controller/user.controller";
+import express from "express";
+import { body } from "express-validator";
+import * as userController from "../controller/user.controller";
+import * as departmentController from "../controller/department.controller";
 
 const router = express.Router();
 
@@ -11,16 +10,7 @@ const router = express.Router();
 router.post(
   "/api/department",
   [body("department").trim().isLength({ min: 4, max: 25 })],
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
-
-    await addNewDepartment(req.body.department);
-
-    res.status(200).send({ msg: "Add New Department Success" });
-  }
+  departmentController.addNewDepartment
 );
 
 // Login
@@ -39,15 +29,7 @@ router.post(
         "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character"
       ),
   ],
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
-
-    res.status(200).send({ msg: "login success" });
-  }
+  userController.login
 );
 
 // Add New User
@@ -82,16 +64,7 @@ router.post(
       .withMessage("Example 09|03|07|08|05 12345678"),
     body("role").trim(),
   ],
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
-
-    addNewUser(req.body);
-
-    res.status(200).send({ msg: "register success" });
-  }
+  userController.addNewUser
 );
+
 export { router as authentication };
