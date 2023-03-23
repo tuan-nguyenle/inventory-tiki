@@ -52,18 +52,19 @@ export async function login(req: Request, res: Response) {
       username: user[0].username,
       fullname: user[0].fullname,
       phone: user[0].phone,
-      Role: user[0].Role.description,
-      Department: user[0].phone.description,
+      Role: user[0].Role[0],
+      Department: user[0].Department[0],
     },
-    "3fa7beca57b0cdad7b39ebfa4a95b3c8be58f7e598cbdd1bf6aa3031f753ed82"
+    process.env.JWT_KEY!
   );
-
-  console.log(userJwt);
 
   // Store it on session object
   req.session = {
     jwt: userJwt,
   };
+
+  console.log(req.session);
+  
 
   return res.status(201).send({ user: user[0] });
 }
