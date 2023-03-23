@@ -34,6 +34,15 @@ const UserSchema = new Schema<User, Document>(
   },
   {
     timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+        delete ret.__v;
+        delete ret.actived;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+      },
+    },
   }
 );
 

@@ -16,7 +16,7 @@ router.post(
 
 // Add new New Role
 // router.post(
-//   "/api/roles",
+//   "/roles",
 //   // [body("department").trim().isLength({ min: 4, max: 25 })],
 //   async () => {
 //     await new Role({
@@ -48,7 +48,7 @@ router.post(
 
 // Add New User
 router.post(
-  "/api/user/",
+  "/api/user",
   [
     body("username")
       .trim()

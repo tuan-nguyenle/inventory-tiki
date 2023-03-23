@@ -37,10 +37,7 @@ export async function login(req: Request, res: Response) {
     throw new BadRequestError("Not User Exited");
   }
 
-  const matchPassword = await Password.comparePassword(
-    password,
-    user[0].password
-  );
+  const matchPassword = await Password.comparePassword(password, user.password);
 
   if (!matchPassword) {
     throw new BadRequestError("Password not matches");
@@ -48,12 +45,12 @@ export async function login(req: Request, res: Response) {
 
   const userJwt = jwt.sign(
     {
-      id: user[0]._id,
-      username: user[0].username,
-      fullname: user[0].fullname,
-      phone: user[0].phone,
-      Role: user[0].Role[0],
-      Department: user[0].Department[0],
+      id: user._id,
+      username: user.username,
+      fullname: user.fullname,
+      phone: user.phone,
+      Role: user.roles,
+      Department: user.departments,
     },
     process.env.JWT_KEY!
   );
@@ -63,8 +60,5 @@ export async function login(req: Request, res: Response) {
     jwt: userJwt,
   };
 
-  console.log(req.session);
-  
-
-  return res.status(201).send({ user: user[0] });
+  return res.status(201).send({ user: user });
 }
