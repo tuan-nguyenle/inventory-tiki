@@ -1,13 +1,26 @@
 version: "3"
 services:
+  nginx:
+    depends_on:
+      - backend
+    restart: always # because it is routing traffic to our entire app
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      - inventory_tiki
+
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - 8080:8080
-    expose:
-      - 8080
+    environment:
+      JWT_KEY: "${JWT_KEY}"
+      SESSION_KEY: "${SESSION_KEY}"
     volumes:
       - /app/node_modules
       - ./backend:/app/

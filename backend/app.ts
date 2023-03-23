@@ -32,6 +32,7 @@ app.use(
 app.use("/", routes);
 
 app.all("*", async (req, res) => {
+  console.log(req.protocol + "://" + req.get("host") + req.originalUrl);
   throw new NotFoundError();
 });
 

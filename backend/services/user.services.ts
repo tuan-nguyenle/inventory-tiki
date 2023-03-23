@@ -18,38 +18,39 @@ export const addNewUser = async (userAttributes: any) => {
 };
 
 export const checkUser = async (username: string) => {
-  return await User.aggregate([
-    {
-      $match: {
-        username: username,
-      },
-    },
-    {
-      $lookup: {
-        from: "roles",
-        localField: "roles",
-        foreignField: "_id",
-        as: "Role",
-      },
-    },
-    {
-      $lookup: {
-        from: "departments",
-        localField: "departments",
-        foreignField: "_id",
-        as: "Department",
-      },
-    },
-    {
-      $project: {
-        _id: 1,
-        username: 1,
-        fullname: 1,
-        phone: 1,
-        password: 1,
-        "Role.description": 1,
-        "Department.description": 1,
-      },
-    },
-  ]);
+  return User.findOne({ username }).populate("roles").populate("departments");
+  // return await User.aggregate([
+  //   {
+  //     $match: {
+  //       username: username,
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "roles",
+  //       localField: "roles",
+  //       foreignField: "_id",
+  //       as: "Role",
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "departments",
+  //       localField: "departments",
+  //       foreignField: "_id",
+  //       as: "Department",
+  //     },
+  //   },
+  //   {
+  //     $project: {
+  //       _id: 1,
+  //       username: 1,
+  //       fullname: 1,
+  //       phone: 1,
+  //       password: 1,
+  //       "Role.description": 1,
+  //       "Department.description": 1,
+  //     },
+  //   },
+  // ]);
 };
