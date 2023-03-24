@@ -9,11 +9,19 @@ import NavIB from "./routes/NavIB";
 import NavIC from './routes/NavIC';
 import Login from './views/Account/Login';
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const session = JSON.parse(sessionStorage.getItem('user'));
 root.render(
   <>
-    <Login />
-    <NavIB />
-    <NavIC />
+    {session ? (
+      <>
+        <NavIB />
+        {/* <NavIC /> */}
+      </>
+    ) : (
+      <Login />
+    )}
+
+
     <ToastContainer
       position="top-right"
       autoClose={3000}

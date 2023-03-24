@@ -27,19 +27,19 @@ const NavIB = () => {
             {/* <React.StrictMode> */}
             < BrowserRouter >
                 <Routes>
-                    {/* <Route path="/" exact element={<Login />} /> */}
-                    <Route path="MainIB" element={<MainIB />} >
+                    <Route path="/" element={<MainIB />} >
                         <Route index element={<Home />} />
-                        <Route path="User" exact element={<User />} />
-                        <Route path='Home' element={<Home />} />
-                        <Route path='Notification' element={<Notification />} />
-                        <Route path='InboundList' element={<InboundList />} />
-                        <Route path='ConfirmationInbound' element={<ConfirmationInbound />} />
-                        <Route path='Accountmanagement' element={<Accountmanagement />} />
-                        <Route path='Reback' element={<Reback />} />
-                        <Route path='PrintBowl' element={<PrintBowl />} />
+                        <Route path="MainIB" exact element={<Home />} />
+                        <Route path="MainIB/User" exact element={<User />} />
+                        <Route path='MainIB/Home' element={<Home />} />
+                        <Route path='MainIB/Notification' element={<Notification />} />
+                        <Route path='MainIB/InboundList' element={<InboundList />} />
+                        <Route path='MainIB/ConfirmationInbound' element={<ConfirmationInbound />} />
+                        <Route path='MainIB/Accountmanagement' element={<Accountmanagement />} />
+                        <Route path='MainIB/Reback' element={<Reback />} />
+                        <Route path='MainIB/PrintBowl' element={<PrintBowl />} />
                     </Route>
-                    <Route path='/LogOut' element={<LogOut />} />
+                    {/* <Route path='/LogOut' element={<LogOut />} /> */}
                 </Routes>
             </BrowserRouter >
             {/* </React.StrictMode> */}

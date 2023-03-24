@@ -9,55 +9,59 @@ import avatar from "../../assets/images/Avatar/Loc.jpg";
 import {
     FaBell, FaWarehouse, FaEdit, FaBars, FaUser, FaTh, FaSignOutAlt, FaBarcode, FaCheckDouble, FaUsers
 } from "react-icons/fa";
-
 const MainIB = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
     const menuItem = [
         {
-            path: "Home",
+            path: "MainIB/Home",
             name: "Home",
             icon: <FaTh />,
             number: ""
         },
         {
-            path: "Notification",
+            path: "MainIB/Notification",
             name: "Notification",
             icon: <FaBell />,
             number: "4"
         },
         {
-            path: "InboundList",
+            path: "MainIB/InboundList",
             name: "Create Inbound List",
             icon: <FaWarehouse />,
             number: ""
         },
         {
-            path: "Reback",
+            path: "MainIB/Reback",
             name: "Create Reback",
             icon: <FaEdit />,
             number: ""
         },
         {
-            path: "PrintBowl",
+            path: "MainIB/PrintBowl",
             name: "Print Bowl",
             icon: <FaBarcode />,
             number: ""
         },
         {
-            path: "ConfirmationInbound",
+            path: "MainIB/ConfirmationInbound",
             name: "Confirmation Inbound",
             icon: <FaCheckDouble />,
             number: ""
         },
         {
-            path: "Accountmanagement",
+            path: "MainIB/Accountmanagement",
             name: "Account management",
             icon: <FaUsers />,
             number: ""
         }
     ]
+    function handleLogout() {
+        sessionStorage.removeItem('user');
+        // window.location.reload();
+        window.location.href = '/login';
+    }
     return (
         <>
             <div className="container_sidebar">
@@ -88,7 +92,7 @@ const MainIB = () => {
                             </NavLink>
                         ))
                     }
-                    <NavLink to="/Logout" key={-1} style={{ width: isOpen ? "199px" : "50px" }} className={({ isActive }) => (isActive ? 'nonelogout' : 'nonelogout')}>
+                    <NavLink to="#" key={-1} style={{ width: isOpen ? "199px" : "50px" }} className={({ isActive }) => (isActive ? 'nonelogout' : 'nonelogout')} onClick={handleLogout}>
                         <div className="icon_logout"><FaSignOutAlt /></div>
                         <div style={{ display: isOpen ? "block" : "none" }} className="link_text">Log Out</div>
                     </NavLink>
