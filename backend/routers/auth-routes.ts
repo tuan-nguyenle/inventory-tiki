@@ -81,4 +81,7 @@ router.post(
   userController.addNewUser
 );
 
+// getProfile
+router.get("/api/users/profile", userController.getCurrentUser);
+
 export { router as authentication };

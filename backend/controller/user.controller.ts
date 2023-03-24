@@ -23,7 +23,7 @@ export const addNewUser = async (req: Request, res: Response) => {
   res.status(200).send({ msg: "register success", user: user });
 };
 
-export async function login(req: Request, res: Response) {
+export const login = async (req: Request, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -61,4 +61,10 @@ export async function login(req: Request, res: Response) {
   };
 
   return res.status(201).send({ user: user });
-}
+};
+
+export const getCurrentUser = async (req: Request, res: Response) => {
+  if (!req.session?.jwt) {
+    // throw new ""();
+  }
+};
