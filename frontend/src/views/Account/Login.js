@@ -12,8 +12,16 @@ function Login() {
         username: "",
         password: "",
     });
+    const [err, setErr] = useState({
+        errmess: "",
+    });
     const { username, password } = account;
+    const currentUrl = window.location.href; // lấy URL hiện tại của trang
+
     const changeHandler = (e) => {
+        setErr({
+            errmess: "",
+        })
         const { id, value } = e.target
         setAccount(prevState => ({
             ...prevState,
@@ -21,14 +29,25 @@ function Login() {
         }
         ))
     }
+
     const callAPIlogin = async () => {
         try {
-            await handleLoginAPI(account);
+            let a = await handleLoginAPI(account);
+            // if (a && !err.errmess) {
+            //     sessionStorage.setItem('user', JSON.stringify(a));
+            //     window.location.href = "/";
+            // }
+            // const a = JSON.parse(sessionStorage.getItem('a'));
         } catch (error) {
-            console.log(error);
+            setErr({
+                errmess: "The username or password you entered is incorrect!"
+            })
         }
     }
     const HandlerSubmit = (e) => {
+        setErr({
+            errmess: "",
+        })
         e.preventDefault();
         if (!account.username || !account.password) {
             toast.error("Missing ! Please fill in the missing information.");
@@ -36,11 +55,13 @@ function Login() {
         }
         let API = callAPIlogin();
         if (API) {
-            var token = "API";
-            var decoded = jwt_decode(token);
-            console.log(decoded);
+
+            // var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MWFjMWEyNDMzMjJkZmRkYmM5M2IwNiIsInVzZXJuYW1lIjoiVHVhbkxlMjUxMjIwMDEiLCJmdWxsbmFtZSI6IkxlIE5ndXllbiBUdWFuIiwicGhvbmUiOiIwODY5MjM2NTE0IiwiaWF0IjoxNjc5NDgyMTkwfQ.602TIYBoKj4XsxTXihrvkmxl1pI7RfUl5437BUicU9s";
+            // var decoded = jwt_decode(token);
+            // console.log(decoded);
         }
     }
+
     return (
         <div className="body_login">
             <div className="container_login">
@@ -49,17 +70,20 @@ function Login() {
                         <div className="Login_text_top">
                             <h1>Login Account</h1>
                         </div>
-                        <form className="login">
+                        <form className="login" onSubmit={HandlerSubmit}>
                             <div className="login__field">
                                 <i className="login__icon"><FaUser /></i>
-                                <input id="username" type="text" className="login__input" placeholder="Username" value={username} onChange={changeHandler} />
+                                <input id="username" type="text" className="login__input" placeholder="Username" value={username} onChange={changeHandler} autoComplete="off" />
                             </div>
                             <div className="login__field">
                                 <i className="login__icon"><FaLock /></i>
-                                <input id="password" type={eye ? "text" : "password"} className="login__input" placeholder="Password" value={password} onChange={changeHandler} />
+                                <input id="password" type={eye ? "text" : "password"} className="login__input" placeholder="Password" value={password} onChange={changeHandler} required />
                                 <span
                                     onClick={changeIconEye}
                                 > {eye ? <i style={{ cursor: "pointer" }}><FaEye /></i> : <i style={{ cursor: "pointer" }}><FaEyeSlash /></i>}</span>
+                            </div>
+                            <div>
+                                <p style={{ color: "red" }} >{err.errmess}</p>
                             </div>
                             <button name="submit" className="button login__submit" onClick={HandlerSubmit} >
                                 <span className="button__text">Log In Now </span>
