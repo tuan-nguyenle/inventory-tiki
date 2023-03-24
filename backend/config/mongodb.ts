@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const ConnectDB = async () => {
   try {
     await mongoose.connect("mongodb://mongodb:27017/Inventory-tiki", {});
-    console.log("Connected to mongodb");
+    console.log(`🟢  Connected to Mongodb with ports 27017`);
   } catch (error) {
-    console.log(error);
+    console.error("🔴  " + error);
   }
 };
 
