@@ -12,6 +12,21 @@ services:
     networks:
       - inventory_tiki
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    networks:
+      - inventory_tiki
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app/
+    restart: on-failure
+    stdin_open: true
+    tty: true
+
   backend:
     build:
       context: ./backend
