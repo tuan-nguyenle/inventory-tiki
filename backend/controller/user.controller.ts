@@ -2,12 +2,13 @@ import * as User from "../services/user.services";
 import { Request, Response } from "express";
 import {
   BadRequestError,
+  MissingTokenError,
   RequestValidationError,
 } from "../middleware/error/errors";
 import { Password } from "../config/cryto";
 import { validationResult } from "express-validator";
 import "express-async-errors";
-import jwt from "jsonwebtoken";
+import * as jwt from "../config/jwt";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -43,16 +44,16 @@ export const login = async (req: Request, res: Response) => {
     throw new BadRequestError("Password not matches");
   }
 
-  const userJwt = jwt.sign(
+  const userJwt = jwt.signJwt(
     {
-      id: user._id,
+      id: user.id,
       username: user.username,
       fullname: user.fullname,
       phone: user.phone,
       Role: user.roles,
       Department: user.departments,
     },
-    process.env.JWT_KEY!
+    {}
   );
 
   // Store it on session object
@@ -65,6 +66,13 @@ export const login = async (req: Request, res: Response) => {
 
 export const getCurrentUser = async (req: Request, res: Response) => {
   if (!req.session?.jwt) {
-    // throw new ""();
+    throw new MissingTokenError("Please Login !!!");
+  }
+
+  try {
+    const payload = jwt.verifyJwt(req.session.jwt);
+    res.send({ user: payload });
+  } catch (error) {
+    throw new MissingTokenError("Token is not invalid");
   }
 };
