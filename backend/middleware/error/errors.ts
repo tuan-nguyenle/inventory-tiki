@@ -72,3 +72,21 @@ export class BadRequestError extends ErrorMessage {
     ];
   }
 }
+
+export class MissingTokenError extends ErrorMessage {
+  statusCode = 400;
+  constructor(public message: string) {
+    super(message);
+
+    // only have when you extends
+    Object.setPrototypeOf(this, MissingTokenError.prototype);
+  }
+
+  serializeErrors() {
+    return [
+      {
+        message: this.message,
+      },
+    ];
+  }
+}

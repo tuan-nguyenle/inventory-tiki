@@ -3,7 +3,6 @@ import express from "express";
 import { body } from "express-validator";
 import * as userController from "../controller/user.controller";
 import * as departmentController from "../controller/department.controller";
-import { Role } from "../models/role.model";
 
 const router = express.Router();
 

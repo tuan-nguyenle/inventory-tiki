@@ -12,21 +12,6 @@ services:
     networks:
       - inventory_tiki
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-    networks:
-      - inventory_tiki
-    volumes:
-      - /app/node_modules
-      - ./frontend:/app/
-    restart: on-failure
-    stdin_open: true
-    tty: true
-
   backend:
     build:
       context: ./backend
@@ -34,8 +19,9 @@ services:
     ports:
       - 8080:8080
     environment:
-      JWT_KEY: "${JWT_KEY}"
       SESSION_KEY: "${SESSION_KEY}"
+      ACCESS_TOKEN_PUBLIC_KEY: "${ACCESS_TOKEN_PUBLIC_KEY}"
+      ACCESS_TOKEN_PRIVATE_KEY: "${ACCESS_TOKEN_PRIVATE_KEY}"
     volumes:
       - /app/node_modules
       - ./backend:/app/

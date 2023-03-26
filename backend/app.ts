@@ -60,7 +60,10 @@ const start = async () => {
 ⢐ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠿⠀⢈⠥⠹⢿⣬⣷⠌⠣⢑⡆⣭⣧⠀⠀⠀⢂⠀⠀⠀⠀⢐
 ⢐⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣁⣉⣉⣓⣚⣧⣾⣿⣿⣆⣁⣐⣀⣀⣀⣐⣀⣀⢐
     `);
-  if (!process.env.JWT_KEY) {
+  if (
+    !process.env.ACCESS_TOKEN_PUBLIC_KEY ||
+    !process.env.ACCESS_TOKEN_PRIVATE_KEY
+  ) {
     throw new Error("JWT_KEY must be defined");
   }
 
