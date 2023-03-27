@@ -2,7 +2,7 @@ version: "3"
 services:
   nginx:
     depends_on:
-      - backend
+      - auth
     restart: always # because it is routing traffic to our entire app
     build:
       dockerfile: Dockerfile
@@ -12,9 +12,9 @@ services:
     networks:
       - inventory_tiki
 
-  backend:
+  auth:
     build:
-      context: ./backend
+      context: ./auth
       dockerfile: Dockerfile
     ports:
       - 8080:8080
@@ -24,7 +24,7 @@ services:
       ACCESS_TOKEN_PRIVATE_KEY: "${ACCESS_TOKEN_PRIVATE_KEY}"
     volumes:
       - /app/node_modules
-      - ./backend:/app/
+      - ./auth:/app/
     networks:
       - inventory_tiki
     restart: on-failure

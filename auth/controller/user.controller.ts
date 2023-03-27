@@ -2,7 +2,6 @@ import * as User from "../services/user.services";
 import { Request, Response } from "express";
 import {
   BadRequestError,
-  MissingTokenError,
   RequestValidationError,
 } from "../middleware/error/errors";
 import { Password } from "../config/cryto";
@@ -65,14 +64,10 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const getCurrentUser = async (req: Request, res: Response) => {
-  if (!req.session?.jwt) {
-    throw new MissingTokenError("Please Login !!!");
-  }
+  res.send({ user: req.userPayload || null });
+};
 
-  try {
-    const payload = jwt.verifyJwt(req.session.jwt);
-    res.send({ user: payload });
-  } catch (error) {
-    throw new MissingTokenError("Token is not invalid");
-  }
+export const logout = async (req: Request, res: Response) => {
+  req.session = null;
+  res.send({ message: "Logout success" });
 };

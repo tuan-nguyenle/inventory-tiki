@@ -1,6 +1,7 @@
 import "express-async-errors";
 import express from "express";
 import { body } from "express-validator";
+import { requireAuthor, userAuthor } from "../middleware/authencation";
 import * as userController from "../controller/user.controller";
 import * as departmentController from "../controller/department.controller";
 
@@ -80,7 +81,15 @@ router.post(
   userController.addNewUser
 );
 
+// Logout
+router.post("/api/users/logout", userController.logout);
+
 // getProfile
-router.get("/api/users/profile", userController.getCurrentUser);
+router.get(
+  "/api/users/profile",
+  userAuthor,
+  requireAuthor,
+  userController.getCurrentUser
+);
 
 export { router as authentication };
