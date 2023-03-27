@@ -73,19 +73,18 @@ export class BadRequestError extends ErrorMessage {
   }
 }
 
-export class MissingTokenError extends ErrorMessage {
-  statusCode = 400;
-  constructor(public message: string) {
-    super(message);
-
+export class NotAuthorizedError extends ErrorMessage {
+  statusCode = 401;
+  constructor() {
+    super("Not Authorized");
     // only have when you extends
-    Object.setPrototypeOf(this, MissingTokenError.prototype);
+    Object.setPrototypeOf(this, NotAuthorizedError.prototype);
   }
 
   serializeErrors() {
     return [
       {
-        message: this.message,
+        message: "Not Authorized",
       },
     ];
   }
