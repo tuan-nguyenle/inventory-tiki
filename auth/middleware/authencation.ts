@@ -9,14 +9,15 @@ interface UserPayload {
   username: string;
   fullname: string;
   phone: string;
-  roles: Role;
-  departments: Department;
+  Role: Role;
+  Department: Department;
+  iat: string;
 }
 
 declare global {
   namespace Express {
     interface Request {
-      userAuthor: UserPayload;
+      currentUser: UserPayload;
     }
   }
 }
@@ -28,7 +29,7 @@ export const userAuthor = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const payload = jwt.verifyJwt(req.session?.jwt) as UserPayload;
-    res.send({ user: payload });
+    req.currentUser = payload;
   } catch (error) {
     console.log(error);
   }
@@ -41,7 +42,7 @@ export const requireAuthor = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.userAuthor) {
+  if (!req.currentUser) {
     throw new NotAuthorizedError();
   }
 
