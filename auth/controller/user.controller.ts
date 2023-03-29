@@ -64,7 +64,7 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const getCurrentUser = async (req: Request, res: Response) => {
-  res.send({ user: req.userPayload || null });
+  res.send({ user: req.currentUser || null });
 };
 
 export const logout = async (req: Request, res: Response) => {
