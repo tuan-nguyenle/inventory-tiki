@@ -1,10 +1,18 @@
 import React from "react";
-import { FaRegWindowMinimize, FaSearch, FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaSearch, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import "../../styles/inbound.scss";
 import { Link } from "react-router-dom";
-import DataIB from "../../components/dataIB";
+// import DataIB from "../../components/dataIB";
 import DataIB2 from "../../components/dataIB2";
+import InputExcel from "../InputExcel";
+
+let DataIB = "";
 const Notification = () => {
+    const getdata = (a) => {
+        DataIB = a;
+        console.log("data đấy", DataIB);
+    }
+
     // console.log(DataIB)
     return (
         <div className="container_notification">
@@ -179,6 +187,9 @@ const Notification = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div>
+                <InputExcel getdata={getdata} />
             </div>
         </div >
     );
