@@ -9,7 +9,7 @@ import Notification from '../views/InBound/Notification';
 import User from '../views/InBound/User';
 import Home from '../components/Home';
 // import number from './components/number';
-import LogOut from '../components/LogOut';
+// import LogOut from '../components/LogOut';
 // import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -21,6 +21,7 @@ import "../styles/nav.scss";
 import ConfirmationInbound from '../views/InBound/ConfirmationInbound';
 import Accountmanagement from '../views/InBound/Accountmanagement';
 import PrintBowl from '../views/InBound/PrintBowl';
+import InputExcel from '../views/InputExcel';
 const NavIB = () => {
     return (
         <>
@@ -28,6 +29,7 @@ const NavIB = () => {
             < BrowserRouter >
                 <Routes>
                     <Route path="/" element={<MainIB />} >
+                        <Route path="InputExcel" exact element={<InputExcel />} />
                         <Route index element={<Home />} />
                         <Route path="MainIB" exact element={<Home />} />
                         <Route path="MainIB/User" exact element={<User />} />

@@ -15,14 +15,16 @@ const handleLoginAPI = async (account) => {
     //     body: JSON.stringify({ username: account.username, password: account.password }), // body data type must match "Content-Type" header
     // });
     return await axios.post(apiUrl, {
-            username: account.username,
-            password: account.password
-        })
+        username: account.username,
+        password: account.password
+    })
         .then(response => {
+            console.log("vai l luon");
             // Xử lý phản hồi từ server khi yêu cầu thành công
             return response.data.user;
         })
         .catch(error => {
+            // console.log("vai l luon");
             throw error;
         });
 

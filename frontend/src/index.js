@@ -12,14 +12,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const session = JSON.parse(sessionStorage.getItem('user'));
 root.render(
   <>
-    {session ? (
-      <>
-        <NavIB />
-        {/* <NavIC /> */}
-      </>
-    ) : (
-      <Login />
-    )}
+
+    <NavIB />
+    <NavIC />
+
 
 
     <ToastContainer

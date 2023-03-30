@@ -15,6 +15,7 @@ const InboundList = (props) => {
     let container = "";
     if (state) {
         container = location.state[0];
+        console.log(state);
     }
     // Lấy ngày
     var dateObj = new Date();
@@ -51,7 +52,7 @@ const InboundList = (props) => {
             [id]: value
         }
         ))
-        if (id === "codecontainer" && value !== containerbowl.codecontainervalidate) {
+        if (id == "codecontainer" && value !== containerbowl.codecontainervalidate) {
             setCheckcontainer(true);
         }
         else {
@@ -69,7 +70,7 @@ const InboundList = (props) => {
         let dt = data;
         let check = false;
         for (let i = 0; i < data.length; i++) {
-            if (dt[i].productcode === item) {
+            if (dt[i].productcode == item) {
                 // console.log("đã tồn tại", data[i])
                 let product = dt[i];   // thay đổi 1 giá trị trong object của state
                 // dt = dt.filter(product => product.productcode !== item);
@@ -84,7 +85,7 @@ const InboundList = (props) => {
     const allinfo = (item) => {
         if (state && state.length > 0) {
             for (let i = 1; i < state.length; i++) {
-                if (state[i].productcode === item) {
+                if (state[i].productcode == item) {
                     let pr = state[i]
                     let newdatainput = {
                         id: Math.floor((Math.random() * 199999999) + 1),
@@ -143,7 +144,7 @@ const InboundList = (props) => {
             return;
         }
         let isValid = checkexists(newdata.productcode);
-        if (isValid === true) {
+        if (isValid == true) {
             setData([...data]);
             setNewdata({
                 productcode: "",
@@ -163,11 +164,11 @@ const InboundList = (props) => {
                 if (obj.hasOwnProperty("productcode")) { // Kiểm tra xem đối tượng có chứa key "c" hay không
                     let productcodeValue = obj.productcode;
                     let productquantity = obj.quantity;
-                    let foundproductcodeValue = data.some((o) => o.hasOwnProperty("productcode") && o.productcode === productcodeValue && o.quantity === productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
+                    let foundproductcodeValue = data.some((o) => o.hasOwnProperty("productcode") && o.productcode == productcodeValue && o.quantity == productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
                     if (!foundproductcodeValue) {
-                        let foundData = data.find((o) => o.productcode === productcodeValue);
+                        let foundData = data.find((o) => o.productcode == productcodeValue);
                         let quantityDifference = foundData && foundData.quantity ? productquantity - foundData.quantity : productquantity;
-                        // let quantityDifference = data.find((o) => o.productcode === productcodeValue);
+                        // let quantityDifference = data.find((o) => o.productcode == productcodeValue);
                         if (quantityDifference !== 0) {
                             let newhaha = {
                                 product: obj.productname,
