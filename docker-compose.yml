@@ -12,9 +12,9 @@ services:
     networks:
       - inventory_tiki
 
-  auth:
+  backend:
     build:
-      context: ./auth
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - 8080:8080
@@ -24,7 +24,7 @@ services:
       ACCESS_TOKEN_PRIVATE_KEY: "${ACCESS_TOKEN_PRIVATE_KEY}"
     volumes:
       - /app/node_modules
-      - ./auth:/app/
+      - ./backend:/app/
     networks:
       - inventory_tiki
     restart: on-failure
