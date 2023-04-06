@@ -2,7 +2,7 @@ version: "3"
 services:
   nginx:
     depends_on:
-      - auth
+      - backend
     restart: always # because it is routing traffic to our entire app
     build:
       dockerfile: Dockerfile

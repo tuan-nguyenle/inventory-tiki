@@ -1,4 +1,4 @@
-import { Department } from "../models/department.model";
+import { Department } from "../models/account/department.model";
 import { BadRequestError } from "../middleware/error/errors";
 import "express-async-errors";
 

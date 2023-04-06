@@ -1,4 +1,4 @@
-import { User } from "../models/user.model";
+import { User } from "../models/account/user.model";
 import { Password } from "../config/cryto";
 import { findOneRole } from "./role.services";
 import { findOneDepartment } from "./department.services";
