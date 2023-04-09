@@ -20,7 +20,6 @@ const ShowListIB = React.forwardRef((props, ref) => {
     const data = props.listinput; // bắt props
     const codecontainer = props.container;
     const bowl = props.bowl;
-
     return (
         < div className="ShowlistIB_body" ref={ref} >
             <div className="row">

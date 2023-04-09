@@ -1,11 +1,24 @@
-import React from "react";
-import { FaRegWindowMinimize, FaSearch, FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import React, { useEffect } from "react";
+import { FaSearch, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import "../../styles/inbound.scss";
 import { Link } from "react-router-dom";
-import DataIB from "../../components/dataIB";
+// import DataIB from "../../components/dataIB";
 import DataIB2 from "../../components/dataIB2";
+import InputExcel from "../InputExcel";
+import * as IBAPI from "../../services/IBAPI";
+
+let DataIB = "";
 const Notification = () => {
-    // console.log(DataIB)
+    const getdata = (a) => {
+        DataIB = a;
+        console.log(DataIB);
+    }
+    // useEffect(() => {
+    //     let notifi = IBAPI.getNotication();
+    //     // tạo một usestate rồi lưu vào đó
+    //     // rồi dưới return .map
+    // }, [])
+
     return (
         <div className="container_notification">
             <div>
@@ -179,6 +192,9 @@ const Notification = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div>
+                <InputExcel getdata={getdata} />
             </div>
         </div >
     );

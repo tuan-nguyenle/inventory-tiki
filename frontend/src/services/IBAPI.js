@@ -1,11 +1,17 @@
 import axios from 'axios';
 
-getAllAccounts = () => {
+export const getNotication = async () => {
+    try {
+        const response = await axios.post('link').then(res => res.json())
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+export const getAllAccounts = () => {
 
 }
 
-addNewAccount = (data) => {
+export const addNewAccount = (data) => {
     return axios.post('link', data);
 }
-
-export { addNewAccount, getAllAccounts }
