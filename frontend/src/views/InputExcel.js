@@ -5,6 +5,11 @@ import { Sendexcel } from "../services/BOSSAPI"
 const InputExcel = (props) => {
     const [fileName, setFileName] = useState(null);
     const [newdata, setNewdata] = useState(null);
+    const [drive, setDrive] = useState({
+        fullname: "Nguyễn Văn A",
+        phone: "05598996663",
+        bsx: "2354553556"
+    });
     const handleFile = async (e) => {
         e.stopPropagation(); e.preventDefault();
         const f = e.target.files[0];
@@ -14,8 +19,17 @@ const InputExcel = (props) => {
         const container = workbook.SheetNames; // lấy container name
         const worksheet = workbook.Sheets[container];
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
-        const arr2 = [container[0], ...jsonData.map((item, index) => ({ ...item }))];
+        const arr2 = [container[0], ...jsonData.map((item, index) => ({ ...item }))]; // json có thể xử lý
         setNewdata(arr2);
+        // const combinedData = {
+        //     fullname: drive.fullname,
+        //     phone: drive.phone,
+        //     bsx: drive.bsx,
+        //     listpackages: jsonData,
+        // };
+        // const combinedJson = JSON.stringify(combinedData);
+        // setNewdata(combinedJson);
+        // console.log(combinedJson);
     }
 
     const handledata = async () => {
