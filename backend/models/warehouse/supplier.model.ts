@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 
 interface Supplier {
-  namesupplier: string;
-  busines: string;
+  name_supplier: string;
+  business: string; // loai doanh nghiep
   phone: string;
   location: string;
   actived: number;
@@ -10,11 +10,11 @@ interface Supplier {
 
 const SupplierSchema = new Schema<Supplier, Document>(
   {
-    namesupplier: { type: String, required: true, unique: true },
-    busines: { type: String, required: true },
+    name_supplier: { type: String, required: true, unique: true },
+    business: { type: String, required: true },
     location: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
-    actived: { type: Number, default: 0 },
+    actived: { type: Number, default: 1 },
   },
   {
     timestamps: true,
@@ -22,7 +22,7 @@ const SupplierSchema = new Schema<Supplier, Document>(
       transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
-        delete ret.actived;
+        delete ret.__v;
       },
     },
   }

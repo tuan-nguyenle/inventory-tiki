@@ -15,7 +15,7 @@ interface Product {
 const ProductSchema = new Schema<Product, Document>(
   {
     product_name: { type: String, required: true },
-    bar_code: { type: String, required: true },
+    bar_code: { type: String, required: true, unique: true },
     quantity: { type: Number, default: 0 },
     condition: [
       {
