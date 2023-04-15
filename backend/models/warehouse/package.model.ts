@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { Product } from "./product.model";
 
 interface Package {
   container_code: string; // Ma so hang van chuyen
@@ -10,7 +11,7 @@ interface Package {
   };
   weight: number;
   package_types: string;
-  //   products:
+  products: Product;
 }
 
 const PackageSchema = new Schema<Package, Document>(
@@ -24,7 +25,12 @@ const PackageSchema = new Schema<Package, Document>(
     },
     weight: { type: Number, required: true },
     package_types: { type: String, required: true },
-    // products
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   {
     timestamps: true,
