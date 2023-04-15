@@ -1,6 +1,6 @@
 import { Supplier } from "../models/warehouse/supplier.model";
-export const findOneSupplier = async (supplier_name: any) => {
-  return await Supplier.findOne({ supplier_name });
+export const findOneSupplier = async (name_supplier: any) => {
+  return await Supplier.findOne({ name_supplier });
 };
 
 export const addNewSupplier = async (supplier_attribute: Supplier) => {

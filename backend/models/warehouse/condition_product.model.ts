@@ -6,7 +6,7 @@ interface ConditionProduct {
 
 const ConditionProductSchema = new Schema<ConditionProduct, Document>(
   {
-    description: { type: String, required: true },
+    description: { type: String, required: true, unique: true },
   },
   {
     timestamps: true,
