@@ -1,9 +1,9 @@
 import * as User from "../services/user.services";
 import { Request, Response } from "express";
 import {
-  BadRequestError,
   RequestValidationError,
-} from "../middleware/error/errors";
+  BadRequestError,
+} from "@microservies-inventory/common/build";
 import { Password } from "../config/cryto";
 import { validationResult } from "express-validator";
 import "express-async-errors";

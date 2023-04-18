@@ -3,8 +3,10 @@ import express from "express";
 import SessionCookie from "cookie-session";
 import { json } from "body-parser";
 import { routes } from "./routers";
-import { errorsHandler } from "./middleware/error-handler";
-import { NotFoundError } from "./middleware/error/errors";
+import {
+  NotFoundError,
+  errorsHandler,
+} from "@microservies-inventory/common";
 import { ConnectDB } from "./config/mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
