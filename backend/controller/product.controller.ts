@@ -1,40 +1,59 @@
-import { Request, Response } from "express";
-import * as ProductServices from "../services/product.services";
-import { validationResult } from "express-validator";
-import { RequestValidationError } from "../middleware/error/errors";
-import { Product } from "../models/warehouse/product.model";
+// import { Request, Response } from "express";
+// import * as ProductServices from "../services/product.services";
+// import { validationResult } from "express-validator";
+// import {
+//   BadRequestError,
+//   RequestValidationError,
+// } from "../middleware/error/errors";
+// import { Product } from "../models/warehouse/product.model";
+// // This controller function imports multiple products at once
+// export const importProduct = async (req: Request, res: Response) => {
+//   const errors = validationResult(req);
 
-// This controller function imports multiple products at once
-export const importProduct = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     throw new RequestValidationError(errors.array());
+//   }
 
-  if (!errors.isEmpty()) {
-    throw new RequestValidationError(errors.array());
-  }
-
-  const products = req.body.products;
-  // Loop through each product and add it to the database
-  for (const product of products) {
-    const existingProduct = (await ProductServices.searchProduct(
-      product
-    )) as Product;
-
-    if (!existingProduct) {
-      await ProductServices.addNewProduct(product);
-    } else {
-      // If the existing product already has a quantity property, increase it by the quantity in the request
-      if (existingProduct.quantity) {
-        existingProduct.quantity += product.quantity;
-      } else {
-        // Otherwise, set the quantity property to the quantity in the request
-        existingProduct.quantity = product.quantity;
-      }
-      await ProductServices.findOneUpdate(existingProduct);
-    }
-  }
-
-  // Send success response
-  res.status(200).send({
-    msg: "Import Finished",
-  });
-};
+//   const products = req.body.products;
+//   // Loop through each product and add it to the database
+//   try {
+//     let result: {}[] = [];
+//     for (const product of products) {
+//       let existingProduct = await ProductServices.searchProduct(product);
+//       if (existingProduct) {
+//         existingProduct.quantity += product.quantity;
+//         ProductServices.findOneUpdate(existingProduct)
+//           .then(() => {
+//             result.push({
+//               product: product,
+//               status: `Update ${product.product_name} success`,
+//             });
+//           })
+//           .catch(() => {
+//             result.push({
+//               product: product,
+//               status: `Update ${product.product_name} failed`,
+//             });
+//           });
+//       } else {
+//         const newProduct = new Product(product);
+//         ProductServices.addNewProduct(newProduct)
+//           .then(() => {
+//             result.push({
+//               product: product,
+//               status: `Add new ${product.product_name} success`,
+//             });
+//           })
+//           .catch(() => {
+//             result.push({
+//               product: product,
+//               status: `Add new ${product.product_name} failed`,
+//             });
+//           });
+//       }
+//     }
+//     res.status(200).json({ result });
+//   } catch (err: any) {
+//     throw new BadRequestError(`${err.message}`);
+//   }
+// };

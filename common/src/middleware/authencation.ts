@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import * as jwt from "../config/jwt";
-import { Role } from "../models/account/role.model";
-import { Department } from "../models/account/department.model";
 import { NotAuthorizedError } from "./error/errors";
 
 interface UserPayload {
@@ -9,8 +7,8 @@ interface UserPayload {
   username: string;
   fullname: string;
   phone: string;
-  Role: Role;
-  Department: Department;
+  Role: Object;
+  Department: Object;
   iat: string;
 }
 

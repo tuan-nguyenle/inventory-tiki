@@ -1,5 +1,5 @@
 import { Department } from "../models/account/department.model";
-import { BadRequestError } from "../middleware/error/errors";
+import { BadRequestError } from "@microservies-inventory/common/build";
 import "express-async-errors";
 
 export const findOneDepartment = async (DepartmentDescription: string) => {

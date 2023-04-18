@@ -1,19 +1,21 @@
 import mongoose, { Schema } from "mongoose";
 import { Category } from "./category.model";
 import { Supplier } from "./supplier.model";
-import { ConditionProduct } from "./condition_product.model";
+import { Product } from "./product.model";
 
-interface Product {
-  product_name: string;
+interface ProductDetail {
+  bar_code: string;
+  category: Category;
+  supplier: Supplier;
   quantity: number;
-  condition: ConditionProduct;
   image: string;
   unit: string;
+  productID: Product;
 }
 
-const ProductSchema = new Schema<Product, Document>(
+const ProductDetailSchema = new Schema<ProductDetail, Document>(
   {
-    product_name: { type: String, required: true },
+    bar_code: { type: String, required: true },
     quantity: { type: Number, default: 0 },
     image: {
       type: String,
@@ -23,10 +25,16 @@ const ProductSchema = new Schema<Product, Document>(
     unit: {
       type: String,
     },
-    condition: [
+    category: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "ConditionProduct",
+        ref: "Category",
+      },
+    ],
+    supplier: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Supplier",
       },
     ],
   },
@@ -41,6 +49,9 @@ const ProductSchema = new Schema<Product, Document>(
   }
 );
 
-const Product = mongoose.model<Product & Document>("Product", ProductSchema);
+const ProductDetail = mongoose.model<ProductDetail & Document>(
+  "ProductDetail",
+  ProductDetailSchema
+);
 
-export { Product };
+export { ProductDetail };

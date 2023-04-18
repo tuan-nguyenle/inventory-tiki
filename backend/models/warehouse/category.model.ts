@@ -4,7 +4,6 @@ interface Category {
   category_name: string;
   category_description: string;
   parent_id: Category;
-  //   products:
 }
 
 const CategorySchema = new Schema<Category, Document>(

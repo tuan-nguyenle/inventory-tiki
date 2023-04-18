@@ -1,7 +1,7 @@
 import "express-async-errors";
 import express from "express";
 import { body } from "express-validator";
-import { requireAuthor, userAuthor } from "../middleware/authencation";
+import { requireAuthor, userAuthor } from "@microservies-inventory/common/build";
 import * as userController from "../controller/user.controller";
 import * as departmentController from "../controller/department.controller";
 

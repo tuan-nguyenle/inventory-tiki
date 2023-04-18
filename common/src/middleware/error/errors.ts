@@ -23,7 +23,7 @@ export class DatabaseConnectionError extends ErrorMessage {
 export class RequestValidationError extends ErrorMessage {
   statusCode = 400;
 
-  constructor(public errors: ValidationError[]) {
+  constructor(public errors: any[]) {
     super("Invalid request parameters");
 
     // Only because we are extending a built in class
