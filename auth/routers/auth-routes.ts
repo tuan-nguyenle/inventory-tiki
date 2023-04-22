@@ -1,7 +1,10 @@
 import "express-async-errors";
 import express from "express";
 import { body } from "express-validator";
-import { requireAuthor, userAuthor } from "@microservies-inventory/common/build";
+import {
+  requireAuthor,
+  userAuthor,
+} from "@microservies-inventory/common/build";
 import * as userController from "../controller/user.controller";
 import * as departmentController from "../controller/department.controller";
 
@@ -9,7 +12,7 @@ const router = express.Router();
 
 // Add new New Department
 router.post(
-  "/api/department",
+  "/auth/api/department",
   [body("department").trim().isLength({ min: 4, max: 25 })],
   departmentController.addNewDepartment
 );
@@ -29,7 +32,7 @@ router.post(
 
 // login
 router.post(
-  "/api/login",
+  "/auth/api/login",
   [
     body("username").trim(),
     body("password")
@@ -48,7 +51,7 @@ router.post(
 
 // Add New User
 router.post(
-  "/api/user",
+  "/auth/api/user",
   [
     body("username")
       .trim()
@@ -82,11 +85,11 @@ router.post(
 );
 
 // Logout
-router.post("/api/users/logout", userController.logout);
+router.post("/auth/api/users/logout", userController.logout);
 
 // getProfile
 router.get(
-  "/api/users/profile",
+  "/auth/api/users/profile",
   userAuthor,
   requireAuthor,
   userController.getCurrentUser
