@@ -1,42 +1,36 @@
 import mongoose, { Schema } from "mongoose";
-import { Category } from "./category.model";
 import { Supplier } from "./supplier.model";
 import { Product } from "./product.model";
 
 interface ProductDetail {
   bar_code: string;
-  category: Category;
-  supplier: Supplier;
+  sku: string;
   quantity: number;
-  image: string;
+  available: number; // The quantity that is available on the stock.
+  defective: number; // The total defective items either received at the inventory or returned by the customers.
+  supplier: Supplier;
+  product: Product;
   unit: string;
-  productID: Product;
 }
 
 const ProductDetailSchema = new Schema<ProductDetail, Document>(
   {
     bar_code: { type: String, required: true },
+    sku: { type: String, required: true },
     quantity: { type: Number, default: 0 },
-    image: {
-      type: String,
-      default:
-        "https://scontent.fsgn5-11.fna.fbcdn.net/v/t39.30808-6/319679335_537631668262888_5340863634551239276_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=TEm6Fxwd6L0AX9vz5nw&_nc_ht=scontent.fsgn5-11.fna&oh=00_AfA2Vehl2Rb1OaSOsNtmsdLK8mH1I1XKdvqZpV8IUfVFzg&oe=6440213A",
-    },
+    available: { type: Number, default: 0 },
+    defective: { type: Number, default: 0 },
     unit: {
       type: String,
     },
-    category: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
-      },
-    ],
-    supplier: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Supplier",
-      },
-    ],
+    supplier: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Supplier",
+    },
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
   },
   {
     timestamps: true,

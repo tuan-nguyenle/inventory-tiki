@@ -71,3 +71,10 @@ export const logout = async (req: Request, res: Response) => {
   req.session = null;
   res.send({ message: "Logout success" });
 };
+
+export const getUsers = async (req: Request, res: Response) => {
+  const listUser = await User.getAllUser();
+  res.send({
+    data: listUser,
+  });
+};

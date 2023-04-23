@@ -1,7 +1,4 @@
-// import { Product } from "../models/warehouse/product.model";
-// import { findOneCategory } from "./category.services";
-// import { findCondition } from "./condition.product.services";
-// import { findOneSupplier } from "./supplier.services";
+import { ProductDetail } from "../models/product_detail.model";
 
 // export const addNewProduct = async (product_attributes: Product) => {
 //   let supplier = await findOneSupplier(product_attributes.supplier);
@@ -19,26 +16,8 @@
 //   return product.save();
 // };
 
-// export const searchProduct = async (product_attributes: Product) => {
-//   let supplier = await findOneSupplier(product_attributes.supplier);
-//   let category = await findOneCategory(product_attributes.category);
-//   let condition = await findCondition(product_attributes.condition);
+// export const searchProduct = async (product_attributes: ProductDetail) => {
 
-//   // Find all products that match the given attributes
-//   const products = await Product.find({
-//     product_name: product_attributes.product_name,
-//     bar_code: product_attributes.bar_code,
-//     condition: condition,
-//     category: category,
-//     supplier: supplier,
-//   });
-
-//   if (products.length > 1) {
-//     return products;
-//   }
-
-//   // If there is only one product, return that product
-//   return products[0];
 // };
 
 // // To update a product when it already exists, we can use the following code:

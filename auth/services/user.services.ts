@@ -20,3 +20,7 @@ export const addNewUser = async (userAttributes: any) => {
 export const checkUser = async (username: string) => {
   return User.findOne({ username }).populate("roles").populate("departments");
 };
+
+export const getAllUser = async () => {
+  return User.find();
+};

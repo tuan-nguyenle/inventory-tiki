@@ -12,7 +12,7 @@ const router = express.Router();
 
 // Add new New Department
 router.post(
-  "/auth/api/department",
+  "/api/auth/department",
   [body("department").trim().isLength({ min: 4, max: 25 })],
   departmentController.addNewDepartment
 );
@@ -32,7 +32,7 @@ router.post(
 
 // login
 router.post(
-  "/auth/api/login",
+  "/api/auth/login",
   [
     body("username").trim(),
     body("password")
@@ -51,7 +51,7 @@ router.post(
 
 // Add New User
 router.post(
-  "/auth/api/user",
+  "/api/auth/user",
   [
     body("username")
       .trim()
@@ -85,11 +85,12 @@ router.post(
 );
 
 // Logout
-router.post("/auth/api/users/logout", userController.logout);
+router.post("/api/auth/users/logout", userController.logout);
+router.get("/api/auth/users", userController.getUsers);
 
 // getProfile
 router.get(
-  "/auth/api/users/profile",
+  "/api/auth/users/profile",
   userAuthor,
   requireAuthor,
   userController.getCurrentUser
