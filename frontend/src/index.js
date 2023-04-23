@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NavIB from "./routes/NavIB";
 import NavIC from './routes/NavIC';
+import NavOB from './routes/NavOB';
 import Login from './views/Account/Login';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const session = JSON.parse(sessionStorage.getItem('user'));
@@ -15,6 +16,7 @@ root.render(
 
     <NavIB />
     <NavIC />
+    <NavOB />
 
 
 

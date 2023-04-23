@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg"
-import avatar from "../../assets/images/Avatar/Loc.jpg";
+import avatar from "../../assets/images/Avatar/Hong.jpg";
 import {
     FaBell, FaWarehouse, FaBars, FaTh, FaSignOutAlt, FaUsers, FaProductHunt, FaBox
 } from "react-icons/fa";

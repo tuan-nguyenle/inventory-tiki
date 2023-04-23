@@ -19,15 +19,40 @@ const InputExcel = (props) => {
         const container = workbook.SheetNames; // lấy container name
         const worksheet = workbook.Sheets[container];
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
         const arr2 = [container[0], ...jsonData.map((item, index) => ({ ...item }))]; // json có thể xử lý
         setNewdata(arr2);
+
+        // // list 1
         // const combinedData = {
         //     fullname: drive.fullname,
         //     phone: drive.phone,
         //     bsx: drive.bsx,
         //     listpackages: jsonData,
         // };
+
+        // const combinedData = {
+        //     fullname: drive.fullname,
+        //     phone: drive.phone,
+        //     bsx: drive.bsx,
+        //     listpackages: [
+        //         {
+        //             packages: jsonData.map((data) => {
+        //                 return {
+        //                     productcode: data.productcode,
+        //                     productname: data.productname,
+        //                     category: data.category,
+        //                     quantity: data.quantity,
+        //                     supplier: data.supplier,
+        //                 };
+        //             }),
+        //         },
+        //     ],
+        // };
         // const combinedJson = JSON.stringify(combinedData);
+
+        // // cái này chung
+        // const combinedJson = JSON.stringify(combinedData, null, 2);
         // setNewdata(combinedJson);
         // console.log(combinedJson);
     }

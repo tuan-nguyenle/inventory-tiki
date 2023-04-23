@@ -214,7 +214,7 @@ const InboundList = (props) => {
         }
     };
     const checkpallet = (event) => {
-        const palletregex = /^OB-\d{5}$/;
+        const palletregex = /^IB-\d{5}$/;
 
         if (palletregex.test(event.target.value)) {
             // document.getElementById("productcode").focus();
@@ -243,7 +243,7 @@ const InboundList = (props) => {
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
-                <h1 style={{ textAlign: "center" }} >InboundList</h1>
+                <h1 style={{ textAlign: "center" }} >Inbound List</h1>
             </div>
             <hr></hr>
             <div className="card card-default">
@@ -325,7 +325,6 @@ const InboundList = (props) => {
                     </div>
                 </div>
             </div>
-
         </div >
     );
 };
