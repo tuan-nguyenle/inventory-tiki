@@ -5,7 +5,6 @@ interface Supplier {
   business: string; // loai doanh nghiep
   phone: string;
   location: string;
-  actived: number;
 }
 
 const SupplierSchema = new Schema<Supplier, Document>(
@@ -14,7 +13,6 @@ const SupplierSchema = new Schema<Supplier, Document>(
     business: { type: String, required: true },
     location: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
-    actived: { type: Number, default: 1 },
   },
   {
     timestamps: true,

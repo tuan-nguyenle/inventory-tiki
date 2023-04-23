@@ -2,13 +2,14 @@ import "express-async-errors";
 import express from "express";
 import SessionCookie from "cookie-session";
 import { json } from "body-parser";
+import { routes } from "./routers";
 import { NotFoundError, errorsHandler } from "@microservies-inventory/common";
 import { ConnectDB } from "./config/mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
 
 const app = express();
-const HOST = "8080";
+const HOST = "8081";
 dotenv.config();
 
 app.set("trust proxy", true);
@@ -27,7 +28,7 @@ app.use(
   })
 );
 
-// app.use("/", routes);
+app.use("/", routes);
 
 app.all("*", async (req, res) => {
   console.log(req.protocol + "://" + req.get("host") + req.originalUrl);
