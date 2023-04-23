@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import "../styles/home.scss";
+import avatar from "../assets/images/inventory2.jpg"
 import { FaEnvelope, FaHardHat, FaGuitar, FaBed } from "react-icons/fa";
 
 const Home = () => {
@@ -10,7 +11,7 @@ const Home = () => {
         <div className='Home_body'>
             <div className='container-home'>
                 <div>
-                    <h1 style={{ textAlign: "center" }}>Làm việc đi</h1>
+                    <h1 style={{ textAlign: "center" }}>Home Page</h1>
                 </div>
                 <hr></hr>
                 <div className="row">
@@ -19,7 +20,7 @@ const Home = () => {
                             <span className="info-box-icon bg-info"><i className='far'><FaEnvelope /></i></span>
 
                             <div className="info-box-content">
-                                <span className="info-box-text">Làm việc</span>
+                                <span className="info-box-text">Work</span>
                                 <span className="info-box-number">90%</span>
                             </div>
                         </div>
@@ -29,7 +30,7 @@ const Home = () => {
                             <span className="info-box-icon bg-success"><i className="far"> <FaHardHat /></i></span>
 
                             <div className="info-box-content">
-                                <span className="info-box-text">Ăn</span>
+                                <span className="info-box-text">Eat</span>
                                 <span className="info-box-number">3%</span>
                             </div>
                         </div>
@@ -39,7 +40,7 @@ const Home = () => {
                             <span className="info-box-icon bg-warning"><i className="far"><FaBed /></i></span>
 
                             <div className="info-box-content">
-                                <span className="info-box-text">Ngủ</span>
+                                <span className="info-box-text">Sleep</span>
                                 <span className="info-box-number">3%</span>
                             </div>
                         </div>
@@ -49,19 +50,24 @@ const Home = () => {
                             <span className="info-box-icon bg-danger"><i className="far"><FaGuitar /></i></span>
 
                             <div className="info-box-content">
-                                <span className="info-box-text">Chơi</span>
+                                <span className="info-box-text">Play</span>
                                 <span className="info-box-number">1%</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className='row'>
-                    <div className="col-md-6 col-12">
-                        <Calendar onChange={onChange} value={value} />
-                    </div >
+                    <div className="col-12">
+                        <div style={{ display: 'flex', width: '100%' }}>
+                            <Calendar onChange={onChange} value={value} style={{ width: '100%' }} />
+                        </div>
+                    </div>
                 </div>
-
-
+                <div className='row'>
+                    <div className='col-12'>
+                        <img src={avatar} alt="Avatar" />
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -1,11 +1,7 @@
-// import Container from 'react-bootstrap/Container';
-// import Nav from 'react-bootstrap/Nav';
-// import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
 import React, { useState } from "react";
 import { NavLink, Link, Outlet } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg"
-import avatar from "../../assets/images/Avatar/Loc.jpg";
+import avatar from "../../assets/images/Avatar/long.jpg";
 import {
     FaBell, FaWarehouse, FaEdit, FaBars, FaUser, FaTh, FaSignOutAlt, FaBarcode, FaCheckDouble, FaUsers
 } from "react-icons/fa";
@@ -15,43 +11,43 @@ const MainIB = () => {
 
     const menuItem = [
         {
-            path: "MainIB/Home",
+            path: "MainOB/Home",
             name: "Home",
             icon: <FaTh />,
             number: ""
         },
         {
-            path: "MainIB/Notification",
+            path: "MainOB/Notification",
             name: "Notification",
             icon: <FaBell />,
-            number: "4"
+            number: "1"
         },
         {
-            path: "MainIB/InboundList",
-            name: "Create Inbound List",
+            path: "MainOB/OutboundList",
+            name: "Create OutBound List",
             icon: <FaWarehouse />,
             number: ""
         },
+        // {
+        //     path: "MainIB/Reback",
+        //     name: "Create Reback",
+        //     icon: <FaEdit />,
+        //     number: ""
+        // },
         {
-            path: "MainIB/Reback",
-            name: "Create Reback",
-            icon: <FaEdit />,
-            number: ""
-        },
-        {
-            path: "MainIB/PrintBowl",
-            name: "Print Bowl",
+            path: "MainOB/PrintPalletOB",
+            name: "Print Pallet",
             icon: <FaBarcode />,
             number: ""
         },
         {
-            path: "MainIB/ConfirmationInbound",
-            name: "Confirmation Inbound",
+            path: "MainOB/ConfirmationInbound",
+            name: "Confirmation OutBound",
             icon: <FaCheckDouble />,
             number: ""
         },
         {
-            path: "MainIB/Accountmanagement",
+            path: "MainOB/Accountmanagement",
             name: "Account management",
             icon: <FaUsers />,
             number: ""
@@ -73,12 +69,12 @@ const MainIB = () => {
                         </div>
                     </div>
                     <div className="nav_avatar">
-                        <NavLink to="MainIB/User" key="avatar" className={({ isActive }) => (isActive ? 'avatar_hover' : 'avatar_hover')} >
+                        <NavLink to="MainOB/User" key="avatar" className={({ isActive }) => (isActive ? 'avatar_hover' : 'avatar_hover')} >
                             <div className="img_avatar">
                                 <img style={{ marginLeft: isOpen ? "" : "3px" }} src={avatar} className="avatar" alt="User Image" />
                             </div>
                             <div className="info">
-                                <div style={{ display: isOpen ? "block" : "none" }} className="NameUser">Nguyễn Thùy Linh</div>
+                                <div style={{ display: isOpen ? "block" : "none" }} className="NameUser">Lê Nguyễn Tuân</div>
                             </div>
                         </NavLink>
                     </div>
@@ -99,30 +95,6 @@ const MainIB = () => {
                 </div>
                 <main> {<Outlet />}</main>
             </div>
-            {/* <Navbar bg="light" expand="lg">
-                <Container>
-                    <Navbar.Brand href="#home">Home</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            <Link to="PrintInvoice" className="nav-link">Print invoice</Link>
-                            <Link to="CheckInventory" className="nav-link">Check Inventory</Link>
-                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">
-                                    Another action
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">
-                                    Separated link
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-            <Outlet /> */}
         </>
     );
 };
