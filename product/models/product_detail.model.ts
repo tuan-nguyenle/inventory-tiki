@@ -11,6 +11,7 @@ interface ProductDetail {
   supplier: Supplier;
   product: Product;
   unit: string;
+  reason: string;
 }
 
 const ProductDetailSchema = new Schema<ProductDetail, Document>(
@@ -20,6 +21,7 @@ const ProductDetailSchema = new Schema<ProductDetail, Document>(
     quantity: { type: Number, default: 0 },
     available: { type: Number, default: 0 },
     defective: { type: Number, default: 0 },
+    reason: { type: String },
     unit: {
       type: String,
     },
