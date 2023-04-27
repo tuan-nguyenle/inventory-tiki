@@ -49,6 +49,24 @@ services:
     stdin_open: true
     tty: true
 
+  orders:
+    build:
+      context: ./orders
+      dockerfile: Dockerfile
+    ports:
+      - 8082:8082
+    environment:
+      SESSION_KEY: "${SESSION_KEY}"
+      ACCESS_TOKEN_PUBLIC_KEY: "${ACCESS_TOKEN_PUBLIC_KEY}"
+      ACCESS_TOKEN_PRIVATE_KEY: "${ACCESS_TOKEN_PRIVATE_KEY}"
+    volumes:
+      - /app/node_modules
+      - ./orders:/app/
+    networks:
+      - inventory_tiki
+    stdin_open: true
+    tty: true
+
   mongodb:
     image: mongo
     ports:
