@@ -7,6 +7,7 @@ import { NotFoundError, errorsHandler } from "@microservies-inventory/common";
 import { ConnectDB } from "./config/mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
+import { Receipt } from "./models/receipt.model";
 
 const app = express();
 const HOST = "8082";
@@ -75,6 +76,7 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
+
   app.listen(HOST, () => {
     console.log(`🟢  Listening on port ${HOST}`);
   });

@@ -1,13 +1,14 @@
 import * as amqplib from "amqplib";
-const queue = "demo";
-
-var connection;
+import { OrdersCreatedPublisher } from "./orders/orders-created-publisher";
 
 // Kết nối RabbitMQ
 async function connectRabbitMQ() {
   try {
-    connection = await amqplib.connect("amqp://localhost:5673");
+    const connection = await amqplib.connect("amqp://localhost:5673");
+    const queue = "created-orders";
+
     console.info("connect to RabbitMQ success");
+    // const publisher = new OrdersCreatedPublisher("");
 
     const channel = await connection.createChannel();
     await channel.assertQueue(queue);

@@ -1,4 +1,4 @@
 import express from "express";
-// import { authentication } from "./auth-routes";
+import { ordersRouter } from "./orders";
 
-export const routes = express.Router().use();
+export const routes = express.Router().use(ordersRouter);
