@@ -11,11 +11,11 @@ export const insertSupplier = async (req: Request, res: Response) => {
     throw new RequestValidationError(errors.array());
   }
 
-  const supplier = await Supplier.insertSupplier(req.body);
+  const newSupplier = await Supplier.insertSupplier(req.body);
 
   res.status(200).send({
     msg: "Add New Supplier Success",
-    data: supplier,
+    data: newSupplier,
   });
 };
 
