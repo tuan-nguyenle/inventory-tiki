@@ -1,27 +1,24 @@
 import mongoose, { Document, Schema } from "mongoose";
-// import { Package } from "./package.model";
-
 // gui den nhiu xe / khong du hang thi stack car
 // sau do thi tra lai phieu missing and warehouse repack
-enum ReceiptType {
+enum OrderType {
   WAREHOUSE_EXPORT = "Warehouse Export",
-  WAREHOUSE_RECEIPT = "Warehouse Receipt",
-  WAREHOUSE_RECEIPT_REPACK = "Warehouse Receipt Repack",
+  WAREHOUSE_ORDER = "Warehouse Order",
+  WAREHOUSE_ORDER_REPACK = "Warehouse Orders Repack",
 }
 
 enum StatusType {
   UNCHECK = "Unchecked",
   MISSING = "Not Enough Stock",
   STOCKED = "Stocked",
-  STACK_CAR = "Stack Car",
 }
 
-interface Receipt {
+interface Order {
   container_code: string;
   deliverer: string; //nguoi gui hang
   license_plates: string; // Bien So Xe
   store_keeper: string;
-  receipt_type: ReceiptType;
+  order_type: OrderType;
   status: StatusType;
   packages: {
     package_code: string;
@@ -31,12 +28,15 @@ interface Receipt {
       bar_code: string;
       sku: string;
       unit: string;
+      quantity: number;
       supplier_name: string;
     }[];
   }[];
+  stack_car: boolean;
+  parentID: Order;
 }
 
-const ReceiptSchema = new Schema<Receipt, Document>(
+const OrderSchema = new Schema<Order, Document>(
   {
     container_code: { type: String, required: true },
     deliverer: { type: String, required: true, default: "Qlo" },
@@ -50,6 +50,7 @@ const ReceiptSchema = new Schema<Receipt, Document>(
             product_name: { type: String, required: true },
             category: { type: String, required: true },
             bar_code: { type: String, required: true },
+            quantity: { type: Number, default: 0 },
             sku: { type: String, required: true },
             unit: {
               type: String,
@@ -59,28 +60,35 @@ const ReceiptSchema = new Schema<Receipt, Document>(
         ],
       },
     ],
-    receipt_type: {
+    order_type: {
       type: String,
       required: true,
-      enum: Object.values(ReceiptType),
+      enum: Object.values(OrderType),
     },
     status: {
       type: String,
       required: true,
       enum: Object.values(StatusType),
     },
+    stack_car: {
+      type: Boolean,
+      required: true,
+    },
+    parentID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+    },
   },
   {
     timestamps: true,
     toJSON: {
       transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
+        delete ret.__v;
       },
     },
   }
 );
 
-const Receipt = mongoose.model<Receipt & Document>("Receipt", ReceiptSchema);
+const Order = mongoose.model<Order & Document>("Order", OrderSchema);
 
-export { Receipt };
+export { Order };

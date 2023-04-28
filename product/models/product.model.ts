@@ -30,10 +30,7 @@ const ProductSchema = new Schema<Product, Document>(
   {
     timestamps: true,
     toJSON: {
-      transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-      },
+      transform(doc, ret) {},
     },
   }
 );
