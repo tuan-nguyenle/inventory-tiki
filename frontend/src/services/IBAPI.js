@@ -8,8 +8,14 @@ export const getNotication = async () => {
         throw error;
     }
 }
-export const getAllAccounts = () => {
+export const getAllAccounts = async () => {
+    try {
+        const response = await axios.get('http://localhost/api/auth/users');
+        return response.data.data;
 
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export const addNewAccount = (data) => {

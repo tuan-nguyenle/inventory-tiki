@@ -11,11 +11,19 @@ import ShowListIB from "./ShowListIB";
 import CheckIB from "./modalIB/CheckIB";
 const InboundList = (props) => {
     const location = useLocation();
-    const state = location.state;
+    const step = location.state;
     let container = "";
-    if (state) {
-        container = location.state[0];
-        console.log(state);
+    const state1 = [];
+    if (step) {
+        const step2 = JSON.parse(step); // chuyển Json thành đối tượng javascript
+        const step3 = step2.packages;
+        const step4 = step3.flatMap(pkg => pkg.products);
+        container = step2.container_code;
+        if (step4) {
+            state1.unshift(container);
+            state1.push(...step4);
+        }
+        // console.log(state1);
     }
     // Lấy ngày
     var dateObj = new Date();
@@ -26,10 +34,11 @@ const InboundList = (props) => {
 
     // State
     const MAX_PALLET_LENGTH = 8;
-    const nextinput = useRef(null);
+    const begininputRef = useRef(null);
     const [isBarcodeScanned, setIsBarcodeScanned] = useState(false);
     const [checkSquare, setCheckSquare] = useState(false);
     const [checkcontainer, setCheckcontainer] = useState(false);
+    const [checkpalletright, setCheckpalletright] = useState(false);
     const [data, setData] = useState([]);
     const [misssave, setMisssave] = useState([]);
     const [containerbowl, setContainerbowl] = useState(
@@ -38,12 +47,13 @@ const InboundList = (props) => {
             bowl: "",
         });
     const [newdata, setNewdata] = useState({
-        productcode: "",
+        bar_code: "",
         codecontainer: "",
-        productname: "",
-        supplier: "",
+        product_name: "",
+        supplier_name: "",
         category: "",
         quantity: 1,
+        sku: "",
     });
     // Hàm xử lý
     const toggle = () => setCheckSquare(!checkSquare);
@@ -55,7 +65,6 @@ const InboundList = (props) => {
             [id]: value
         }
         ))
-        setCheckcontainer(id === "codecontainer" && value !== containerbowl.codecontainervalidate ? true : false);
     }
     const changeHandler2 = (e) => {
         const { id, value } = e.target
@@ -68,10 +77,10 @@ const InboundList = (props) => {
         let dt = data;
         let check = false;
         for (let i = 0; i < data.length; i++) {
-            if (dt[i].productcode == item) {
+            if (dt[i].bar_code == item) {
                 // console.log("đã tồn tại", data[i])
                 let product = dt[i];   // thay đổi 1 giá trị trong object của state
-                // dt = dt.filter(product => product.productcode !== item);
+                // dt = dt.filter(product => product.bar_code !== item);
                 product.quantity++
                 check = true;
                 break;
@@ -81,22 +90,23 @@ const InboundList = (props) => {
         return check;
     }
     const allinfo = (item) => {
-        if (state && state.length > 0) {
-            for (let i = 1; i < state.length; i++) {
-                if (state[i].productcode == item) {
-                    let pr = state[i]
+        if (state1 && state1.length > 0) {
+            for (let i = 1; i < state1.length; i++) {
+                if (state1[i].bar_code == item) {
+                    let pr = state1[i]
                     let newdatainput = {
                         id: Math.floor((Math.random() * 199999999) + 1),
-                        productcode: newdata.productcode,
-                        productname: pr.productname,
+                        bar_code: newdata.bar_code,
+                        product_name: pr.product_name,
                         category: pr.category,
-                        supplier: pr.supplier,
+                        supplier_name: pr.supplier_name,
                         date: newdate,
+                        sku: pr.sku,
                         quantity: newdata.quantity,
                     }
                     setData([...data, newdatainput]);
                     setNewdata({
-                        productcode: "",
+                        bar_code: "",
                         codecontainer: newdata.codecontainer,
                         quantity: newdata.quantity,
                     });
@@ -106,70 +116,72 @@ const InboundList = (props) => {
             }
             toast.error("Product does not exist"); // in thông báo
             setNewdata({
-                productcode: "",
+                bar_code: "",
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
             });
         } else {
-            if (!containerbowl.codecontainervalidate || !newdata.productcode || !containerbowl.bowl || !newdata.productname || !newdata.category) {
+            if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || !newdata.product_name || !newdata.category) {
                 toast.error("Missing info"); // in thông báo
                 return;
             }
             let newdatainput = {
                 id: Math.floor((Math.random() * 199999999) + 1),
-                productcode: newdata.productcode,
-                productname: newdata.productname,
+                bar_code: newdata.bar_code,
+                product_name: newdata.product_name,
                 category: newdata.category,
-                supplier: newdata.supplier,
+                supplier_name: newdata.supplier_name,
+                sku: newdata.sku,
                 date: newdate,
                 quantity: newdata.quantity,
             }
             setData([...data, newdatainput]);
             setNewdata({
-                productcode: "",
+                bar_code: "",
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
-                productname: "",
+                product_name: "",
                 category: "",
-                supplier: ""
+                supplier_name: "",
+                sku: "",
             });
         }
     }
     const inputProduct = (e) => {
         e.preventDefault();
-        if (!containerbowl.codecontainervalidate || !newdata.productcode || !containerbowl.bowl) {
+        if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || checkpalletright || checkcontainer) {
             toast.error("Missing info"); // in thông báo
             return;
         }
-        let isValid = checkexists(newdata.productcode);
+        let isValid = checkexists(newdata.bar_code);
         if (isValid == true) {
             setData([...data]);
             setNewdata({
-                productcode: "",
+                bar_code: "",
                 quantity: newdata.quantity,
                 codecontainer: newdata.codecontainer,
             });
             return;
         }
-        allinfo(newdata.productcode);
+        allinfo(newdata.bar_code);
     }
 
     const checksave = () => {
-        if (state.length > 0) {
+        if (state1.length > 0) {
             let newMisssave = [];
-            for (let i = 1; i < state.length; i++) {
-                let obj = state[i];
-                if (obj.hasOwnProperty("productcode")) { // Kiểm tra xem đối tượng có chứa key "c" hay không
-                    let productcodeValue = obj.productcode;
+            for (let i = 1; i < state1.length; i++) {
+                let obj = state1[i];
+                if (obj.hasOwnProperty("bar_code")) { // Kiểm tra xem đối tượng có chứa key "c" hay không
+                    let productcodeValue = obj.bar_code;
                     let productquantity = obj.quantity;
-                    let foundproductcodeValue = data.some((o) => o.hasOwnProperty("productcode") && o.productcode == productcodeValue && o.quantity == productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
+                    let foundproductcodeValue = data.some((o) => o.hasOwnProperty("bar_code") && o.bar_code == productcodeValue && o.quantity == productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
                     if (!foundproductcodeValue) {
-                        let foundData = data.find((o) => o.productcode == productcodeValue);
+                        let foundData = data.find((o) => o.bar_code == productcodeValue);
                         let quantityDifference = foundData && foundData.quantity ? productquantity - foundData.quantity : productquantity;
-                        // let quantityDifference = data.find((o) => o.productcode == productcodeValue);
+                        // let quantityDifference = data.find((o) => o.bar_code == productcodeValue);
                         if (quantityDifference !== 0) {
                             let newhaha = {
-                                product: obj.productname,
+                                product: obj.product_name,
                                 missquantity: quantityDifference,
                                 codecontainer: container
                             }
@@ -184,7 +196,7 @@ const InboundList = (props) => {
         }
     }
     const SaveInbound = async () => {
-        if (state && state.length > 0) {
+        if (state1 && state1.length > 0) {
             // const getmiss = await checksave();
             // if (getmiss.length > 0) {
             //     console.log("thiếu", getmiss);
@@ -215,12 +227,24 @@ const InboundList = (props) => {
     };
     const checkpallet = (event) => {
         const palletregex = /^IB-\d{5}$/;
-
         if (palletregex.test(event.target.value)) {
-            // document.getElementById("productcode").focus();
-            nextinput.current.focus();
+            setCheckpalletright(false);
+            document.getElementById("bar_code").focus();
+        }
+        else {
+            setCheckpalletright(true);
         }
     };
+    const checkcontai = (event) => {
+        const contaitregex = new RegExp(containerbowl.codecontainervalidate);
+        if (contaitregex.test(event.target.value)) {
+            setCheckcontainer(false);
+        }
+        else {
+            setCheckcontainer(true);
+        }
+
+    }
     useEffect(() => {
         if (!checkcontainer) {
             // nextinput.current.focus();
@@ -234,12 +258,16 @@ const InboundList = (props) => {
         }
     }, [isBarcodeScanned]);
     useEffect(() => {
-        if (state) {
+        if (step) {
             const newMisssave = checksave();
             setMisssave(newMisssave);
         }
 
-    }, [state, data]);
+    }, [step, data]);
+    useEffect(() => {
+        begininputRef.current.focus();
+    }, []);
+
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
@@ -247,17 +275,6 @@ const InboundList = (props) => {
             </div>
             <hr></hr>
             <div className="card card-default">
-                {/* <div className="card-header">
-                    <h3 className="card-title">Quét mã barcode</h3>
-                    <div className="card-tools">
-                        <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                            <i className="fas fa-minus"></i>
-                        </button>
-                        <button type="button" className="btn btn-tool" data-card-widget="remove">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div> */}
                 <div className="card-body">
                     <form>
                         <div className="row">
@@ -280,33 +297,34 @@ const InboundList = (props) => {
                             <div className="col-md-4">
                                 <div className="form-group">
                                     <label>Container Code</label>
-                                    <input id="codecontainer" type="text" className="form-control" placeholder="Code-container" onChange={changeHandler} ref={nextinput} />
+                                    <input id="codecontainer" type="text" className="form-control" placeholder="Code-container" onChange={changeHandler} onInput={checkcontai} ref={begininputRef} />
                                     {checkcontainer ? <p style={{ color: "red" }}>* Mismatched!</p> : <p></p>}
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group">
                                     <label>Pallet</label>
-                                    <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} ref={nextinput} onInput={checkpallet} />
+                                    <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} onInput={checkpallet} />
                                 </div>
+                                {checkpalletright ? <p style={{ color: "red" }}>* The pallet is invalid!</p> : <p></p>}
                             </div>
-                            {!state ? <>
+                            {!step ? <>
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Product Name</label>
-                                        <input id="productname" type="text" className="form-control" placeholder="Product Name" value={newdata.productname} onChange={changeHandler} ref={nextinput} />
+                                        <input id="product_name" type="text" className="form-control" placeholder="Product Name" value={newdata.product_name} onChange={changeHandler} />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Category</label>
-                                        <input id="category" type="text" className="form-control" placeholder="Category" value={newdata.category} onChange={changeHandler} ref={nextinput} />
+                                        <input id="category" type="text" className="form-control" placeholder="Category" value={newdata.category} onChange={changeHandler} />
                                     </div>
                                 </div></> : null}
                             <div className="col-md-10">
                                 <div className="form-group">
                                     <label>Input Code Product</label>
-                                    <input id="productcode" type="number" className="form-control" placeholder="Code-container" value={newdata.productcode} onChange={changeHandler} onInput={checkBarcode} ref={nextinput} />
+                                    <input id="bar_code" type="text" className="form-control" placeholder="Code-container" value={newdata.bar_code} onChange={changeHandler} onInput={checkBarcode} />
                                 </div>
                             </div>
                             <div className="col-md-2">
@@ -318,8 +336,13 @@ const InboundList = (props) => {
                     <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
                     <div style={{ float: "right" }} className="row">
                         <div className="btn-button">
-                            <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
-                            <CheckIB misssave={misssave} inbound={data} container={containerbowl} />
+                            {data && data.length > 0 ?
+                                <>
+                                    <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
+                                    <CheckIB misssave={misssave} inbound={data} container={containerbowl} />
+                                </>
+                                : null}
+
                             {/* <Button variant="primary" onClick={() => { SaveInbound(); }}><span style={{ paddingRight: "5px" }}><FaSave /></span> Save</Button> */}
                         </div>
                     </div>

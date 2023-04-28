@@ -41,16 +41,17 @@ const ShowListIB = React.forwardRef((props, ref) => {
                                         <th>Supplier</th>
                                         <th>Category</th>
                                         <th>Quantity</th>
+                                        <th>SKU</th>
                                         <th>Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {/* <tr>
-                                        <td>1</td>
-                                        <td>8938510904063</td>
-                                        <td>{newdate}</td>
-                                        <td>1</td>
-                                    </tr> */}
+                                            <td>1</td>
+                                            <td>8938510904063</td>
+                                            <td>{newdate}</td>
+                                            <td>1</td>
+                                        </tr> */}
                                     {
 
                                         data && data.length > 0 && data.map((data, i) => {
@@ -58,11 +59,12 @@ const ShowListIB = React.forwardRef((props, ref) => {
 
                                                 <tr key={data.id}>
                                                     <td>{i + 1}</td>
-                                                    <td>{data.productcode}</td>
-                                                    <td>{data.productname}</td>
-                                                    <td>{data.supplier}</td>
+                                                    <td>{data.bar_code}</td>
+                                                    <td style={{ maxWidth: "200px", wordBreak: "break-all", whiteSpace: "pre-wrap" }}>{data.product_name}</td>
+                                                    <td>{data.supplier_name}</td>
                                                     <td>{data.category}</td>
                                                     <td>{data.quantity}</td>
+                                                    <td>{data.sku}</td>
                                                     <td>{data.date}</td>
                                                 </tr>
                                             )
