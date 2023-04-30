@@ -85,7 +85,7 @@ export const checkOrder = async (req: Request, res: Response) => {
   }).filter((missingPackage) => missingPackage !== null) as Package[];
 
   if (missingProducts.length === 0) {
-    let order = await Order.findOneAndUpdate(req.params.id, { status: "Stocked" });
+    await Order.findOneAndUpdate(req.params.id, { status: "Stocked", checkPoint: "offset" });
 
     res.status(200).send({ status: "The Order is Stocked Finished" });
   } else {

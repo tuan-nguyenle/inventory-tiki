@@ -25,8 +25,8 @@ export const findOneOrder = async (id: string) => {
 export const findOneAndUpdate = async (id: string, dataObj: Record<string, unknown>) => {
   const order = await Order.findOneAndUpdate({ _id: id }, dataObj);
 
-  if (order?.parentID !== null && order?.status === "Stocked") {
-    await findOneAndUpdate(String(order?.parentID), { status: "Stocked" });
+  if (order?.parentID !== null && dataObj.checkPoint === "offset") {
+    await findOneAndUpdate(String(order?.parentID), { status: "Stocked", checkPoint: "offset" });
   }
 
   return order;
