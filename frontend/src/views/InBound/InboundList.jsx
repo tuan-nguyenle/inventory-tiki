@@ -9,21 +9,41 @@ import {
 import "../../styles/inbound.scss"
 import ShowListIB from "./ShowListIB";
 import CheckIB from "./modalIB/CheckIB";
+import NextIB from "./modalIB/NextIB";
 const InboundList = (props) => {
     const location = useLocation();
     const step = location.state;
     let container = "";
     const state1 = [];
+    const step4 = [];
     if (step) {
-        const step2 = JSON.parse(step); // chuyển Json thành đối tượng javascript
-        const step3 = step2.packages;
-        const step4 = step3.flatMap(pkg => pkg.products);
-        container = step2.container_code;
-        if (step4) {
-            state1.unshift(container);
-            state1.push(...step4);
+
+        // const step2 = JSON.parse(step); // chuyển Json thành đối tượng javascript
+        const state3 = step.packages;
+        state1.push(...state3);
+        if (state3) {
+            for (let i = 0; i < state3.length; i++) {
+                const pkg = state3[i];
+                const products = pkg.products.map(product => {
+                    return {
+                        ...product,
+                        package_code: pkg.package_code
+                    };
+                });
+                step4.push(...products);
+            }
         }
-        // console.log(state1);
+        container = step.container_code;
+
+        // state1.unshift(container);
+        // const step4 = step3.flatMap(pkg => pkg.products);
+        // container = step2.container_code;
+        // if (step4) {
+        //     state1.unshift(container);
+        //     state1.push(...step4);
+        // }
+        // console.log(step2);
+
     }
     // Lấy ngày
     var dateObj = new Date();
@@ -34,19 +54,23 @@ const InboundList = (props) => {
 
     // State
     const MAX_PALLET_LENGTH = 8;
+    const MAX_PACKAGE_LENGTH = 12;
     const begininputRef = useRef(null);
     const [isBarcodeScanned, setIsBarcodeScanned] = useState(false);
     const [checkSquare, setCheckSquare] = useState(false);
+    const [checksquarepack, setChecksquarepack] = useState(true);
     const [checkcontainer, setCheckcontainer] = useState(false);
     const [checkpalletright, setCheckpalletright] = useState(false);
     const [data, setData] = useState([]);
     const [misssave, setMisssave] = useState([]);
+    const [newmiss, setNewmiss] = useState(null);
     const [containerbowl, setContainerbowl] = useState(
         {
             codecontainervalidate: container,
             bowl: "",
         });
     const [newdata, setNewdata] = useState({
+        package: "",
         bar_code: "",
         codecontainer: "",
         product_name: "",
@@ -58,7 +82,6 @@ const InboundList = (props) => {
     // Hàm xử lý
     const toggle = () => setCheckSquare(!checkSquare);
     const changeHandler = (e) => {
-        // setNewdata({ ...newdata, [e.target.name]: [e.target.value] });
         const { id, value } = e.target
         setNewdata(prevState => ({
             ...prevState,
@@ -73,45 +96,66 @@ const InboundList = (props) => {
             [id]: value
         }))
     }
-    const checkexists = (item) => {
+    const checkexists = (item, pa) => {
         let dt = data;
         let check = false;
+        // let productToUpdate = null; // sản phẩm cần được cập nhật quantity
         for (let i = 0; i < data.length; i++) {
-            if (dt[i].bar_code == item) {
-                // console.log("đã tồn tại", data[i])
-                let product = dt[i];   // thay đổi 1 giá trị trong object của state
-                // dt = dt.filter(product => product.bar_code !== item);
-                product.quantity++
-                check = true;
-                break;
+            if (dt[i].bar_code == item && dt[i].package == pa) {
+                let product = dt[i];
+                // let productToUpdate = state1.find(p => p.package_code == pa && p.bar_code == item);
+                // if (productToUpdate) {
+                //     console.log("Đã đủ số lượng luôn");
+                //     break;
+                // }
+                // console.log(product.quantity);
+                let productToUpdate = state1.find(p => p.package_code == pa && p.products.some(prod => {
+                    return prod.bar_code == item && product.quantity >= prod.quantity;
+                }));
+                if (productToUpdate) {
+                    toast.warning("This product has reached its quantity limit."); // in thông báo
+                    check = true;
+                    return check;
+                }
+                else {
+                    product.quantity++
+                    check = true;
+                    break;
+                }
+
             }
 
         }
         return check;
     }
-    const allinfo = (item) => {
+
+    const allinfo = (item, pa) => {
         if (state1 && state1.length > 0) {
-            for (let i = 1; i < state1.length; i++) {
-                if (state1[i].bar_code == item) {
-                    let pr = state1[i]
-                    let newdatainput = {
-                        id: Math.floor((Math.random() * 199999999) + 1),
+            const packageIndex = state1.findIndex((p) => p.package_code == pa);
+
+            if (packageIndex !== -1) {
+                const productIndex = state1[packageIndex].products.findIndex((p) => p.bar_code == item);
+                if (productIndex !== -1) {
+                    const product = state1[packageIndex].products[productIndex];
+                    const newdatainput = {
+                        id: Math.floor(Math.random() * 199999999 + 1),
                         bar_code: newdata.bar_code,
-                        product_name: pr.product_name,
-                        category: pr.category,
-                        supplier_name: pr.supplier_name,
+                        product_name: product.product_name,
+                        category: product.category,
+                        supplier_name: product.supplier_name,
                         date: newdate,
-                        sku: pr.sku,
+                        sku: product.sku,
                         quantity: newdata.quantity,
-                    }
+                        package: newdata.package
+                    };
                     setData([...data, newdatainput]);
                     setNewdata({
                         bar_code: "",
+                        package: newdata.package,
                         codecontainer: newdata.codecontainer,
                         quantity: newdata.quantity,
                     });
                     return;
-
                 }
             }
             toast.error("Product does not exist"); // in thông báo
@@ -119,6 +163,7 @@ const InboundList = (props) => {
                 bar_code: "",
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
+                package: newdata.package,
             });
         } else {
             if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || !newdata.product_name || !newdata.category) {
@@ -137,6 +182,7 @@ const InboundList = (props) => {
             }
             setData([...data, newdatainput]);
             setNewdata({
+                package: newdata.package,
                 bar_code: "",
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
@@ -148,95 +194,138 @@ const InboundList = (props) => {
         }
     }
     const inputProduct = (e) => {
+        // console.log(state1);
         e.preventDefault();
-        if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || checkpalletright || checkcontainer) {
-            toast.error("Missing info"); // in thông báo
+        if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || checkpalletright || checkcontainer || !newdata.package) {
+            toast.error("Missing info - The information is incorrect"); // in thông báo
             return;
         }
-        let isValid = checkexists(newdata.bar_code);
+        // let enough = check_enough(newdata.package); // check đủ rồi thì next
+        let isValid = checkexists(newdata.bar_code, newdata.package); // check trùng thì tăng lên
         if (isValid == true) {
             setData([...data]);
             setNewdata({
+                package: newdata.package,
                 bar_code: "",
                 quantity: newdata.quantity,
                 codecontainer: newdata.codecontainer,
             });
             return;
         }
-        allinfo(newdata.bar_code);
+        allinfo(newdata.bar_code, newdata.package); //check có trong excel không
     }
-
     const checksave = () => {
-        if (state1.length > 0) {
-            let newMisssave = [];
-            for (let i = 1; i < state1.length; i++) {
-                let obj = state1[i];
-                if (obj.hasOwnProperty("bar_code")) { // Kiểm tra xem đối tượng có chứa key "c" hay không
-                    let productcodeValue = obj.bar_code;
-                    let productquantity = obj.quantity;
-                    let foundproductcodeValue = data.some((o) => o.hasOwnProperty("bar_code") && o.bar_code == productcodeValue && o.quantity == productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
-                    if (!foundproductcodeValue) {
-                        let foundData = data.find((o) => o.bar_code == productcodeValue);
-                        let quantityDifference = foundData && foundData.quantity ? productquantity - foundData.quantity : productquantity;
-                        // let quantityDifference = data.find((o) => o.bar_code == productcodeValue);
-                        if (quantityDifference !== 0) {
-                            let newhaha = {
-                                product: obj.product_name,
-                                missquantity: quantityDifference,
-                                codecontainer: container
-                            }
-                            // setMisssave(prevMisssave => [...prevMisssave, newhaha]) // callback
-                            newMisssave = [...newMisssave, newhaha];
-                        }
+        if (step4.length > 0) {
+            let missave1 = [];
 
+            // Duyệt qua từng sản phẩm trong biến step4
+            for (let i = 0; i < step4.length; i++) {
+                let found = false;
+
+                // Kiểm tra xem sản phẩm có trong biến data hay không dựa trên các thuộc tính
+                for (let j = 0; j < data.length; j++) {
+                    if (step4[i].bar_code === data[j].bar_code &&
+                        step4[i].package_code === data[j].package &&
+                        step4[i].supplier_name === data[j].supplier_name &&
+                        step4[i].sku === data[j].sku) {
+                        found = true;
+
+                        // So sánh quantity
+                        if (step4[i].quantity > data[j].quantity) {
+                            // Lưu thông tin sản phẩm vào biến missave nếu quantity của sản phẩm trong step4 lớn hơn quantity của sản phẩm trong data
+                            missave1.push({
+                                ...step4[i],
+                                quantity: step4[i].quantity - data[j].quantity
+                            });
+                        }
+                        break;
                     }
                 }
+
+                // Lưu thông tin sản phẩm vào biến missave nếu sản phẩm trong biến step4 không có trong biến data
+                if (!found) {
+                    missave1.push(step4[i]);
+                }
             }
-            return newMisssave;
-        }
+            return missave1;
+        };
     }
-    const SaveInbound = async () => {
-        if (state1 && state1.length > 0) {
-            // const getmiss = await checksave();
-            // if (getmiss.length > 0) {
-            //     console.log("thiếu", getmiss);
-            // }
-            // else {
-            //     console.log("không")
-            // }
-            // setCurrentMisssave(misssave);
-            console.log(misssave);
-        }
-        console.log("Data dữ liệu: ", data);
-        console.log("Container: ", containerbowl);
-        toast.success("Đã Save"); // in thông báo
-    }
+    // const checksave = () => {
+    //     if (state1.length > 0) {
+    //         let newMisssave = [];
+    //         for (let i = 1; i < state1.length; i++) {
+    //             let obj = state1[i];
+    //             if (obj.hasOwnProperty("bar_code")) { // Kiểm tra xem đối tượng có chứa key "c" hay không
+    //                 let productcodeValue = obj.bar_code;
+    //                 let productquantity = obj.quantity;
+    //                 let foundproductcodeValue = data.some((o) => o.hasOwnProperty("bar_code") && o.bar_code == productcodeValue && o.quantity == productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
+    //                 if (!foundproductcodeValue) {
+    //                     let foundData = data.find((o) => o.bar_code == productcodeValue);
+    //                     let quantityDifference = foundData && foundData.quantity ? productquantity - foundData.quantity : productquantity;
+    //                     // let quantityDifference = data.find((o) => o.bar_code == productcodeValue);
+    //                     if (quantityDifference !== 0) {
+    //                         let newhaha = {
+    //                             product: obj.product_name,
+    //                             missquantity: quantityDifference,
+    //                             codecontainer: container
+    //                         }
+    //                         // setMisssave(prevMisssave => [...prevMisssave, newhaha]) // callback
+    //                         newMisssave = [...newMisssave, newhaha];
+    //                     }
+
+    //                 }
+    //             }
+    //         }
+    //         return newMisssave;
+    //     }
+    // }
     //Xử lý Print
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
     });
 
+    //xử lý next
+    const inputNext = () => {
+        setChecksquarepack(true);
+        if (newmiss) {
+            // setMisssave(prevMisssave => [...prevMisssave, ...newmiss.map(item => ({ ...item }))]);
+        }
+        setNewdata({
+            package: "",
+            bar_code: "",
+            quantity: newdata.quantity,
+            codecontainer: newdata.codecontainer,
+        });
+        setNewmiss(null);
+    }
+
     // xử lý input
     const checkBarcode = (event) => {
-        const barcodeRegex = /^[0-9]{3}$/;
+        const barcodeRegex = /^[0-9]{13}$/;
 
         if (barcodeRegex.test(event.target.value)) {
             setIsBarcodeScanned(true);
         }
     };
+    const checkPack = (event) => {
+        const packregex = /^[A-Za-z0-9]{12}$/;
+        if (packregex.test(event.target.value)) {
+            document.getElementById("bar_code").focus();
+        }
+    }
     const checkpallet = (event) => {
         const palletregex = /^IB-\d{5}$/;
         if (palletregex.test(event.target.value)) {
             setCheckpalletright(false);
-            document.getElementById("bar_code").focus();
+            document.getElementById("package").focus();
         }
         else {
             setCheckpalletright(true);
         }
     };
     const checkcontai = (event) => {
-        const contaitregex = new RegExp(containerbowl.codecontainervalidate);
+        const contaitregex = new RegExp(containerbowl.codecontainervalidate + "$");
         if (contaitregex.test(event.target.value)) {
             setCheckcontainer(false);
         }
@@ -245,6 +334,11 @@ const InboundList = (props) => {
         }
 
     }
+    useEffect(() => {
+        if (checksquarepack) {
+            document.getElementById("package").focus();
+        }
+    }, [checksquarepack]);
     useEffect(() => {
         if (!checkcontainer) {
             // nextinput.current.focus();
@@ -262,12 +356,80 @@ const InboundList = (props) => {
             const newMisssave = checksave();
             setMisssave(newMisssave);
         }
-
     }, [step, data]);
     useEffect(() => {
         begininputRef.current.focus();
     }, []);
-
+    const [enough, setEnough] = useState(false);
+    useEffect(() => {
+        const checkEnough = (pa) => {
+            let dt = data;
+            const packageIndex = state1.findIndex(p => p.package_code == pa);
+            if (packageIndex < 0) {
+                // Không tìm thấy package_code trong state1
+                return false;
+            } else {
+                // Tính tổng số lượng các sản phẩm trong biến data có package trùng với pa
+                const products = dt.filter(p => p.package == pa);
+                const productsQuantity = products.reduce((acc, cur) => acc + cur.quantity, 0);
+                if (productsQuantity >= state1[packageIndex].products.reduce((acc, cur) => acc + cur.quantity, 0)) {
+                    setChecksquarepack(true);
+                    setNewdata({
+                        package: "",
+                        bar_code: "",
+                        quantity: newdata.quantity,
+                        codecontainer: newdata.codecontainer,
+                    });
+                    setNewmiss(null);
+                    return;
+                } else {
+                    // Lấy ra danh sách các sản phẩm có trong biến state1 nhưng không có trong biến data
+                    const productsWithoutData = state1[packageIndex].products.filter(p1 =>
+                        !products.some(p2 => p1.product_name == p2.product_name)
+                    );
+                    // Lưu thông tin các sản phẩm chưa có trong biến data vào biến miss
+                    let miss = productsWithoutData.map(p => ({
+                        bar_code: p.bar_code,
+                        category: p.category,
+                        sku: p.sku,
+                        package_code: pa,
+                        product_name: p.product_name,
+                        quantity: p.quantity,
+                        supplier_name: p.supplier_name
+                    }));
+                    // Lưu thông tin các sản phẩm thiếu vào biến miss
+                    products.forEach(p => {
+                        const productInState1 = state1[packageIndex].products.find(pr => pr.product_name == p.product_name && pr.bar_code == p.bar_code && pr.supplier_name == p.supplier_name); //sửa thành barcode nè
+                        const quantityMissing = productInState1.quantity - p.quantity; // -quantity
+                        if (quantityMissing > 0) {
+                            miss.push({
+                                package_code: pa,
+                                sku: p.sku,
+                                bar_code: p.bar_code,
+                                category: p.category,
+                                supplier_name: p.supplier_name,
+                                product_name: p.product_name,
+                                quantity: quantityMissing
+                            });
+                        }
+                    });
+                    setChecksquarepack(false);
+                    setNewmiss(miss)
+                    return;
+                }
+            }
+        };
+        const enough = state1.every((p) => checkEnough(newdata.package));
+        setEnough(enough);
+    }, [data]);
+    // console.log("miss", newmiss);
+    // console.log("miss tổng", misssave);
+    // console.log(miss1);
+    // console.log(state1);
+    // console.log(data);
+    // console.log(step4);
+    // console.log(data);
+    // console.log(isBarcodeScanned);
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
@@ -321,7 +483,13 @@ const InboundList = (props) => {
                                         <input id="category" type="text" className="form-control" placeholder="Category" value={newdata.category} onChange={changeHandler} />
                                     </div>
                                 </div></> : null}
-                            <div className="col-md-10">
+                            <div className="col-md-3">
+                                <div className="form-group">
+                                    <label>Package</label>
+                                    <input id="package" type="text" maxLength={MAX_PACKAGE_LENGTH} className="form-control" placeholder="Package" value={newdata.package} disabled={checksquarepack ? "" : "{false}"} onChange={changeHandler} onInput={checkPack} />
+                                </div>
+                            </div>
+                            <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Input Code Product</label>
                                     <input id="bar_code" type="text" className="form-control" placeholder="Code-container" value={newdata.bar_code} onChange={changeHandler} onInput={checkBarcode} />
@@ -330,6 +498,13 @@ const InboundList = (props) => {
                             <div className="col-md-2">
                                 <button type="button" id="btnnhapinput" className="btn btn_nhap btn-block btn-success btn-lg" onClick={inputProduct}>Input</button>
                             </div>
+                            {
+                                newmiss ?
+                                    <div className="next col-md-1">
+                                        <NextIB misssave={newmiss} handlemissing={inputNext} />
+                                    </div>
+                                    : null
+                            }
                         </div>
                     </form>
                     <hr></hr>
@@ -342,8 +517,6 @@ const InboundList = (props) => {
                                     <CheckIB misssave={misssave} inbound={data} container={containerbowl} />
                                 </>
                                 : null}
-
-                            {/* <Button variant="primary" onClick={() => { SaveInbound(); }}><span style={{ paddingRight: "5px" }}><FaSave /></span> Save</Button> */}
                         </div>
                     </div>
                 </div>
