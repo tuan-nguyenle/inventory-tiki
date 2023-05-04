@@ -6,25 +6,48 @@ interface Event {
   data: any;
 }
 
-export abstract class Publisher<T extends Event> {
-  abstract subject: T["subject"];
-  private channel: amqp.Channel;
+class RabbitMQ {
+  private connection!: amqp.Connection;
+  private channel!: amqp.Channel;
 
-  constructor(channel: amqp.Channel) {
-    this.channel = channel;
+  constructor(
+    private queueName: string,
+    private exchangeName: string,
+    private exchangeType: string,
+    private routingKey: string,
+  ) { }
+
+  public async connect(url: string): Promise<void> {
+    this.connection = await amqp.connect(url);
+    this.channel = await this.connection.createChannel();
+    await this.channel.assertQueue(this.queueName);
+    await this.channel.assertExchange(this.exchangeName, this.exchangeType);
+    // await this.channel.bindQueue(this.queueName, this.exchangeName, this.routingKey);
   }
 
-  async publish(data: T["data"]): Promise<void> {
-    if (!this.channel) {
-      throw new Error("Not connected to RabbitMQ");
-    }
-
-    await this.channel.assertExchange(this.subject, "fanout", {
-      durable: true,
+  public async sendToQueue(message: string): Promise<void> {
+    await this.channel.sendToQueue(this.queueName, Buffer.from(message), {
+      persistent: true,
     });
-    const message = Buffer.from(JSON.stringify(data));
-    await this.channel.publish(this.subject, "", message, { persistent: true });
+  }
 
-    console.log("Event published to subject", this.subject);
+  public async consume(callback: (message: string) => void): Promise<void> {
+    await this.channel.consume(this.queueName, async (message) => {
+      try {
+        const messageContent = message!.content.toString();
+        await callback(messageContent);
+        this.channel.ack(message!);
+      } catch (error) {
+        console.error(error);
+        this.channel.nack(message!, false, false);
+      }
+    });
+  }
+
+  public async close(): Promise<void> {
+    await this.channel.close();
+    await this.connection.close();
   }
 }
+
+export default RabbitMQ;

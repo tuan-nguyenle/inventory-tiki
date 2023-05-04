@@ -1,6 +1,6 @@
 import * as amqplib from "amqplib";
 // import { Or } from "./orders/orders-created-listener";
-const queue = "demo";
+const queue = "created-orders";
 
 var connection;
 

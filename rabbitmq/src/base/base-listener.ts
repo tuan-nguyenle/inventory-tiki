@@ -16,7 +16,7 @@ export abstract class Listener<T extends Event> {
     private host: string,
     private exchange: string,
     private routingKey: string
-  ) {}
+  ) { }
 
   async connect() {
     const connection = await amqp.connect(this.host);

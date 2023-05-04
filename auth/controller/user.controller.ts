@@ -45,7 +45,7 @@ export const login = async (req: Request, res: Response) => {
 
   const userJwt = jwt.signJwt(
     {
-      id: user.id,
+      id: user._id,
       username: user.username,
       fullname: user.fullname,
       phone: user.phone,
