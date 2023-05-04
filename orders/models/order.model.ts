@@ -18,8 +18,8 @@ interface Order {
   deliverer: string; //nguoi gui hang
   license_plates: string; // Bien So Xe
   store_keeper: string;
-  order_type: OrderType;
-  status: StatusType;
+  order_type: string;
+  status: string;
   packages: {
     package_code: string;
     products: {
@@ -77,6 +77,7 @@ const OrderSchema = new Schema<Order, Document>(
     parentID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
+      default: null,
     },
   },
   {
