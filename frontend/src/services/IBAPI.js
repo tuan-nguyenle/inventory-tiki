@@ -17,17 +17,20 @@ export const getAllAccounts = async () => {
         console.log(error);
     }
 }
-export const submitIB = async (data) => {
+export const submitIB = async (data, orderid) => {
     try {
-        console.log(data);
-        const response = await axios.post("link", data, {
+        const combinedJson = JSON.stringify(data, null, 2);
+        console.log(combinedJson);
+        console.log(orderid);
+        const response = await axios.post("http://localhost/api/orders/${orderid}", data, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
         return response;
     } catch (error) {
-        throw error;
+        // throw error;
+        console.log(error);
     }
 }
 

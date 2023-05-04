@@ -13,6 +13,7 @@ const CheckIB = (props) => {
     const miss = props.misssave; // data thiếu
     const contai = props.container; // pallet vs container
     const data = { ...contai, miss };
+    const orderid = props.orderid;
     const handledata = [];
     const saveinbound = props.inbound;
     const containerbow = props.container
@@ -35,14 +36,12 @@ const CheckIB = (props) => {
         };
         // gọi api ngay đây
         try {
-            await IBAPI.submitIB(datainput);
+            await IBAPI.submitIB(datainput, orderid);
             toast.success("Saving process has been completed"); // in thông báo
         } catch (error) {
             toast.error("Can't send. Please check again"); // in thông báo
             toggle();
         }
-
-
     }
     return (
         <div>

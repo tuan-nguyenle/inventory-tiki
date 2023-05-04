@@ -13,11 +13,12 @@ import NextIB from "./modalIB/NextIB";
 const InboundList = (props) => {
     const location = useLocation();
     const step = location.state;
+    let orderid = "";
     let container = "";
     const state1 = [];
     const step4 = [];
     if (step) {
-
+        orderid = step._id;
         // const step2 = JSON.parse(step); // chuyển Json thành đối tượng javascript
         const state3 = step.packages;
         state1.push(...state3);
@@ -430,6 +431,7 @@ const InboundList = (props) => {
     // console.log(step4);
     // console.log(data);
     // console.log(isBarcodeScanned);
+    // console.log(orderid);
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
@@ -514,7 +516,7 @@ const InboundList = (props) => {
                             {data && data.length > 0 ?
                                 <>
                                     <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
-                                    <CheckIB misssave={misssave} inbound={data} container={containerbowl} />
+                                    <CheckIB misssave={misssave} inbound={data} container={containerbowl} orderid={orderid} />
                                 </>
                                 : null}
                         </div>

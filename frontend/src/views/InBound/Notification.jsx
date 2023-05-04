@@ -14,7 +14,7 @@ const Notification = () => {
     //     console.log(DataIB);
     // }
     const [allnotifi, setAllnotifi] = useState(null)
-    // const [notifi, setNotifi] = useState(null)
+    const [notifiun, setNotifiun] = useState(null)
     useEffect(() => {
         (async () => {
             try {
@@ -26,6 +26,15 @@ const Notification = () => {
 
         })();
     }, [])
+    useEffect(() => {
+        if (allnotifi && allnotifi.length > 0) {
+            const uncheckedNotifi = allnotifi.filter((notifi) => notifi.status === "Unchecked");
+            setNotifiun(uncheckedNotifi);
+        }
+    }, [allnotifi])
+
+
+    // console.log(notifiun);
     return (
         <div className="container_notification">
             <div>
@@ -123,7 +132,7 @@ const Notification = () => {
                                 <table className="table table-hover table-striped">
                                     <tbody>
                                         {
-                                            allnotifi && allnotifi.length > 0 && allnotifi.map((about) => {
+                                            notifiun && notifiun.length > 0 && notifiun.map((about) => {
                                                 return (
                                                     <tr key={about._id}>
                                                         <td>
@@ -132,7 +141,7 @@ const Notification = () => {
                                                                 <label htmlFor="check1"></label>
                                                             </div>
                                                         </td>
-                                                        <td className="mailbox-attachment"></td>
+                                                        <td className="mailbox-attachment">{about._id}</td>
                                                         <td className="mailbox-name">Inventory management</td>
                                                         <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="/MainIB/InboundList" state={about} > Create inbound this container</Link>}
                                                         </td>
