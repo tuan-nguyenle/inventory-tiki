@@ -1,24 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import "../../styles/inbound.scss";
 import { Link } from "react-router-dom";
 // import DataIB from "../../components/dataIB";
-import DataIB2 from "../../components/dataIB2";
-import InputExcel from "../InputExcel";
+// import DataIB2 from "../../components/dataIB2";
 import * as IBAPI from "../../services/IBAPI";
 
-let DataIB = "";
+// let DataIB = "";
 const Notification = () => {
-    const getdata = (a) => {
-        DataIB = a;
-        console.log(DataIB);
-    }
-    // useEffect(() => {
-    //     let notifi = IBAPI.getNotication();
-    //     // tạo một usestate rồi lưu vào đó
-    //     // rồi dưới return .map
-    // }, [])
+    // const getdata = (a) => {
+    //     DataIB = a;
+    //     console.log(DataIB);
+    // }
+    const [allnotifi, setAllnotifi] = useState(null)
+    const [notifiun, setNotifiun] = useState(null)
+    const [notifinote, setNotifinote] = useState(null)
+    useEffect(() => {
+        (async () => {
+            try {
+                let notifi = await IBAPI.getNotication();
+                setAllnotifi(notifi);
+            } catch (error) {
+                setAllnotifi(null);
+            }
 
+        })();
+    }, [])
+    useEffect(() => {
+        if (allnotifi && allnotifi.length > 0) {
+            const uncheckedNotifi = allnotifi.filter((notifi) => notifi.status === "Unchecked" && notifi.order_type === "Warehouse Order");
+            setNotifiun(uncheckedNotifi);
+        }
+    }, [allnotifi])
+    useEffect(() => {
+        if (allnotifi && allnotifi.length > 0) {
+            const notenoughNotifi = allnotifi.filter((notifi) => notifi.status === "Not Enough Stock" && notifi.order_type === "Warehouse Order");
+            setNotifinote(notenoughNotifi);
+        }
+    }, [allnotifi])
+
+    // console.log(notifiun);
     return (
         <div className="container_notification">
             <div>
@@ -85,7 +106,7 @@ const Notification = () => {
                 <div className="col-md-9">
                     <div className="card card-primary card-outline">
                         <div className="card-header">
-                            <h3 className="card-title">Inbox</h3>
+                            <h3 className="card-title">Unchecked</h3>
 
                             <div className="card-tools">
                                 <div className="input-group input-group-sm">
@@ -99,6 +120,61 @@ const Notification = () => {
                             </div>
                         </div>
                         <div className="card-body p-0">
+                            {/* <div className="mailbox-controls">
+                                <div className="float-right">
+                                    01-10/02
+                                    <div className="btn-group">
+                                        <button type="button" className="btn btn-default btn-sm">
+                                            <i className="fas"><FaAngleLeft /></i>
+                                        </button>
+                                        <button type="button" className="btn btn-default btn-sm">
+                                            <i className="fas"><FaAngleRight /></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div> */}
+                            <div className="table-responsive mailbox-messages">
+                                <table className="table table-hover table-striped">
+                                    <tbody>
+                                        {
+                                            notifiun && notifiun.length > 0 && notifiun.map((about) => {
+                                                return (
+                                                    <tr key={about._id}>
+                                                        <td>
+                                                            <div className="icheck-primary">
+                                                                <input type="checkbox" value="" id="check1" />
+                                                                <label htmlFor="check1"></label>
+                                                            </div>
+                                                        </td>
+                                                        <td className="mailbox-attachment">{about._id}</td>
+                                                        <td className="mailbox-name">Inventory management</td>
+                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="/MainIB/InboundList" state={about} > Create inbound this container</Link>}
+                                                        </td>
+                                                        <td className="mailbox-star" style={{ color: "red" }} >New</td>
+                                                        <td className="mailbox-date">5 mins ago</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                        {/* <tr>
+                                            <td>
+                                                <div className="icheck-primary">
+                                                    <input type="checkbox" value="" id="check1" />
+                                                    <label htmlFor="check1"></label>
+                                                </div>
+                                            </td>
+                                            <td className="mailbox-star"><a href="#"><i className="fas fa-star text-warning"></i></a></td>
+                                            <td className="mailbox-name">ĐứcSiro</td>
+                                            <td className="mailbox-subject"><b>ARADIA887958</b>  - {<Link to="/MainIB/InboundList" state={DataIB} > Create inbound this container</Link>}
+                                            </td>
+                                            <td className="mailbox-attachment"></td>
+                                            <td className="mailbox-date">5 mins ago</td>
+                                        </tr> */}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className="card-footer p-0">
                             <div className="mailbox-controls">
                                 <div className="float-right">
                                     01-10/02
@@ -112,10 +188,50 @@ const Notification = () => {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <hr></hr>
+                    <div className="card card-primary card-outline">
+                        <div className="card-header">
+                            <h3 className="card-title">Not Enough Stock</h3>
+
+                            <div className="card-tools">
+                                <div className="input-group input-group-sm">
+                                    <input type="text" className="form-control" placeholder="Search Mail" />
+                                    <div className="input-group-append">
+                                        <div className="btn btn-primary">
+                                            <i className="fas"><FaSearch /></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card-body p-0">
                             <div className="table-responsive mailbox-messages">
                                 <table className="table table-hover table-striped">
                                     <tbody>
-                                        <tr>
+                                        {
+                                            notifinote && notifinote.length > 0 && notifinote.map((about) => {
+                                                return (
+                                                    <tr key={about._id}>
+                                                        <td>
+                                                            <div className="icheck-primary">
+                                                                <input type="checkbox" value="" id="check1" />
+                                                                <label htmlFor="check1"></label>
+                                                            </div>
+                                                        </td>
+                                                        <td className="mailbox-attachment">{about._id}</td>
+                                                        <td className="mailbox-name">Inventory management</td>
+                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="/MainIB/InboundList" state={about} > Create inbound this container</Link>}
+                                                        </td>
+                                                        <td className="mailbox-star" style={{ color: "red" }} >Reback</td>
+                                                        <td className="mailbox-date">5 mins ago</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                        {/* <tr>
                                             <td>
                                                 <div className="icheck-primary">
                                                     <input type="checkbox" value="" id="check1" />
@@ -128,49 +244,7 @@ const Notification = () => {
                                             </td>
                                             <td className="mailbox-attachment"></td>
                                             <td className="mailbox-date">5 mins ago</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div className="icheck-primary">
-                                                    <input type="checkbox" value="" id="check1" />
-                                                    <label htmlFor="check1"></label>
-                                                </div>
-                                            </td>
-                                            <td className="mailbox-star"><a href="#"><i className="fas fa-star text-warning"></i></a></td>
-                                            <td className="mailbox-name">ĐứcSiro</td>
-                                            <td className="mailbox-subject"><b>ARADIA887960</b>  -  {<Link to="/MainIB/InboundList" state={DataIB2} > Create inbound this container</Link>}
-                                            </td>
-                                            <td className="mailbox-attachment"></td>
-                                            <td className="mailbox-date">5 mins ago</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div className="icheck-primary">
-                                                    <input type="checkbox" value="" id="check1" />
-                                                    <label htmlFor="check1"></label>
-                                                </div>
-                                            </td>
-                                            <td className="mailbox-star"><a href="#"><i className="fas fa-star text-warning"></i></a></td>
-                                            <td className="mailbox-name">TuânStock</td>
-                                            <td className="mailbox-subject"><b>STuan022356899</b>  -  <a href="read-mail.html">Create inbound this container</a>
-                                            </td>
-                                            <td className="mailbox-attachment"></td>
-                                            <td className="mailbox-date">5 mins ago</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div className="icheck-primary">
-                                                    <input type="checkbox" value="" id="check14" />
-                                                    <label htmlFor="check14"></label>
-                                                </div>
-                                            </td>
-                                            <td className="mailbox-star"><a href="#"><i className="fas fa-star text-warning"></i></a></td>
-                                            <td className="mailbox-name">Dr.strange</td>
-                                            <td className="mailbox-subject"><b>STRANGE59968556</b>  -  <a href="read-mail.html">Create inbound this container</a>
-                                            </td>
-                                            <td className="mailbox-attachment"><i className="fas fa-paperclip"></i></td>
-                                            <td className="mailbox-date">14 days ago</td>
-                                        </tr>
+                                        </tr> */}
                                     </tbody>
                                 </table>
                             </div>
@@ -193,9 +267,9 @@ const Notification = () => {
                     </div>
                 </div>
             </div>
-            <div>
+            {/* <div>
                 <InputExcel getdata={getdata} />
-            </div>
+            </div> */}
         </div >
     );
 };

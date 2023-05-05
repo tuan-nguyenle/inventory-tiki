@@ -8,66 +8,51 @@ const InputExcel = (props) => {
     const [drive, setDrive] = useState({
         fullname: "Nguyễn Văn A",
         phone: "05598996663",
-        bsx: "2354553556"
+        license_plates: "79N3 195-123",
+        store_keeper: "Jane Smith"
     });
     const handleFile = async (e) => {
-        e.stopPropagation(); e.preventDefault();
+        e.stopPropagation();
+        e.preventDefault();
         const f = e.target.files[0];
         setFileName(f.name);
         const data = await f.arrayBuffer();
         const workbook = XLSX.read(data);
-        const container = workbook.SheetNames; // lấy container name
-        const worksheet = workbook.Sheets[container];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        const container = workbook.SheetNames[0]; // lấy container name
+        const listPackage = Object.values(workbook.SheetNames.slice(1));
+        const order = [];
+        await listPackage.forEach((ele) => {
+            let packages = {};
+            packages.package_code = ele;
+            packages.products = XLSX.utils.sheet_to_json(workbook.Sheets[ele]);
+            order.push(packages);
+        })
+        // list 1
+        const combinedData = {
+            container_code: container,
+            deliverer: drive.fullname,
+            license_plates: drive.license_plates,
+            store_keeper: drive.store_keeper,
+            packages: order,
+            order_type: "Warehouse Order",
+            status: "Unchecked",
+            stack_car: false
+        };
 
-        const arr2 = [container[0], ...jsonData.map((item, index) => ({ ...item }))]; // json có thể xử lý
-        setNewdata(arr2);
-
-        // // list 1
-        // const combinedData = {
-        //     fullname: drive.fullname,
-        //     phone: drive.phone,
-        //     bsx: drive.bsx,
-        //     listpackages: jsonData,
-        // };
-
-        // const combinedData = {
-        //     fullname: drive.fullname,
-        //     phone: drive.phone,
-        //     bsx: drive.bsx,
-        //     listpackages: [
-        //         {
-        //             packages: jsonData.map((data) => {
-        //                 return {
-        //                     productcode: data.productcode,
-        //                     productname: data.productname,
-        //                     category: data.category,
-        //                     quantity: data.quantity,
-        //                     supplier: data.supplier,
-        //                 };
-        //             }),
-        //         },
-        //     ],
-        // };
-        // const combinedJson = JSON.stringify(combinedData);
-
-        // // cái này chung
-        // const combinedJson = JSON.stringify(combinedData, null, 2);
-        // setNewdata(combinedJson);
-        // console.log(combinedJson);
+        // cái này chung
+        const combinedJson = JSON.stringify(combinedData, null, 2);
+        setNewdata(combinedJson);
     }
 
     const handledata = async () => {
-        // console.log(newdata);
-        props.getdata(newdata); // xóa cái này bỏ props luôn cả bên notifition nữa
+        // props.getdata(newdata); // xóa cái này bỏ props luôn cả bên notifition nữa
         try {
-            let wait = Sendexcel(newdata);
+            await Sendexcel(newdata);
             toast.success("Send"); // in thông báo
         } catch (error) {
-            throw error;
-            // toast.error(error); // in thông báo
+            // console.log(error);
+            toast.error("Can't send"); // in thông báo
         }
-
     }
 
     return (

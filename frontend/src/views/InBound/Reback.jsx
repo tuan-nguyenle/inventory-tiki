@@ -11,14 +11,16 @@ import ShowReback from "./ShowReback";
 const Reback = (props) => {
     const location = useLocation();
     const checkstate = location.state;
+    const datafull = null;
+    // console.log("data", checkstate);
     let container = "";
     let state = "";
+    let orderid = "";
     if (checkstate) {
-        state = location.state.miss;
-        const containerbow = location.state.codecontainervalidate;
-        container = containerbow;
+        state = checkstate.miss;
+        container = checkstate.codecontainervalidate;
+        orderid = checkstate.id;
     }
-
     // Lấy ngày
     var dateObj = new Date();
     var month = dateObj.getUTCMonth() + 1;
@@ -109,9 +111,8 @@ const Reback = (props) => {
         setData(state);
     }, [state]);
     const SaveReback = async () => {
-        await data;
-        console.log("Reback Container:", containerbowl);
-        console.log("Data Reback:", data);
+        window.location.assign("http://localhost:3000/MainIB/Notification");
+        toast.success("Saving process has been completed"); // in thông báo
     }
     return (
         <div className="body_inboundList">
@@ -122,7 +123,7 @@ const Reback = (props) => {
             <div className="card card-default">
                 <div className="card-body">
                     {
-                        checkstate ? "" :
+                        checkstate ? null :
                             <>
                                 <form>
                                     <div className="row">
@@ -156,7 +157,7 @@ const Reback = (props) => {
                                 <hr></hr>
                             </>
                     }
-                    <ShowReback ref={componentRefReback} reback={data} container={containerbowl.codecontainervalidate} />
+                    <ShowReback ref={componentRefReback} reback={data} container={containerbowl.codecontainervalidate} orderid={orderid} />
                     <div style={{ float: "right" }} className="row">
                         <div className="btn-button">
                             <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>

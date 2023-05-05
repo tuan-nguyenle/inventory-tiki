@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios"
 import { Button } from "react-bootstrap";
 import {
     FaTrashAlt
 } from "react-icons/fa";
-import data from "./dataaccount.json"
+// import data from "./dataaccount.json"
+// import data from "./dataaccount2.json"
 import AddUser from "./accountmodal/AddUser";
 import EditUser from "./accountmodal/EditUser";
 import DeleteUser from "./accountmodal/DeleteUser";
+import * as IBAPI from "../../services/IBAPI";
 const Accountmanagement = () => {
+    const [allaccount, setAllaccount] = useState(null);
     const getnewaccount = (getInfo) => {
         console.log("data lấy về", getInfo)
     }
+    useEffect(() => {
+        (async () => {
+            try {
+                const getUsers = await IBAPI.getAllAccounts();
+                console.log(getUsers);
+                setAllaccount(getUsers);
+            } catch (error) {
+                console.log(error);
+            }
+        })();
+    }, []);
     return (
         <>
             <div className="Accountmanagement_body">
@@ -49,28 +64,35 @@ const Accountmanagement = () => {
                                                     <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
                                                 </td>
                                             </tr> */}
-                                                {data && data.length > 0 && data.map((data, i) => {
-                                                    return (
-                                                        <tr key={data.id}>
-                                                            <td>{i + 1}</td>
-                                                            <td>{data.fullname}</td>
-                                                            <td>{data.account}</td>
-                                                            <td>{data.phone}</td>
-                                                            <td>
-                                                                <div className="Button-extends">
-                                                                    <div className="button">
-                                                                        <EditUser />
-                                                                    </div>
-                                                                    <div className="button">
-                                                                        <DeleteUser />
-                                                                    </div>
+                                                {!allaccount ?
+                                                    <>
+                                                        <div>
+                                                            <h1 style={{ textAlign: "center" }}>Loading...</h1>
+                                                        </div>
+                                                    </>
+                                                    :
+                                                    allaccount && allaccount.length > 0 && allaccount.map((data, i) => {
+                                                        return (
+                                                            <tr key={data.id}>
+                                                                <td>{i + 1}</td>
+                                                                <td>{data.fullname}</td>
+                                                                <td>{data.username}</td>
+                                                                <td>{data.phone}</td>
+                                                                <td>
+                                                                    <div className="Button-extends">
+                                                                        <div className="button">
+                                                                            <EditUser />
+                                                                        </div>
+                                                                        <div className="button">
+                                                                            <DeleteUser />
+                                                                        </div>
 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    )
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        )
 
-                                                })}
+                                                    })}
 
                                                 {/* {
 
