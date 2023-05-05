@@ -102,7 +102,7 @@ const InboundList = (props) => {
         let check = false;
         // let productToUpdate = null; // sản phẩm cần được cập nhật quantity
         for (let i = 0; i < data.length; i++) {
-            if (dt[i].bar_code == item && dt[i].package == pa) {
+            if (dt[i].bar_code === item && dt[i].package === pa) {
                 let product = dt[i];
                 // let productToUpdate = state1.find(p => p.package_code == pa && p.bar_code == item);
                 // if (productToUpdate) {
@@ -110,8 +110,8 @@ const InboundList = (props) => {
                 //     break;
                 // }
                 // console.log(product.quantity);
-                let productToUpdate = state1.find(p => p.package_code == pa && p.products.some(prod => {
-                    return prod.bar_code == item && product.quantity >= prod.quantity;
+                let productToUpdate = state1.find(p => p.package_code === pa && p.products.some(prod => {
+                    return prod.bar_code === item && product.quantity >= prod.quantity;
                 }));
                 if (productToUpdate) {
                     toast.warning("This product has reached its quantity limit."); // in thông báo
@@ -132,10 +132,10 @@ const InboundList = (props) => {
 
     const allinfo = (item, pa) => {
         if (state1 && state1.length > 0) {
-            const packageIndex = state1.findIndex((p) => p.package_code == pa);
+            const packageIndex = state1.findIndex((p) => p.package_code === pa);
 
             if (packageIndex !== -1) {
-                const productIndex = state1[packageIndex].products.findIndex((p) => p.bar_code == item);
+                const productIndex = state1[packageIndex].products.findIndex((p) => p.bar_code === item);
                 if (productIndex !== -1) {
                     const product = state1[packageIndex].products[productIndex];
                     const newdatainput = {
@@ -365,13 +365,13 @@ const InboundList = (props) => {
     useEffect(() => {
         const checkEnough = (pa) => {
             let dt = data;
-            const packageIndex = state1.findIndex(p => p.package_code == pa);
+            const packageIndex = state1.findIndex(p => p.package_code === pa);
             if (packageIndex < 0) {
                 // Không tìm thấy package_code trong state1
                 return false;
             } else {
                 // Tính tổng số lượng các sản phẩm trong biến data có package trùng với pa
-                const products = dt.filter(p => p.package == pa);
+                const products = dt.filter(p => p.package === pa);
                 const productsQuantity = products.reduce((acc, cur) => acc + cur.quantity, 0);
                 if (productsQuantity >= state1[packageIndex].products.reduce((acc, cur) => acc + cur.quantity, 0)) {
                     setChecksquarepack(true);
@@ -386,7 +386,7 @@ const InboundList = (props) => {
                 } else {
                     // Lấy ra danh sách các sản phẩm có trong biến state1 nhưng không có trong biến data
                     const productsWithoutData = state1[packageIndex].products.filter(p1 =>
-                        !products.some(p2 => p1.product_name == p2.product_name)
+                        !products.some(p2 => p1.product_name === p2.product_name)
                     );
                     // Lưu thông tin các sản phẩm chưa có trong biến data vào biến miss
                     let miss = productsWithoutData.map(p => ({
@@ -400,7 +400,7 @@ const InboundList = (props) => {
                     }));
                     // Lưu thông tin các sản phẩm thiếu vào biến miss
                     products.forEach(p => {
-                        const productInState1 = state1[packageIndex].products.find(pr => pr.product_name == p.product_name && pr.bar_code == p.bar_code && pr.supplier_name == p.supplier_name); //sửa thành barcode nè
+                        const productInState1 = state1[packageIndex].products.find(pr => pr.product_name === p.product_name && pr.bar_code === p.bar_code && pr.supplier_name === p.supplier_name); //sửa thành barcode nè
                         const quantityMissing = productInState1.quantity - p.quantity; // -quantity
                         if (quantityMissing > 0) {
                             miss.push({

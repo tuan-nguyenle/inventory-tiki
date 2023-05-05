@@ -12,11 +12,37 @@ const CheckIB = (props) => {
     const toggle = () => setModal(!modal);
     const miss = props.misssave; // data thiếu
     const contai = props.container; // pallet vs container
-    const data = { ...contai, miss };
     const orderid = props.orderid;
+    const data = { ...contai, id: orderid, miss };
     const handledata = [];
     const saveinbound = props.inbound;
     const containerbow = props.container
+    const SaveReback = async () => {
+        await saveinbound.forEach((ele) => {
+            let products = {
+                product_name: ele.product_name,
+                category: ele.category,
+                bar_code: ele.bar_code,
+                quantity: ele.quantity,
+                sku: ele.sku,
+                supplier_name: ele.supplier_name
+            };
+            handledata.push(products);
+        })
+        // set lại biến cho api
+        const datainput = {
+            products: handledata
+        };
+        // gọi api ngay đây
+        try {
+            await IBAPI.submitIB(datainput, orderid);
+            toast.success("Saving process has been completed"); // in thông báo
+        } catch (error) {
+            toast.error("Can't send. Please check again"); // in thông báo
+            toggle();
+        }
+
+    }
 
     const SaveInbound = async () => {
         await saveinbound.forEach((ele) => {
@@ -37,6 +63,7 @@ const CheckIB = (props) => {
         // gọi api ngay đây
         try {
             await IBAPI.submitIB(datainput, orderid);
+            window.location.assign("http://localhost:3000/MainIB/Notification");
             toast.success("Saving process has been completed"); // in thông báo
         } catch (error) {
             toast.error("Can't send. Please check again"); // in thông báo
@@ -103,15 +130,14 @@ const CheckIB = (props) => {
 
                 </ModalBody>
                 <ModalFooter>
-                    {miss.length > 0 ? <Link to="/MainIB/Reback" state={data} ><button type="button" className="btn btn-dark" onClick={SaveInbound}>Save and ReBack</button></Link> : ""}
-                    {/* {miss.length === 0 ? <Button variant="primary" onClick={SaveInbound}><i><FaSave /></i> &nbsp;
+                    {miss.length > 0 ? <Link to="/MainIB/Reback" state={data} ><button type="button" className="btn btn-dark" onClick={SaveReback}>Save and ReBack</button></Link> : ""}
+                    {miss.length === 0 ? <Button variant="primary" onClick={SaveInbound}><i><FaSave /></i> &nbsp;
                         Save
-                        
-                    </Button> : null} */}
-                    {<Button variant="primary" onClick={SaveInbound}><i><FaSave /></i> &nbsp;
+                    </Button> : null}
+                    {/* {<Button variant="primary" onClick={SaveInbound}><i><FaSave /></i> &nbsp;
                         Save
 
-                    </Button>}
+                    </Button>} */}
                     <Button variant="secondary" onClick={() => toggle()}>
                         Cancel
                     </Button>
