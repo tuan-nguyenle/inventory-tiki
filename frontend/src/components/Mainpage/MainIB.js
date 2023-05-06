@@ -7,7 +7,7 @@ import { NavLink, Link, Outlet } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg"
 import avatar from "../../assets/images/Avatar/Loc.jpg";
 import {
-    FaBell, FaWarehouse, FaEdit, FaBars, FaUser, FaTh, FaSignOutAlt, FaBarcode, FaCheckDouble, FaUsers
+    FaBell, FaWarehouse, FaEdit, FaBars, FaUser, FaTh, FaSignOutAlt, FaBarcode, FaCheckDouble, FaUsers, FaRedoAlt
 } from "react-icons/fa";
 const MainIB = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -30,6 +30,12 @@ const MainIB = () => {
             path: "MainIB/InboundList",
             name: "Create Inbound List",
             icon: <FaWarehouse />,
+            number: ""
+        },
+        {
+            path: "MainIB/InputReback",
+            name: "Input Reback",
+            icon: <FaRedoAlt />,
             number: ""
         },
         {

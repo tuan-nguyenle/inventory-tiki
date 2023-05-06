@@ -197,20 +197,67 @@
         box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
     }
 
-    .ant-card .ant-card-head {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        min-height: 56px;
-        margin-bottom: -1px;
-        padding: 0 24px;
-        color: rgba(0, 0, 0, 0.88);
-        font-weight: 600;
-        font-size: 18px;
-        background: #3d72f9;
-        border-bottom: 1px solid #1802bb;
-        border-radius: 8px 8px 0 0;
-        text-align: center;
+    // .ant-card .ant-card-head {
+    //     display: flex;
+    //     justify-content: center;
+    //     flex-direction: column;
+    //     min-height: 56px;
+    //     margin-bottom: -1px;
+    //     padding: 0 24px;
+    //     color: rgba(0, 0, 0, 0.88);
+    //     font-weight: 600;
+    //     font-size: 18px;
+    //     background: #3d72f9;
+    //     border-bottom: 1px solid #1802bb;
+    //     border-radius: 8px 8px 0 0;
+    //     text-align: center;
+    // }
+
+    .card_left {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.13), 0 1px 3px rgba(0, 0, 0, 0.2);
+        font-size: 17px;
+
+        .card-body {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    }
+
+    .card_right {
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.13), 0 1px 3px rgba(0, 0, 0, 0.2);
+        font-size: 17px;
+
+        .card-body {
+            form {
+                max-height: 76vh;
+                overflow-y: auto;
+            }
+
+        }
+    }
+
+    .card {
+        .card-title {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            min-height: 56px;
+            margin-bottom: -1px;
+            padding: 0 24px;
+            color: rgba(0, 0, 0, 0.88);
+            font-weight: 600;
+            font-size: 18px;
+            background: #3d72f9;
+            border-bottom: 1px solid #1802bb;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+    }
+
+    .mid_arrow {
+        margin: 0;
+        padding: 0;
+        width: auto;
     }
 
     .Fa {
@@ -218,12 +265,10 @@
         padding: 0px;
         position: relative;
         top: 30%;
-        left: 25%;
     }
 
-    .card {
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0.13), 0 1px 3px rgba(0, 0, 0, 0.2);
-        font-size: 17px;
+    .right_table {
+        flex-grow: 1;
     }
 
     .scrollable-card {

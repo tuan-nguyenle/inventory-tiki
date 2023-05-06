@@ -14,7 +14,7 @@ export const getAllAccounts = async () => {
         return response.data.data;
 
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 export const submitIB = async (data, orderid) => {
@@ -30,7 +30,16 @@ export const submitIB = async (data, orderid) => {
         return response;
     } catch (error) {
         // throw error;
-        console.log(error);
+        throw error;
+    }
+}
+export const getDetailReback = async () => {
+    try {
+        const response = await axios.get('http://localhost/api/orders')
+        return response.data.data;
+
+    } catch (error) {
+        throw error;
     }
 }
 

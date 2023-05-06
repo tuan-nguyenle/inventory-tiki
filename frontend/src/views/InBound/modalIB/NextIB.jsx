@@ -22,7 +22,7 @@ const NextIB = (props) => {
         toggle();
     }
     return (
-        <div>
+        <div >
             <button type="button" id="btnnhapnext" className="btn btn_next btn-block btn-danger btn-lg" onClick={() => toggle()} >{">>"}</button>
             <Modal isOpen={modal} toggle={() => toggle()} {...props.miss} className="modal-validate" size="xl">
                 <ModalHeader toggle={() => toggle()} className="modal-header" >Missing products in package - {pack}</ModalHeader>

@@ -22,6 +22,7 @@ import ConfirmationInbound from '../views/InBound/ConfirmationInbound';
 import Accountmanagement from '../views/InBound/Accountmanagement';
 import PrintBowl from '../views/InBound/PrintBowl';
 import InputExcel from '../views/InputExcel';
+import InputReback from '../views/InBound/InputReback';
 const NavIB = () => {
     return (
         <>
@@ -34,6 +35,7 @@ const NavIB = () => {
                         <Route path="MainIB" exact element={<Home />} />
                         <Route path="MainIB/User" exact element={<User />} />
                         <Route path='MainIB/Home' element={<Home />} />
+                        <Route path='MainIB/InputReback' element={<InputReback />} />
                         <Route path='MainIB/Notification' element={<Notification />} />
                         <Route path='MainIB/InboundList' element={<InboundList />} />
                         <Route path='MainIB/ConfirmationInbound' element={<ConfirmationInbound />} />
