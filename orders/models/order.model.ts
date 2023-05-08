@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, ObjectId, Schema } from "mongoose";
 // gui den nhiu xe / khong du hang thi stack car
 // sau do thi tra lai phieu missing and warehouse repack
 enum OrderType {
@@ -34,6 +34,7 @@ interface Order {
   }[];
   stack_car: boolean;
   parentID: Order;
+  childID: [];
 }
 
 const OrderSchema = new Schema<Order, Document>(
@@ -77,8 +78,15 @@ const OrderSchema = new Schema<Order, Document>(
     parentID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
-      default: null,
+      default: null
     },
+    childID: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order",
+        default: null,
+      }
+    ],
   },
   {
     timestamps: true,
