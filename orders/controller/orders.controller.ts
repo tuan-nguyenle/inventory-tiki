@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import * as Order from "../services/order.services";
 import { validationResult } from "express-validator";
 import { RequestValidationError } from "@microservies-inventory/common";
+import mongoose from "mongoose";
 
 export const viewAllOrders = async (req: Request, res: Response) => {
   const listOrders = await Order.viewAllOrders();
@@ -45,9 +46,8 @@ export const checkOrder = async (req: Request, res: Response) => {
     products: Array<Product>
   }
 
-  const detailOrder = await Order.findOneOrder(req.params.id);
+  const detailOrder = await Order.findOrder({ _id: req.params.id });
   const checkProduct = req.body.products;
-
   let missingProducts: Array<Package> = [];
 
   missingProducts = detailOrder!.packages.map((packages) => {
@@ -85,23 +85,38 @@ export const checkOrder = async (req: Request, res: Response) => {
   }).filter((missingPackage) => missingPackage !== null) as Package[];
 
   if (missingProducts.length === 0) {
-    await Order.findOneAndUpdate(req.params.id, { status: "Stocked", checkPoint: "offset" });
+    await Order.findOneOrderAndUpdate(req.params.id, { status: "Stocked" });
 
     res.status(200).send({ status: "The Order is Stocked Finished" });
   } else {
-    Order.findOneAndUpdate(req.params.id, { status: "Not Enough Stock" }).then((result) => {
-      Order.insertOrder({
-        container_code: result?.container_code || "",
-        deliverer: result?.deliverer || "",
-        license_plates: result?.license_plates || "",
-        store_keeper: result?.store_keeper || "",
-        order_type: "Warehouse Orders Repack",
-        status: "Unchecked",
-        packages: missingProducts,
-        stack_car: result?.stack_car || false,
-        parentID: result?._id
+    // await detailOrder
+    const orderParent = detailOrder.parentID !== null ? detailOrder.parentID : new mongoose.Types.ObjectId(req.params.id);
+    Order.insertOrder({
+      container_code: detailOrder.container_code,
+      deliverer: detailOrder.deliverer || "",
+      license_plates: detailOrder.license_plates || "",
+      store_keeper: detailOrder.store_keeper || "",
+      order_type: "Warehouse Orders Repack",
+      status: "Unchecked",
+      packages: missingProducts,
+      stack_car: detailOrder.stack_car,
+      parentID: orderParent,
+      childID: []
+    }).then((result) => {
+      Order.findOneOrderAndUpdate(
+        orderParent.toString(),
+        { status: "Not Enough Stock", childID: result._id }
+      );
+
+      res.status(200).send({
+        message: "The Order not finished Because Not Enough Stock",
+        missingProducts: missingProducts
       });
-      res.status(200).send({ status: "The Order not finished Because Not Enough Stock", missingProducts: missingProducts });
     });
   }
 };
+
+export const getDetailOrder = async (req: Request, res: Response) => {
+  const orderDetail = await Order.findOrder({ _id: req.params.id, reback: true });
+  res.status(200).send({ data: orderDetail });
+}
