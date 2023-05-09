@@ -6,7 +6,6 @@ import "../../styles/inventorycontrol.scss";
 import {
     FaAngleDoubleRight
 } from "react-icons/fa";
-import { Card, Col, Row } from 'antd';
 import dataListIB from "./data/dataListIB.json";
 import datadetail1 from "./data/datalistDetail.json";
 const Storage = () => {
