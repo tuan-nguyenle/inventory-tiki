@@ -37,15 +37,15 @@ export abstract class RabbitMQ<T extends Event> {
     }
   }
 
-  async publishMessage(exchangeName: string, message: string): Promise<void> {
+  async publishMessage(message: string): Promise<void> {
     if (!this.channel) {
       await this.connect();
     }
 
-    this.channel.assertExchange(exchangeName, 'fanout', { durable: false });
-    this.channel.publish(exchangeName, '', Buffer.from(message));
+    this.channel.assertExchange(this.exchangeName, 'fanout', { durable: false });
+    this.channel.publish(this.exchangeName, '', Buffer.from(message));
 
-    console.log(`Message '${message}' sent to exchange '${exchangeName}'`);
+    console.log(`Message '${message}' sent to exchange '${this.exchangeName}'`);
   }
 
   async consumeMessages(onMessageCallback: (message: T['data']) => void): Promise<void> {
