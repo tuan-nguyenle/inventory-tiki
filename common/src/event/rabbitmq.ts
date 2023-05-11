@@ -27,24 +27,57 @@ export abstract class RabbitMQ<T extends Event> {
   }
 
   async setup(): Promise<void> {
-    this.connection = await amqp.connect('amqp://guest:guest@rabbitmq:5672');
-    this.channel = await this.connection.createChannel();
+    try {
+      this.connection = await amqp.connect('amqp://guest:guest@rabbitmq:5672');
+      this.channel = await this.connection.createChannel();
 
-    await this.channel.assertExchange(this.exchangeName, this.exchangeType);
-    await this.channel.assertQueue(this.queueName);
+      await this.channel.assertExchange(this.exchangeName, this.exchangeType);
+      await this.channel.assertQueue(this.queueName);
+      await this.channel.bindQueue(this.queueName, this.exchangeName, this.routingKey);
+    } catch (error) {
+      console.error('Error setting up RabbitMQ:', error);
+      throw error;
+    };
   }
-
   async sendMessage(message: T['data']): Promise<void> {
-    await this.channel.publish(this.exchangeName, this.routingKey, Buffer.from(JSON.stringify(message)));
+    try {
+      const messageBuffer = Buffer.from(JSON.stringify(message));
+      const result = await this.channel.publish(this.exchangeName, this.routingKey, messageBuffer);
+      if (!result) {
+        console.error('Error publishing message:', message);
+        throw new Error('Error publishing message');
+      }
+      console.log('Message published successfully:', message);
+    } catch (error) {
+      console.error('Error publishing message:', error);
+      throw error;
+    }
   }
 
   async consumeMessage(): Promise<void> {
-    await this.channel.bindQueue(this.queueName, this.exchangeName, this.routingKey);
-    await this.channel.consume(this.queueName, (msg) => {
-      if (msg !== null) {
-        console.log(msg.content.toString());
-        // this.channel.ack(msg);
-      }
-    }, { noAck: true });
+    try {
+      await this.channel.consume(this.queueName, (msg) => {
+        if (msg !== null) {
+          console.log(msg.content.toString());
+          // this.channel.ack(msg);
+        }
+      }, { noAck: true });
+    } catch (error) {
+      console.error('Error consuming message:', error);
+      throw error;
+    }
   };
+  // async sendMessage(message: T['data']): Promise<void> {
+  //   await this.channel.publish(this.exchangeName, this.routingKey, Buffer.from(JSON.stringify(message)));
+  // }
+
+  // async consumeMessage(): Promise<void> {
+  //   await this.channel.bindQueue(this.queueName, this.exchangeName, this.routingKey);
+  //   await this.channel.consume(this.queueName, (msg) => {
+  //     if (msg !== null) {
+  //       console.log(msg.content.toString());
+  //       // this.channel.ack(msg);
+  //     }
+  //   }, { noAck: true });
+  // };
 }
