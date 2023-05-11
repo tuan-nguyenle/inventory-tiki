@@ -37,7 +37,7 @@ export abstract class RabbitMQ<T extends Event> {
     }
   }
 
-  async publishMessage(message: string): Promise<void> {
+  async publishMessage(message: T['data']): Promise<void> {
     if (!this.channel) {
       await this.connect();
     }
