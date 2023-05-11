@@ -15,15 +15,16 @@ export abstract class RabbitMQ<T extends Event> {
   protected routingKey: string;
 
   constructor(
-    urlConnection: amqp.Connection,
+    connection: amqp.Connection,
     exchangeName: string,
     exchangeType: string,
     routingKey: string,
   ) {
-    this.connection = urlConnection;
+    this.connection = connection;
     this.exchangeName = exchangeName;
     this.exchangeType = exchangeType;
     this.routingKey = routingKey;
+    console.log(this.connection);
 
     this.setup();
   }
