@@ -23,7 +23,9 @@ export abstract class RabbitMQ<T extends Event> {
     this.exchangeType = exchangeType;
     this.routingKey = routingKey;
 
-    this.setup();
+    this.setup().then(() => {
+      console.log("RabbitMQ setup completed");
+    });
   }
 
   async setup(): Promise<void> {
