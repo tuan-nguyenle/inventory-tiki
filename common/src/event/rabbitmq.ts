@@ -24,12 +24,12 @@ export abstract class RabbitMQ<T extends Event> {
     this.exchangeName = exchangeName;
     this.exchangeType = exchangeType;
     this.routingKey = routingKey;
-    console.log(this.connection);
 
     this.setup();
   }
 
   async setup(): Promise<void> {
+    console.log(this.connection);
     this.channel = await this.connection.createChannel();
 
     await this.channel.assertExchange(this.exchangeName, this.exchangeType);
