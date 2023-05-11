@@ -43,7 +43,7 @@ export abstract class RabbitMQ<T extends Event> {
     }
 
     this.channel.assertExchange(this.exchangeName, 'fanout', { durable: false });
-    this.channel.publish(this.exchangeName, '', Buffer.from(message));
+    this.channel.publish(this.exchangeName, this.routingKey, Buffer.from(JSON.stringify(message)));
 
     console.log(`Message '${message}' sent to exchange '${this.exchangeName}'`);
   }
