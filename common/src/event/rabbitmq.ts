@@ -1,5 +1,5 @@
 import amqp from 'amqplib';
-import { Subjects } from './subject';
+import { Subjects } from './subjects';
 
 interface Event {
   subject: Subjects;
@@ -15,17 +15,20 @@ export abstract class RabbitMQ<T extends Event> {
   protected routingKey: string;
 
   constructor(
+    urlConnection: amqp.Connection,
     exchangeName: string,
     exchangeType: string,
     routingKey: string,
   ) {
+    this.connection = urlConnection;
     this.exchangeName = exchangeName;
     this.exchangeType = exchangeType;
     this.routingKey = routingKey;
+
+    this.setup();
   }
 
-  async connect(): Promise<void> {
-    this.connection = await amqp.connect('amqp://localhost:5673');
+  async setup(): Promise<void> {
     this.channel = await this.connection.createChannel();
 
     await this.channel.assertExchange(this.exchangeName, this.exchangeType);
