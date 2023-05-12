@@ -7,9 +7,9 @@ interface Event {
 }
 
 export abstract class RabbitMQ<T extends Event> {
-  private url: string;
-  private connection!: amqp.Connection;
-  private channel!: amqp.Channel;
+  protected url: string;
+  protected connection!: amqp.Connection;
+  protected channel!: amqp.Channel;
   protected exchangeName: string;
   protected exchangeType: string;
   protected routingKey: string;
@@ -49,19 +49,4 @@ export abstract class RabbitMQ<T extends Event> {
     await this.channel.publish(this.exchangeName, this.routingKey, Buffer.from(JSON.stringify(message)));
     console.log(`Message '${JSON.stringify(message)}' sent to exchange '${this.exchangeName}'`);
   }
-
-  async consumeMessages(): Promise<void> {
-    if (!this.channel) {
-      await this.connect();
-    }
-    await this.channel.assertQueue(this.queueName, { exclusive: true });
-    await this.channel.bindQueue(this.queueName, this.exchangeName, this.routingKey);
-    await this.channel.consume(this.queueName, (msg) => {
-      if (msg !== null) {
-        console.log(msg.content.toString());
-        // this.channel.ack(msg);
-      }
-    }, { noAck: true });
-  }
-
 }
