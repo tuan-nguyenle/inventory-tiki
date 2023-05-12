@@ -1,6 +1,5 @@
-import { BadRequestError } from "@microservies-inventory/common";
 import { Product } from "../models/product.model";
-import { findOneCategory } from "./category.services";
+import { findOneCategory, insertCategory } from "./category.services";
 
 export const showProduct = async (slug: string) => {
   const product = await Product.find({
@@ -9,12 +8,14 @@ export const showProduct = async (slug: string) => {
   return product;
 };
 
-export const insertProduct = async (product_attributes: Product) => {
-  const category = await findOneCategory(product_attributes.category);
+export const insertProduct = async (product_attributes: Record<string, any>) => {
+  let category = await findOneCategory(product_attributes.category);
   if (!category) {
-    throw new BadRequestError(
-      `Category ${product_attributes.category} not exist`
-    );
+    category = await insertCategory({
+      category_name: String(product_attributes.category),
+      category_description: "Text",
+      parent_id: null
+    });
   }
 
   const product = new Product({
@@ -24,3 +25,8 @@ export const insertProduct = async (product_attributes: Product) => {
 
   return product.save();
 };
+
+export const searchProduct = async (data: Record<string, any>) => {
+
+  return Product.findOne({ product_name: data.product.product_name }).exec();
+}
