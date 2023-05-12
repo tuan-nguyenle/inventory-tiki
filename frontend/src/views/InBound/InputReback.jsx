@@ -10,16 +10,17 @@ import "../../styles/inbound.scss"
 import ShowListIB from "./ShowListIB";
 import CheckIB from "./modalIB/CheckIB";
 import NextIB from "./modalIB/NextIB";
-const InboundList = (props) => {
+const InputReBack = (props) => {
     const location = useLocation();
     const step = location.state;
+    console.log(step);
     let orderid = "";
     let container = "";
     const state1 = [];
     const step4 = [];
     if (step) {
+
         orderid = step._id;
-        // const step2 = JSON.parse(step); // chuyển Json thành đối tượng javascript
         const state3 = step.packages;
         state1.push(...state3);
         if (state3) {
@@ -35,29 +36,21 @@ const InboundList = (props) => {
             }
         }
         container = step.container_code;
-
-        // state1.unshift(container);
-        // const step4 = step3.flatMap(pkg => pkg.products);
-        // container = step2.container_code;
-        // if (step4) {
-        //     state1.unshift(container);
-        //     state1.push(...step4);
-        // }
-        // console.log(step2);
-
     }
+    // console.log(state1);
+    console.log(step4);
     // Lấy ngày
     var dateObj = new Date();
     var month = dateObj.getUTCMonth() + 1;
     var day = dateObj.getUTCDate();
     var year = dateObj.getUTCFullYear();
     var newdate = day + "/" + month + "/" + year;
+
     // State
     const MAX_PALLET_LENGTH = 8;
     const MAX_PACKAGE_LENGTH = 12;
     const begininputRef = useRef(null);
     const [isBarcodeScanned, setIsBarcodeScanned] = useState(false);
-    const [checkSquare, setCheckSquare] = useState(false);
     const [checksquarepack, setChecksquarepack] = useState(true);
     const [checkcontainer, setCheckcontainer] = useState(false);
     const [checkpalletright, setCheckpalletright] = useState(false);
@@ -78,10 +71,8 @@ const InboundList = (props) => {
         category: "",
         quantity: 1,
         sku: "",
-        unit: ""
     });
     // Hàm xử lý
-    const toggle = () => setCheckSquare(!checkSquare);
     const changeHandler = (e) => {
         const { id, value } = e.target
         setNewdata(prevState => ({
@@ -147,8 +138,7 @@ const InboundList = (props) => {
                         date: newdate,
                         sku: product.sku,
                         quantity: newdata.quantity,
-                        package: newdata.package,
-                        unit: product.unit
+                        package: newdata.package
                     };
                     setData([...data, newdatainput]);
                     setNewdata({
@@ -156,7 +146,6 @@ const InboundList = (props) => {
                         package: newdata.package,
                         codecontainer: newdata.codecontainer,
                         quantity: newdata.quantity,
-                        unit: newdata.unit
                     });
                     return;
                 }
@@ -167,7 +156,6 @@ const InboundList = (props) => {
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
                 package: newdata.package,
-                unit: newdata.unit
             });
         } else {
             if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || !newdata.product_name || !newdata.category) {
@@ -183,7 +171,6 @@ const InboundList = (props) => {
                 sku: newdata.sku,
                 date: newdate,
                 quantity: newdata.quantity,
-                unit: newdata.unit
             }
             setData([...data, newdatainput]);
             setNewdata({
@@ -195,7 +182,6 @@ const InboundList = (props) => {
                 category: "",
                 supplier_name: "",
                 sku: "",
-                unit: ""
             });
         }
     }
@@ -215,7 +201,6 @@ const InboundList = (props) => {
                 bar_code: "",
                 quantity: newdata.quantity,
                 codecontainer: newdata.codecontainer,
-                unit: ""
             });
             return;
         }
@@ -274,7 +259,6 @@ const InboundList = (props) => {
             bar_code: "",
             quantity: newdata.quantity,
             codecontainer: newdata.codecontainer,
-            unit: newdata.unit
         });
         setNewmiss(null);
     }
@@ -314,18 +298,18 @@ const InboundList = (props) => {
 
     }
     useEffect(() => {
-        if (checksquarepack) {
+        if (checksquarepack && step) {
             document.getElementById("package").focus();
         }
     }, [checksquarepack]);
     useEffect(() => {
-        if (!checkcontainer) {
+        if (!checkcontainer && step) {
             // nextinput.current.focus();
             document.getElementById("bowl").focus();
         }
     }, [checkcontainer]);
     useEffect(() => {
-        if (isBarcodeScanned) {
+        if (isBarcodeScanned && step) {
             document.getElementById("btnnhapinput").click();
             setIsBarcodeScanned(false);
         }
@@ -337,7 +321,9 @@ const InboundList = (props) => {
         }
     }, [step, data]);
     useEffect(() => {
-        begininputRef.current.focus();
+        if (step) {
+            begininputRef.current.focus();
+        }
     }, []);
     const [enough, setEnough] = useState(false);
     useEffect(() => {
@@ -358,7 +344,6 @@ const InboundList = (props) => {
                         bar_code: "",
                         quantity: newdata.quantity,
                         codecontainer: newdata.codecontainer,
-                        unit: ""
                     });
                     setNewmiss(null);
                     return;
@@ -375,8 +360,7 @@ const InboundList = (props) => {
                         package_code: pa,
                         product_name: p.product_name,
                         quantity: p.quantity,
-                        supplier_name: p.supplier_name,
-                        unit: p.unit
+                        supplier_name: p.supplier_name
                     }));
                     // Lưu thông tin các sản phẩm thiếu vào biến miss
                     products.forEach(p => {
@@ -390,7 +374,6 @@ const InboundList = (props) => {
                                 category: p.category,
                                 supplier_name: p.supplier_name,
                                 product_name: p.product_name,
-                                unit: p.unit,
                                 quantity: quantityMissing
                             });
                         }
@@ -404,107 +387,124 @@ const InboundList = (props) => {
         const enough = state1.every((p) => checkEnough(newdata.package));
         setEnough(enough);
     }, [data]);
-    // console.log("miss", newmiss);
-    // console.log("miss tổng", misssave);
-    // console.log(miss1);
-    // console.log(state1);
-    // console.log(data);
-    // console.log(step4);
-    // console.log(data);
-    // console.log(isBarcodeScanned);
-    // console.log(orderid);
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
-                <h1 style={{ textAlign: "center" }} >Inbound List</h1>
+                <h1 style={{ textAlign: "center" }} >Input Reback</h1>
             </div>
             <hr></hr>
-            <div className="card card-default">
-                <div className="card-body">
-                    <form>
-                        <div className="row">
-                            <div className="col-md-3">
-                                <div className="form-group">
-                                    <label>Container Code</label>
-                                    <input id="codecontainervalidate" type="text" className="form-control" placeholder="Code-container" disabled={checkSquare ? "" : "{false}"} value={containerbowl.codecontainervalidate} onChange={changeHandler2} autoComplete="off" />
-                                </div>
-                            </div>
-                            <div style={{ width: "40px", marginRight: "24px" }} className="col-md-1">
-                                <div className="form-group">
-                                    <br />
-                                    <div className="check-square">
-                                        <span className="checksquare" onClick={toggle}>
-                                            {checkSquare ? <i style={{ cursor: "pointer" }} ><FaRegCheckSquare /></i> : <i style={{ cursor: "pointer" }} ><FaRegSquare /></i>}
-                                        </span>
+            {step ?
+                <div className="card card-default">
+                    <div className="card-body">
+                        <form>
+                            <div className="row">
+                                <div style={{ maxHeight: "392px", overflow: "auto" }} className="col-md-6">
+                                    <div className="card card-default">
+                                        <div className="card-body" >
+                                            <div className="col-md-12">
+                                                <div className="table-responsive mailbox-messages">
+                                                    <table className="table table-hover table-striped">
+                                                        <tbody>
+                                                            {
+
+                                                                step4.map((data, i = 0) => {
+                                                                    return (
+                                                                        <tr key={data._id}>
+                                                                            <td>{data.package_code}</td>
+                                                                            <td>{data.bar_code}</td>
+                                                                            <td>{data.supplier_name}</td>
+                                                                            <td>{data.sku}</td>
+                                                                            <td style={{ color: "red" }}>{data.quantity}</td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }
+                                                            {/* <tr>
+                                                    <td className="mailbox-name"><b>Package</b></td>
+                                                    <td className="mailbox-name"><b>barcode</b></td>
+                                                    <td className="mailbox-subject"><b>Supplier</b></td>
+                                                    <td className="mailbox-subject"><b>SKU</b></td>
+                                                    <td className="mailbox-date"><b>Quantity</b></td>
+                                                </tr> */}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group">
-                                    <label>Container Code</label>
-                                    <input id="codecontainer" type="text" className="form-control" placeholder="Code-container" onChange={changeHandler} onInput={checkcontai} ref={begininputRef} />
-                                    {checkcontainer ? <p style={{ color: "red" }}>* Mismatched!</p> : <p></p>}
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="form-group">
-                                    <label>Pallet</label>
-                                    <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} onInput={checkpallet} />
-                                </div>
-                                {checkpalletright ? <p style={{ color: "red" }}>* The pallet is invalid!</p> : <p></p>}
-                            </div>
-                            {!step ? <>
                                 <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>Product Name</label>
-                                        <input id="product_name" type="text" className="form-control" placeholder="Product Name" value={newdata.product_name} onChange={changeHandler} />
+                                    <div className="card card-default">
+                                        <div className="card-body" >
+                                            <div className="row">
+                                                <div className="col-md-12">
+                                                    <div className="form-group">
+                                                        <label>Pallet</label>
+                                                        <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} onInput={checkpallet} ref={begininputRef} />
+                                                    </div>
+                                                    {checkpalletright ? <p style={{ color: "red" }}>* The pallet is invalid!</p> : <p></p>}
+                                                </div>
+                                                <div className="col-md-12">
+                                                    <div className="form-group">
+                                                        <label>Package</label>
+                                                        <input id="package" type="text" maxLength={MAX_PACKAGE_LENGTH} className="form-control" placeholder="Package" value={newdata.package} disabled={checksquarepack ? "" : "{false}"} onChange={changeHandler} onInput={checkPack} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-12">
+                                                    <div className="form-group">
+                                                        <label>Input Code Product</label>
+                                                        <input id="bar_code" type="text" className="form-control" placeholder="Code-container" value={newdata.bar_code} onChange={changeHandler} onInput={checkBarcode} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-10">
+                                                    <button type="button" id="btnnhapinput" className="btn btn_nhap btn-block btn-success btn-lg" onClick={inputProduct}>Input</button>
+                                                </div>
+                                                {
+                                                    newmiss ?
+                                                        <div className="nutnext col-md-2">
+                                                            <NextIB misssave={newmiss} handlemissing={inputNext} />
+                                                        </div>
+                                                        : null
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>Category</label>
-                                        <input id="category" type="text" className="form-control" placeholder="Category" value={newdata.category} onChange={changeHandler} />
-                                    </div>
-                                </div></> : null}
-                            <div className="col-md-3">
-                                <div className="form-group">
-                                    <label>Package</label>
-                                    <input id="package" type="text" maxLength={MAX_PACKAGE_LENGTH} className="form-control" placeholder="Package" value={newdata.package} disabled={checksquarepack ? "" : "{false}"} onChange={changeHandler} onInput={checkPack} />
-                                </div>
                             </div>
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label>Input Code Product</label>
-                                    <input id="bar_code" type="text" className="form-control" placeholder="Code-container" value={newdata.bar_code} onChange={changeHandler} onInput={checkBarcode} />
-                                </div>
+                        </form>
+                        <hr></hr>
+                        <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
+                        <div style={{ float: "right" }} className="row">
+                            <div className="btn-button">
+                                {data && data.length > 0 ?
+                                    <>
+                                        <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
+                                        <CheckIB misssave={misssave} inbound={data} container={containerbowl} orderid={orderid} />
+                                    </>
+                                    : null}
                             </div>
-                            <div className="col-md-2">
-                                <button type="button" id="btnnhapinput" className="btn btn_nhap btn-block btn-success btn-lg" onClick={inputProduct}>Input</button>
-                            </div>
-                            {
-                                newmiss ?
-                                    <div className="next col-md-1">
-                                        <NextIB misssave={newmiss} handlemissing={inputNext} />
-                                    </div>
-                                    : null
-                            }
-                        </div>
-                    </form>
-                    <hr></hr>
-                    <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
-                    <div style={{ float: "right" }} className="row">
-                        <div className="btn-button">
-                            {data && data.length > 0 ?
-                                <>
-                                    <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
-                                    <CheckIB misssave={misssave} inbound={data} container={containerbowl} orderid={orderid} />
-                                </>
-                                : null}
                         </div>
                     </div>
                 </div>
-            </div>
+                :
+                <>
+                    <div className="reback2">
+                        <div className="row">
+                            <div className="col-md-8">
+                                <form>
+                                    <div className="input-group">
+                                        <input type="text" className="form-control form-control-lg" placeholder="Reback code" />
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </>
+                //ref={inputbill}
+            }
+
         </div >
-    );
-};
-export default InboundList;
+    )
+}
+export default InputReBack;

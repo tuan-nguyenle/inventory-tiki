@@ -17,7 +17,7 @@ const ShowReback = React.forwardRef((props, ref) => {
                 <div style={{ marginTop: "20px" }} >
                     <p>Công ty TNHH hai thành viên ĐT Inventory</p>
                     <p>Địa chỉ: 566 Nguyễn Thái Sơn, Quận Gò Vấp, Thành Phố Hồ Chí Minh</p>
-                    <h2 style={{ textAlign: "center" }} >List Reback</h2>
+                    <h2 style={{ textAlign: "center" }} >List Rebacks</h2>
                     <h3 style={{ textAlign: "center" }} >Code Container: {codecontainer}</h3>
                     <h3 style={{ textAlign: "center" }} >Reback_ID: {orderid}</h3>
                 </div>

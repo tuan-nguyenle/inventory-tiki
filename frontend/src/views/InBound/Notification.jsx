@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import "../../styles/inbound.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import DataIB from "../../components/dataIB";
 // import DataIB2 from "../../components/dataIB2";
 import * as IBAPI from "../../services/IBAPI";
+// import MainIB from "../../components/Mainpage/MainIB";
 
 // let DataIB = "";
 const Notification = () => {
+    const navigate = useNavigate();
     // const getdata = (a) => {
     //     DataIB = a;
     //     console.log(DataIB);
     // }
-    const [allnotifi, setAllnotifi] = useState(null)
-    const [notifiun, setNotifiun] = useState(null)
-    const [notifinote, setNotifinote] = useState(null)
+    const [allnotifi, setAllnotifi] = useState(null);
+    const [notifiun, setNotifiun] = useState(null);
+    const [notifinote, setNotifinote] = useState(null);
+    const DetailReback = async (event, id) => {
+        event.preventDefault(); // Ngăn chặn sự kiện mặc định khi click vào link
+        try {
+            let response = await IBAPI.getDetailReback(id)
+            if (response) {
+                // console.log(response);
+                navigate('/MainIB/InputReback',
+                    { state: response });
+            }
+        } catch (error) {
+            alert('Lỗi'); // Thông báo lỗi
+            return;
+        }
+    }
+    // console.log(notifidetail);
     useEffect(() => {
         (async () => {
             try {
@@ -38,8 +55,6 @@ const Notification = () => {
             setNotifinote(notenoughNotifi);
         }
     }, [allnotifi])
-
-    // console.log(notifiun);
     return (
         <div className="container_notification">
             <div>
@@ -223,7 +238,7 @@ const Notification = () => {
                                                         </td>
                                                         <td className="mailbox-attachment">{about._id}</td>
                                                         <td className="mailbox-name">Inventory management</td>
-                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="/MainIB/InboundList" state={about} > Create inbound this container</Link>}
+                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="#" onClick={(event) => DetailReback(event, about._id)} > Create inbound this container</Link>}
                                                         </td>
                                                         <td className="mailbox-star" style={{ color: "red" }} >Reback</td>
                                                         <td className="mailbox-date">5 mins ago</td>
