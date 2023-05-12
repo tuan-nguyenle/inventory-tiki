@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 interface Category {
   category_name: string;
   category_description: string;
-  parent_id: Category;
+  parent_id: Category | null;
 }
 
 const CategorySchema = new Schema<Category, Document>(

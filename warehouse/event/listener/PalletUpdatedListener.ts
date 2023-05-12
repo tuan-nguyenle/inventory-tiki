@@ -1,6 +1,6 @@
 import "express-async-errors";
 import { RabbitMQ, PalletUpdated, Subjects } from "@microservies-inventory/common";
-import { findOneAndUpdate, findOnePallet } from "../../services/pallet.services";
+import { findOneAndUpdate, findOnePallet, updateMany } from "../../services/pallet.services";
 
 export class PalletUpdatedListener extends RabbitMQ<PalletUpdated>{
     readonly queueName!: Subjects.PalletUpdated;
@@ -25,6 +25,9 @@ export class PalletUpdatedListener extends RabbitMQ<PalletUpdated>{
                         matchingProduct.quantity -= product.quantity;
                     }
                     await findOneAndUpdate(pallets);
+                    if (matchingProduct?.quantity === 0) {
+                        await updateMany(pallets);
+                    }
                 } catch (error) {
                     console.error(error);
                 }

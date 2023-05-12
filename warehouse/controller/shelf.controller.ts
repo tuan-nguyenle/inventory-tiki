@@ -1,10 +1,10 @@
 import "express-async-errors";
 import { Request, Response } from "express";
-// import * as PalletServices from "../services/pallet.services";
 import { validationResult } from "express-validator";
 import { RequestValidationError } from "@microservies-inventory/common";
 import { findOneAndUpdate, findOneShelf } from "../services/shelf.services";
 import { PalletUpdatedPublisher } from "../event/publisher/PalletUpdatedPublisher";
+import { ProductCreatedPublisher } from "../event/publisher/ProductCreatedPublisher";
 
 export const transferToShelf = async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -34,36 +34,14 @@ export const transferToShelf = async (req: Request, res: Response) => {
                 product: req.body.product
             }
         );
-
+        new ProductCreatedPublisher('amqp://guest:guest@rabbitmq:5672', 'Product', 'fanout', 'inventory-tiki').publishMessage(
+            {
+                product: req.body.product,
+            }
+        );
     } catch (error) {
         console.error(error);
     }
 
     return res.status(200).send({ "msg": "transfer to shelf success" });
 }
-
-// export const insertPallet = async (req: Request, res: Response) => {
-//     const errors = validationResult(req);
-
-//     if (!errors.isEmpty()) {
-//         throw new RequestValidationError(errors.array());
-//     }
-
-//     await PalletServices.insertPallet(req.body);
-
-//     return res
-//         .status(201)
-//         .send({ msg: "Insert new Pallet success" });
-// };
-
-// export const updateStatus = async (req: Request, res: Response) => {
-//     const errors = validationResult(req);
-
-//     if (!errors.isEmpty()) {
-//         throw new RequestValidationError(errors.array());
-//     }
-//     const data = { _id: req.params.id, status: true };
-//     await PalletServices.findOneAndUpdate(data);
-
-//     return res.status(200).send({ msg: "validate success" });
-// }
