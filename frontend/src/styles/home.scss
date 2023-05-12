@@ -111,8 +111,6 @@
 
     }
 
-    element.style {}
-
     .fa,
     .far,
     .fas {
@@ -174,4 +172,24 @@
         width: 100%;
 
     }
+
+    .react-calendar {
+        width: 100%;
+        max-width: 100%;
+        background: rgb(255, 255, 255);
+        border: 1px solid #a0a096;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.125em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .react-calendar__tile {
+        flex-basis: 0;
+        flex-grow: 1;
+        max-width: none;
+    }
+
+
 }

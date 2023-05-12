@@ -1,0 +1,58 @@
+{
+    "data": [
+        {
+            "username": "TuanLe25122001",
+            "fullname": "Le Nguyen Tuan",
+            "phone": "0869236514",
+            "roles": [
+                "641abd5c95c69c8c536a20e5"
+            ],
+            "departments": [
+                "641abbaf5321756e01927726"
+            ],
+            "id": "641add3f54e82bf9025d0f7c"
+        },
+        {
+            "username": "Hello2vser",
+            "fullname": "Le Nguyen Tuan",
+            "phone": "0869236513",
+            "roles": [
+                "641abd3b10f21edafdf8283e"
+            ],
+            "departments": [
+                "641abba95321756e01927723"
+            ],
+            "id": "641add6654e82bf9025d0f84"
+        }
+    ]
+}
+
+{
+    "id": "0001",
+    "deliverer": "duc",
+    "license_plates": "79N3 195-123",
+    "store_keeper": "duc",
+    "receipt_type": "Warehouse Receipt",
+    "status": "Stocked",
+    "packages": [
+        [
+            {
+                "product_name": "abc",
+                "quanlity": "10",
+                "category": "Tools"
+            }
+        ],
+        [
+            {
+                "product_name": "abc",
+                "quanlity": "10",
+                "category": "Tools"
+            },
+            {
+                "product_name": "abc",
+                "quanlity": "10",
+                "category": "Tools"
+            }
+        ],
+    ]
+}

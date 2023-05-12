@@ -1,0 +1,17 @@
+{
+    "bill": "DTI8894759000889",
+    "listbill": [
+        {
+            "shelf": "A23B123",
+            "productname": "Mattresses & Box Springs",
+            "productcode": "03356968993526",
+            "quantity": "3"
+        },
+        {
+            "shelf": "A45B2",
+            "productname": "3M Filtering Barrier Face Covering, One Size, 20-pack",
+            "productcode": "03356968993432",
+            "quantity": "5"
+        }
+    ]
+}

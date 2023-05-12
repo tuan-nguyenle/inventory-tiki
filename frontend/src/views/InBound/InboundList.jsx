@@ -9,13 +9,42 @@ import {
 import "../../styles/inbound.scss"
 import ShowListIB from "./ShowListIB";
 import CheckIB from "./modalIB/CheckIB";
+import NextIB from "./modalIB/NextIB";
 const InboundList = (props) => {
     const location = useLocation();
-    const state = location.state;
+    const step = location.state;
+    let orderid = "";
     let container = "";
-    if (state) {
-        container = location.state[0];
-        console.log(state);
+    const state1 = [];
+    const step4 = [];
+    if (step) {
+        orderid = step._id;
+        // const step2 = JSON.parse(step); // chuyển Json thành đối tượng javascript
+        const state3 = step.packages;
+        state1.push(...state3);
+        if (state3) {
+            for (let i = 0; i < state3.length; i++) {
+                const pkg = state3[i];
+                const products = pkg.products.map(product => {
+                    return {
+                        ...product,
+                        package_code: pkg.package_code
+                    };
+                });
+                step4.push(...products);
+            }
+        }
+        container = step.container_code;
+
+        // state1.unshift(container);
+        // const step4 = step3.flatMap(pkg => pkg.products);
+        // container = step2.container_code;
+        // if (step4) {
+        //     state1.unshift(container);
+        //     state1.push(...step4);
+        // }
+        // console.log(step2);
+
     }
     // Lấy ngày
     var dateObj = new Date();
@@ -26,36 +55,40 @@ const InboundList = (props) => {
 
     // State
     const MAX_PALLET_LENGTH = 8;
-    const nextinput = useRef(null);
+    const MAX_PACKAGE_LENGTH = 12;
+    const begininputRef = useRef(null);
     const [isBarcodeScanned, setIsBarcodeScanned] = useState(false);
     const [checkSquare, setCheckSquare] = useState(false);
+    const [checksquarepack, setChecksquarepack] = useState(true);
     const [checkcontainer, setCheckcontainer] = useState(false);
+    const [checkpalletright, setCheckpalletright] = useState(false);
     const [data, setData] = useState([]);
     const [misssave, setMisssave] = useState([]);
+    const [newmiss, setNewmiss] = useState(null);
     const [containerbowl, setContainerbowl] = useState(
         {
             codecontainervalidate: container,
             bowl: "",
         });
     const [newdata, setNewdata] = useState({
-        productcode: "",
+        package: "",
+        bar_code: "",
         codecontainer: "",
-        productname: "",
-        supplier: "",
+        product_name: "",
+        supplier_name: "",
         category: "",
         quantity: 1,
+        sku: "",
     });
     // Hàm xử lý
     const toggle = () => setCheckSquare(!checkSquare);
     const changeHandler = (e) => {
-        // setNewdata({ ...newdata, [e.target.name]: [e.target.value] });
         const { id, value } = e.target
         setNewdata(prevState => ({
             ...prevState,
             [id]: value
         }
         ))
-        setCheckcontainer(id === "codecontainer" && value !== containerbowl.codecontainervalidate ? true : false);
     }
     const changeHandler2 = (e) => {
         const { id, value } = e.target
@@ -64,163 +97,249 @@ const InboundList = (props) => {
             [id]: value
         }))
     }
-    const checkexists = (item) => {
+    const checkexists = (item, pa) => {
         let dt = data;
         let check = false;
+        // let productToUpdate = null; // sản phẩm cần được cập nhật quantity
         for (let i = 0; i < data.length; i++) {
-            if (dt[i].productcode == item) {
-                // console.log("đã tồn tại", data[i])
-                let product = dt[i];   // thay đổi 1 giá trị trong object của state
-                // dt = dt.filter(product => product.productcode !== item);
-                product.quantity++
-                check = true;
-                break;
+            if (dt[i].bar_code === item && dt[i].package === pa) {
+                let product = dt[i];
+                // let productToUpdate = state1.find(p => p.package_code == pa && p.bar_code == item);
+                // if (productToUpdate) {
+                //     console.log("Đã đủ số lượng luôn");
+                //     break;
+                // }
+                // console.log(product.quantity);
+                let productToUpdate = state1.find(p => p.package_code === pa && p.products.some(prod => {
+                    return prod.bar_code === item && product.quantity >= prod.quantity;
+                }));
+                if (productToUpdate) {
+                    toast.warning("This product has reached its quantity limit."); // in thông báo
+                    check = true;
+                    return check;
+                }
+                else {
+                    product.quantity++
+                    check = true;
+                    break;
+                }
+
             }
 
         }
         return check;
     }
-    const allinfo = (item) => {
-        if (state && state.length > 0) {
-            for (let i = 1; i < state.length; i++) {
-                if (state[i].productcode == item) {
-                    let pr = state[i]
-                    let newdatainput = {
-                        id: Math.floor((Math.random() * 199999999) + 1),
-                        productcode: newdata.productcode,
-                        productname: pr.productname,
-                        category: pr.category,
-                        supplier: pr.supplier,
+
+    const allinfo = (item, pa) => {
+        if (state1 && state1.length > 0) {
+            const packageIndex = state1.findIndex((p) => p.package_code === pa);
+
+            if (packageIndex !== -1) {
+                const productIndex = state1[packageIndex].products.findIndex((p) => p.bar_code === item);
+                if (productIndex !== -1) {
+                    const product = state1[packageIndex].products[productIndex];
+                    const newdatainput = {
+                        id: Math.floor(Math.random() * 199999999 + 1),
+                        bar_code: newdata.bar_code,
+                        product_name: product.product_name,
+                        category: product.category,
+                        supplier_name: product.supplier_name,
                         date: newdate,
+                        sku: product.sku,
                         quantity: newdata.quantity,
-                    }
+                        package: newdata.package
+                    };
                     setData([...data, newdatainput]);
                     setNewdata({
-                        productcode: "",
+                        bar_code: "",
+                        package: newdata.package,
                         codecontainer: newdata.codecontainer,
                         quantity: newdata.quantity,
                     });
                     return;
-
                 }
             }
             toast.error("Product does not exist"); // in thông báo
             setNewdata({
-                productcode: "",
+                bar_code: "",
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
+                package: newdata.package,
             });
         } else {
-            if (!containerbowl.codecontainervalidate || !newdata.productcode || !containerbowl.bowl || !newdata.productname || !newdata.category) {
+            if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || !newdata.product_name || !newdata.category) {
                 toast.error("Missing info"); // in thông báo
                 return;
             }
             let newdatainput = {
                 id: Math.floor((Math.random() * 199999999) + 1),
-                productcode: newdata.productcode,
-                productname: newdata.productname,
+                bar_code: newdata.bar_code,
+                product_name: newdata.product_name,
                 category: newdata.category,
-                supplier: newdata.supplier,
+                supplier_name: newdata.supplier_name,
+                sku: newdata.sku,
                 date: newdate,
                 quantity: newdata.quantity,
             }
             setData([...data, newdatainput]);
             setNewdata({
-                productcode: "",
+                package: newdata.package,
+                bar_code: "",
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
-                productname: "",
+                product_name: "",
                 category: "",
-                supplier: ""
+                supplier_name: "",
+                sku: "",
             });
         }
     }
     const inputProduct = (e) => {
+        // console.log(state1);
         e.preventDefault();
-        if (!containerbowl.codecontainervalidate || !newdata.productcode || !containerbowl.bowl) {
-            toast.error("Missing info"); // in thông báo
+        if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || checkpalletright || checkcontainer || !newdata.package) {
+            toast.error("Missing info - The information is incorrect"); // in thông báo
             return;
         }
-        let isValid = checkexists(newdata.productcode);
+        // let enough = check_enough(newdata.package); // check đủ rồi thì next
+        let isValid = checkexists(newdata.bar_code, newdata.package); // check trùng thì tăng lên
         if (isValid == true) {
             setData([...data]);
             setNewdata({
-                productcode: "",
+                package: newdata.package,
+                bar_code: "",
                 quantity: newdata.quantity,
                 codecontainer: newdata.codecontainer,
             });
             return;
         }
-        allinfo(newdata.productcode);
+        allinfo(newdata.bar_code, newdata.package); //check có trong excel không
     }
-
     const checksave = () => {
-        if (state.length > 0) {
-            let newMisssave = [];
-            for (let i = 1; i < state.length; i++) {
-                let obj = state[i];
-                if (obj.hasOwnProperty("productcode")) { // Kiểm tra xem đối tượng có chứa key "c" hay không
-                    let productcodeValue = obj.productcode;
-                    let productquantity = obj.quantity;
-                    let foundproductcodeValue = data.some((o) => o.hasOwnProperty("productcode") && o.productcode == productcodeValue && o.quantity == productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
-                    if (!foundproductcodeValue) {
-                        let foundData = data.find((o) => o.productcode == productcodeValue);
-                        let quantityDifference = foundData && foundData.quantity ? productquantity - foundData.quantity : productquantity;
-                        // let quantityDifference = data.find((o) => o.productcode == productcodeValue);
-                        if (quantityDifference !== 0) {
-                            let newhaha = {
-                                product: obj.productname,
-                                missquantity: quantityDifference,
-                                codecontainer: container
-                            }
-                            // setMisssave(prevMisssave => [...prevMisssave, newhaha]) // callback
-                            newMisssave = [...newMisssave, newhaha];
-                        }
+        if (step4.length > 0) {
+            let missave1 = [];
 
+            // Duyệt qua từng sản phẩm trong biến step4
+            for (let i = 0; i < step4.length; i++) {
+                let found = false;
+
+                // Kiểm tra xem sản phẩm có trong biến data hay không dựa trên các thuộc tính
+                for (let j = 0; j < data.length; j++) {
+                    if (step4[i].bar_code === data[j].bar_code &&
+                        step4[i].package_code === data[j].package &&
+                        step4[i].supplier_name === data[j].supplier_name &&
+                        step4[i].sku === data[j].sku) {
+                        found = true;
+
+                        // So sánh quantity
+                        if (step4[i].quantity > data[j].quantity) {
+                            // Lưu thông tin sản phẩm vào biến missave nếu quantity của sản phẩm trong step4 lớn hơn quantity của sản phẩm trong data
+                            missave1.push({
+                                ...step4[i],
+                                quantity: step4[i].quantity - data[j].quantity
+                            });
+                        }
+                        break;
                     }
                 }
+
+                // Lưu thông tin sản phẩm vào biến missave nếu sản phẩm trong biến step4 không có trong biến data
+                if (!found) {
+                    missave1.push(step4[i]);
+                }
             }
-            return newMisssave;
-        }
+            return missave1;
+        };
     }
-    const SaveInbound = async () => {
-        if (state && state.length > 0) {
-            // const getmiss = await checksave();
-            // if (getmiss.length > 0) {
-            //     console.log("thiếu", getmiss);
-            // }
-            // else {
-            //     console.log("không")
-            // }
-            // setCurrentMisssave(misssave);
-            console.log(misssave);
-        }
-        console.log("Data dữ liệu: ", data);
-        console.log("Container: ", containerbowl);
-        toast.success("Đã Save"); // in thông báo
-    }
+    // const checksave = () => {
+    //     if (state1.length > 0) {
+    //         let newMisssave = [];
+    //         for (let i = 1; i < state1.length; i++) {
+    //             let obj = state1[i];
+    //             if (obj.hasOwnProperty("bar_code")) { // Kiểm tra xem đối tượng có chứa key "c" hay không
+    //                 let productcodeValue = obj.bar_code;
+    //                 let productquantity = obj.quantity;
+    //                 let foundproductcodeValue = data.some((o) => o.hasOwnProperty("bar_code") && o.bar_code == productcodeValue && o.quantity == productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
+    //                 if (!foundproductcodeValue) {
+    //                     let foundData = data.find((o) => o.bar_code == productcodeValue);
+    //                     let quantityDifference = foundData && foundData.quantity ? productquantity - foundData.quantity : productquantity;
+    //                     // let quantityDifference = data.find((o) => o.bar_code == productcodeValue);
+    //                     if (quantityDifference !== 0) {
+    //                         let newhaha = {
+    //                             product: obj.product_name,
+    //                             missquantity: quantityDifference,
+    //                             codecontainer: container
+    //                         }
+    //                         // setMisssave(prevMisssave => [...prevMisssave, newhaha]) // callback
+    //                         newMisssave = [...newMisssave, newhaha];
+    //                     }
+
+    //                 }
+    //             }
+    //         }
+    //         return newMisssave;
+    //     }
+    // }
     //Xử lý Print
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
     });
 
+    //xử lý next
+    const inputNext = () => {
+        setChecksquarepack(true);
+        if (newmiss) {
+            // setMisssave(prevMisssave => [...prevMisssave, ...newmiss.map(item => ({ ...item }))]);
+        }
+        setNewdata({
+            package: "",
+            bar_code: "",
+            quantity: newdata.quantity,
+            codecontainer: newdata.codecontainer,
+        });
+        setNewmiss(null);
+    }
+
     // xử lý input
     const checkBarcode = (event) => {
-        const barcodeRegex = /^[0-9]{3}$/;
+        const barcodeRegex = /^[0-9]{13}$/;
 
         if (barcodeRegex.test(event.target.value)) {
             setIsBarcodeScanned(true);
         }
     };
+    const checkPack = (event) => {
+        const packregex = /^[A-Za-z0-9]{12}$/;
+        if (packregex.test(event.target.value)) {
+            document.getElementById("bar_code").focus();
+        }
+    }
     const checkpallet = (event) => {
-        const palletregex = /^OB-\d{5}$/;
-
+        const palletregex = /^IB-\d{5}$/;
         if (palletregex.test(event.target.value)) {
-            // document.getElementById("productcode").focus();
-            nextinput.current.focus();
+            setCheckpalletright(false);
+            document.getElementById("package").focus();
+        }
+        else {
+            setCheckpalletright(true);
         }
     };
+    const checkcontai = (event) => {
+        const contaitregex = new RegExp(containerbowl.codecontainervalidate + "$");
+        if (contaitregex.test(event.target.value)) {
+            setCheckcontainer(false);
+        }
+        else {
+            setCheckcontainer(true);
+        }
+
+    }
+    useEffect(() => {
+        if (checksquarepack) {
+            document.getElementById("package").focus();
+        }
+    }, [checksquarepack]);
     useEffect(() => {
         if (!checkcontainer) {
             // nextinput.current.focus();
@@ -234,30 +353,92 @@ const InboundList = (props) => {
         }
     }, [isBarcodeScanned]);
     useEffect(() => {
-        if (state) {
+        if (step) {
             const newMisssave = checksave();
             setMisssave(newMisssave);
         }
-
-    }, [state, data]);
+    }, [step, data]);
+    useEffect(() => {
+        begininputRef.current.focus();
+    }, []);
+    const [enough, setEnough] = useState(false);
+    useEffect(() => {
+        const checkEnough = (pa) => {
+            let dt = data;
+            const packageIndex = state1.findIndex(p => p.package_code === pa);
+            if (packageIndex < 0) {
+                // Không tìm thấy package_code trong state1
+                return false;
+            } else {
+                // Tính tổng số lượng các sản phẩm trong biến data có package trùng với pa
+                const products = dt.filter(p => p.package === pa);
+                const productsQuantity = products.reduce((acc, cur) => acc + cur.quantity, 0);
+                if (productsQuantity >= state1[packageIndex].products.reduce((acc, cur) => acc + cur.quantity, 0)) {
+                    setChecksquarepack(true);
+                    setNewdata({
+                        package: "",
+                        bar_code: "",
+                        quantity: newdata.quantity,
+                        codecontainer: newdata.codecontainer,
+                    });
+                    setNewmiss(null);
+                    return;
+                } else {
+                    // Lấy ra danh sách các sản phẩm có trong biến state1 nhưng không có trong biến data
+                    const productsWithoutData = state1[packageIndex].products.filter(p1 =>
+                        !products.some(p2 => p1.product_name === p2.product_name)
+                    );
+                    // Lưu thông tin các sản phẩm chưa có trong biến data vào biến miss
+                    let miss = productsWithoutData.map(p => ({
+                        bar_code: p.bar_code,
+                        category: p.category,
+                        sku: p.sku,
+                        package_code: pa,
+                        product_name: p.product_name,
+                        quantity: p.quantity,
+                        supplier_name: p.supplier_name
+                    }));
+                    // Lưu thông tin các sản phẩm thiếu vào biến miss
+                    products.forEach(p => {
+                        const productInState1 = state1[packageIndex].products.find(pr => pr.product_name === p.product_name && pr.bar_code === p.bar_code && pr.supplier_name === p.supplier_name); //sửa thành barcode nè
+                        const quantityMissing = productInState1.quantity - p.quantity; // -quantity
+                        if (quantityMissing > 0) {
+                            miss.push({
+                                package_code: pa,
+                                sku: p.sku,
+                                bar_code: p.bar_code,
+                                category: p.category,
+                                supplier_name: p.supplier_name,
+                                product_name: p.product_name,
+                                quantity: quantityMissing
+                            });
+                        }
+                    });
+                    setChecksquarepack(false);
+                    setNewmiss(miss)
+                    return;
+                }
+            }
+        };
+        const enough = state1.every((p) => checkEnough(newdata.package));
+        setEnough(enough);
+    }, [data]);
+    // console.log("miss", newmiss);
+    // console.log("miss tổng", misssave);
+    // console.log(miss1);
+    // console.log(state1);
+    // console.log(data);
+    // console.log(step4);
+    // console.log(data);
+    // console.log(isBarcodeScanned);
+    // console.log(orderid);
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
-                <h1 style={{ textAlign: "center" }} >InboundList</h1>
+                <h1 style={{ textAlign: "center" }} >Inbound List</h1>
             </div>
             <hr></hr>
             <div className="card card-default">
-                {/* <div className="card-header">
-                    <h3 className="card-title">Quét mã barcode</h3>
-                    <div className="card-tools">
-                        <button type="button" className="btn btn-tool" data-card-widget="collapse">
-                            <i className="fas fa-minus"></i>
-                        </button>
-                        <button type="button" className="btn btn-tool" data-card-widget="remove">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div> */}
                 <div className="card-body">
                     <form>
                         <div className="row">
@@ -280,52 +461,68 @@ const InboundList = (props) => {
                             <div className="col-md-4">
                                 <div className="form-group">
                                     <label>Container Code</label>
-                                    <input id="codecontainer" type="text" className="form-control" placeholder="Code-container" onChange={changeHandler} ref={nextinput} />
+                                    <input id="codecontainer" type="text" className="form-control" placeholder="Code-container" onChange={changeHandler} onInput={checkcontai} ref={begininputRef} />
                                     {checkcontainer ? <p style={{ color: "red" }}>* Mismatched!</p> : <p></p>}
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="form-group">
                                     <label>Pallet</label>
-                                    <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} ref={nextinput} onInput={checkpallet} />
+                                    <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} onInput={checkpallet} />
                                 </div>
+                                {checkpalletright ? <p style={{ color: "red" }}>* The pallet is invalid!</p> : <p></p>}
                             </div>
-                            {!state ? <>
+                            {!step ? <>
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Product Name</label>
-                                        <input id="productname" type="text" className="form-control" placeholder="Product Name" value={newdata.productname} onChange={changeHandler} ref={nextinput} />
+                                        <input id="product_name" type="text" className="form-control" placeholder="Product Name" value={newdata.product_name} onChange={changeHandler} />
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>Category</label>
-                                        <input id="category" type="text" className="form-control" placeholder="Category" value={newdata.category} onChange={changeHandler} ref={nextinput} />
+                                        <input id="category" type="text" className="form-control" placeholder="Category" value={newdata.category} onChange={changeHandler} />
                                     </div>
                                 </div></> : null}
-                            <div className="col-md-10">
+                            <div className="col-md-3">
+                                <div className="form-group">
+                                    <label>Package</label>
+                                    <input id="package" type="text" maxLength={MAX_PACKAGE_LENGTH} className="form-control" placeholder="Package" value={newdata.package} disabled={checksquarepack ? "" : "{false}"} onChange={changeHandler} onInput={checkPack} />
+                                </div>
+                            </div>
+                            <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Input Code Product</label>
-                                    <input id="productcode" type="number" className="form-control" placeholder="Code-container" value={newdata.productcode} onChange={changeHandler} onInput={checkBarcode} ref={nextinput} />
+                                    <input id="bar_code" type="text" className="form-control" placeholder="Code-container" value={newdata.bar_code} onChange={changeHandler} onInput={checkBarcode} />
                                 </div>
                             </div>
                             <div className="col-md-2">
                                 <button type="button" id="btnnhapinput" className="btn btn_nhap btn-block btn-success btn-lg" onClick={inputProduct}>Input</button>
                             </div>
+                            {
+                                newmiss ?
+                                    <div className="next col-md-1">
+                                        <NextIB misssave={newmiss} handlemissing={inputNext} />
+                                    </div>
+                                    : null
+                            }
                         </div>
                     </form>
                     <hr></hr>
                     <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
                     <div style={{ float: "right" }} className="row">
                         <div className="btn-button">
-                            <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
-                            <CheckIB misssave={misssave} inbound={data} container={containerbowl} />
-                            {/* <Button variant="primary" onClick={() => { SaveInbound(); }}><span style={{ paddingRight: "5px" }}><FaSave /></span> Save</Button> */}
+                            {data && data.length > 0 ?
+                                <>
+                                    <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
+                                    <CheckIB misssave={misssave} inbound={data} container={containerbowl} orderid={orderid} />
+                                </>
+                                : null}
                         </div>
                     </div>
                 </div>
             </div>
-
         </div >
     );
 };
