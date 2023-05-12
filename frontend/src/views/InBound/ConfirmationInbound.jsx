@@ -1,7 +1,8 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import ListConfirn from "./modalIB/ListConfirn";
-
+import * as IBAPI from "../../services/IBAPI";
+import { toast } from 'react-toastify';
 import {
     FaPrint, FaCheck, FaTimes
 } from "react-icons/fa";
@@ -11,6 +12,34 @@ const ConfirmationInbound = () => {
     var day = dateObj.getUTCDate();
     var year = dateObj.getUTCFullYear();
     var newdate = day + "/" + month + "/" + year;
+
+    const [listpallet, setlistPallet] = useState(null);
+    const [palletProduct, setPalletProduct] = useState(null);
+    const uploadStatus = async (id) => {
+        try {
+            let res = await IBAPI.uploadstatus(id);
+            toast.success("Update success"); // in thông báo
+        } catch (error) {
+            toast.error("Update Fail"); // in thông báo
+        }
+    }
+    useEffect(() => {
+        (async () => {
+            try {
+                let list = await IBAPI.getallpallets();
+                setlistPallet(list);
+            } catch (error) {
+                setlistPallet(null);
+            }
+        })();
+    }, [])
+    useEffect(() => {
+        if (listpallet && listpallet.length > 0) {
+            const haveproduct = listpallet.filter((IB) => IB.products.length > 0);
+            setPalletProduct(haveproduct);
+        }
+    }, [listpallet])
+    // console.log(palletProduct);
     return (
         <div className=" body_validatelistIB">
             <div className="container_validateIB">
@@ -25,64 +54,39 @@ const ConfirmationInbound = () => {
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>List</th>
-                                        <th>Bowl</th>
-                                        <th>Code Container</th>
+                                        <th>List Products</th>
+                                        <th>Pallet</th>
                                         <th>Date</th>
-                                        <th style={{ width: "300px" }}>Extends</th>
+                                        <th>Extends</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    {palletProduct && palletProduct.length > 0 && palletProduct.map((data, i) => {
+                                        return (
+                                            <tr key={data._id} >
+                                                <td>{i + 1}</td>
+                                                <td><ListConfirn product={data.products} /></td>
+                                                <td>{data.name_pallet}</td>
+                                                <td>{data.updatedAt}</td>
+                                                <td style={{ width: "300px" }}>
+                                                    <Button variant="success"><span style={{ paddingRight: "5px" }} onClick={uploadStatus(data._id)} ><FaCheck /></span>Validate</Button>{' '}
+                                                    <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
+                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
+                                    {/* <tr>
                                         <td>1</td>
                                         <td><ListConfirn /></td>
-                                        {/* <td><a href="adas">List...</a></td> */}
                                         <td>IB0001</td>
-                                        <td>A4253855544</td>
                                         <td>17/02/2023</td>
-                                        <td>
-                                            <Button variant="success"><span style={{ paddingRight: "5px" }}><FaCheck /></span>Validate</Button>{' '}
+                                        <td style={{ width: "300px" }}>
+
                                             <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
                                             <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td><ListConfirn /></td>
-                                        <td>IB0002</td>
-                                        <td>435467657532</td>
-                                        <td>17/02/2023</td>
-                                        <td>
-                                            <Button variant="success"><span style={{ paddingRight: "5px" }}><FaCheck /></span>Validate</Button>{' '}
-                                            <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
-                                            <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td><ListConfirn /></td>
-                                        <td>IB0001</td>
-                                        <td>435467657532aabb</td>
-                                        <td>17/02/2023</td>
-                                        <td>
-                                            <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
-                                        </td>
-                                    </tr>
-
-                                    {/* {
-
-                                        data && data.length > 0 && data.map((data, i) => {
-                                            return (
-
-                                                <tr key={data.id}>
-                                                    <td>{i + 1}</td>
-                                                    <td>{data.productcode}</td>
-                                                    <td>{data.date}</td>
-                                                    <td>1</td>
-                                                </tr>
-                                            )
-                                        })
-                                    } */}
+                                    </tr> */}
                                 </tbody>
                             </table>
                         </div>

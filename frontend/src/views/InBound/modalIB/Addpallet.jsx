@@ -14,8 +14,8 @@ const Addpallet = (props) => {
     const [newdata, setNewdata] = useState({
         name_pallet: "",
         area: "Inbound",
-        type: "metal",
-        weight: "0.8",
+        type: "Metal",
+        weight: "800",
         length: "100",
         width: "100",
         height: "120",
@@ -38,16 +38,14 @@ const Addpallet = (props) => {
                 break;
             }
         }
-        console.log(newdata.name_pallet, newdata.area, newdata.metal, newdata.type, newdata.weight, newdata.width, newdata.length, newdata.height);
+        console.log(newdata.name_pallet, newdata.area, newdata.type, newdata.weight, newdata.width, newdata.length, newdata.height);
         return isValid;
     }
     const handleraddnew = async () => {
         let isValid = checkvalue()
         // props.getnewaccount(newdata);
-
-
         if (isValid === true) {
-            const handledata = {
+            const handledata = [{
                 name_pallet: "IB-" + newdata.name_pallet,
                 area: newdata.area,
                 type: newdata.type,
@@ -57,8 +55,9 @@ const Addpallet = (props) => {
                     height: newdata.height
                 },
                 weight: newdata.weight,
-                products: []
-            }
+                products: [],
+                status: false
+            }]
             // gọi api ở dây
             try {
                 let notifi = await IBAPI.createPallet(handledata); // truyền json qua
@@ -66,14 +65,17 @@ const Addpallet = (props) => {
                     setNewdata({
                         name_pallet: "",
                         area: "Inbound",
-                        type: "metal",
-                        weight: "0.8",
+                        type: "Metal",
+                        weight: "800",
                         length: "100",
                         width: "100",
                         height: "120",
 
+
                     })
-                    toast.error("Created successfully"); // in thông báo xong
+                    toast.success("Created successfully"); // in thông báo xong
+                    toggle();
+                    props.fetchPalletList();
                 }
             } catch (error) {
                 toast.error("Server not responding"); // in thông báo lỗi
@@ -116,9 +118,9 @@ const Addpallet = (props) => {
                                         <div className="form-group">
                                             <label><b>Choose Pallet Type</b></label>
                                             <select id="type" onChange={handlechangeinfo} className="form-control">
-                                                <option value="metal">Metal</option>
-                                                <option value="wood">Wood</option>
-                                                <option value="plastic">Plastic</option>
+                                                <option value="Metal">Metal</option>
+                                                <option value="Wood">Wood</option>
+                                                <option value="Plastic">Plastic</option>
                                             </select>
                                         </div>
                                     </div>

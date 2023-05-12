@@ -17,7 +17,6 @@ let session = null;
 if (getuser) {
   // session = jwt_decode(getuser);
   session = getuser;
-  console.log(session);
 }
 root.render(
   <>

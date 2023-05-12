@@ -1,27 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Barcode from 'react-barcode';
 import { Button } from "react-bootstrap";
 import {
     FaPrint, FaCheck, FaTimes, FaPlus
 } from "react-icons/fa";
 import Addpallet from "./modalIB/Addpallet";
+import * as IBAPI from "../../services/IBAPI";
 const PrintBowl = () => {
     const [barcode, setBarcode] = useState("");
     const [crebarcode, setCrebarcode] = useState("");
+    const [listpallet, setlistPallet] = useState(null);
+    const [listpalletIB, setListpalletIB] = useState(null);
+
     const handlerchange = (e) => {
         setBarcode(e.target.value);
     }
     const create = barcode;
     const createbarcode = (e) => {
         e.preventDefault();
-        // setCrebarcode("OB-" + barcode);
         setCrebarcode(barcode);
         setBarcode("")
     }
+    const fetchPalletList = async () => {
+        try {
+            let list = await IBAPI.getallpallets();
+            setlistPallet(list);
+        } catch (error) {
+            setlistPallet(null);
+        }
+    };
+    useEffect(() => {
+        (async () => {
+            try {
+                let list = await IBAPI.getallpallets();
+                setlistPallet(list);
+            } catch (error) {
+                setlistPallet(null);
+            }
+        })();
+    }, [])
+    useEffect(() => {
+        if (listpallet && listpallet.length > 0) {
+            const listPalletIB = listpallet.filter((IB) => IB.area === "Inbound");
+            setListpalletIB(listPalletIB);
+        }
+    }, [listpallet])
 
     return (
         <div className="Printbowl_body">
-            <div className="header_print">
+            <div>
                 <h1 style={{ textAlign: "center" }} >Pallet Management</h1>
             </div>
             <hr></hr>
@@ -76,11 +103,11 @@ const PrintBowl = () => {
                                     <h3>Pallets </h3>
                                 </div>
                                 <div className="buttom_plus_pallet" >
-                                    {<Addpallet />}
+                                    {<Addpallet fetchPalletList={fetchPalletList} />}
                                 </div>
                             </div>
                             <hr></hr>
-                            <form className="form-printbowl">
+                            <form style={{ maxHeight: "70vh", overflow: "auto" }} className="form-printbowl">
                                 <div className="card card-default">
                                     <div className="card-body">
                                         <div className="row">
@@ -91,64 +118,29 @@ const PrintBowl = () => {
                                                             <thead>
                                                                 <tr>
                                                                     <th>STT</th>
-                                                                    <th>List</th>
-                                                                    <th>Bowl</th>
-                                                                    <th>Code Container</th>
-                                                                    <th>Date</th>
-                                                                    <th style={{ width: "300px" }}>Extends</th>
+                                                                    <th>Pallet Code</th>
+                                                                    <th>Area</th>
+                                                                    <th>Pallet Type</th>
+                                                                    <th>Weight(kg)</th>
+                                                                    <th>Extends</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td></td>
-                                                                    {/* <td><a href="adas">List...</a></td> */}
-                                                                    <td>IB0001</td>
-                                                                    <td>A4253855544</td>
-                                                                    <td>17/02/2023</td>
-                                                                    <td>
-                                                                        <Button variant="success"><span style={{ paddingRight: "5px" }}><FaCheck /></span>Validate</Button>{' '}
-                                                                        <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
-                                                                        <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2</td>
-                                                                    <td></td>
-                                                                    <td>IB0002</td>
-                                                                    <td>435467657532</td>
-                                                                    <td>17/02/2023</td>
-                                                                    <td>
-                                                                        <Button variant="success"><span style={{ paddingRight: "5px" }}><FaCheck /></span>Validate</Button>{' '}
-                                                                        <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
-                                                                        <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>3</td>
-                                                                    <td></td>
-                                                                    <td>IB0001</td>
-                                                                    <td>435467657532aabb</td>
-                                                                    <td>17/02/2023</td>
-                                                                    <td>
-                                                                        <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
-                                                                    </td>
-                                                                </tr>
-
-                                                                {/* {
-
-                                        data && data.length > 0 && data.map((data, i) => {
-                                            return (
-
-                                                <tr key={data.id}>
-                                                    <td>{i + 1}</td>
-                                                    <td>{data.productcode}</td>
-                                                    <td>{data.date}</td>
-                                                    <td>1</td>
-                                                </tr>
-                                            )
-                                        })
-                                    } */}
+                                                                {listpalletIB && listpalletIB.length > 0 && listpalletIB.map((data, i) => {
+                                                                    return (
+                                                                        <tr key={data._id} >
+                                                                            <td>{i + 1}</td>
+                                                                            <td>{data.name_pallet}</td>
+                                                                            <td>{data.area}</td>
+                                                                            <td>{data.type}</td>
+                                                                            <td>{data.weight}</td>
+                                                                            <td style={{ maxWidth: "100px", wordBreak: "break-all", whiteSpace: "pre-wrap" }}>
+                                                                                <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
+                                                                                <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                })}
                                                             </tbody>
                                                         </table>
                                                     </div>

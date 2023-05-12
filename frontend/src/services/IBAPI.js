@@ -43,17 +43,34 @@ export const getDetailReback = async (id) => {
     }
 }
 export const createPallet = async (data) => {
-    console.log(data);
-    // try {
-    //     const response = await axios.post(`link`, data, {
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     });
-    //     return response;
-    // } catch (error) {
-    //     throw error;
-    // }
+    const combinedJson = JSON.stringify(data, null, 2);
+    console.log(combinedJson);
+    try {
+        const response = await axios.post("http://localhost/api/warehouse/pallets", data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+export const getallpallets = async () => {
+    try {
+        const response = await axios.get('http://localhost/api/warehouse/pallets');
+        return response.data.pallets;
+    } catch (error) {
+        throw error;
+    }
+}
+export const uploadstatus = async (id) => {
+    try {
+        const response = await axios.get(`http://localhost/api/warehouse/pallets/${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
 }
 export const addNewAccount = (data) => {
     return axios.post('link', data);
