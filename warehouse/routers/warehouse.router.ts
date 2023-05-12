@@ -8,5 +8,6 @@ const router = express.Router();
 // get list api
 router.post("/api/warehouse/pallets", PalletController.insertPallet);
 router.get("/api/warehouse/pallets", PalletController.searchPallet);
+router.post("/api/warehouse/pallets/:id", PalletController.updateStatus);
 
 export { router as warehouse };

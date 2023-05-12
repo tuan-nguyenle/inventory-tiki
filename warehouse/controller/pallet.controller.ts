@@ -28,3 +28,15 @@ export const insertPallet = async (req: Request, res: Response) => {
         .status(201)
         .send({ msg: "Insert new Pallet success" });
 };
+
+export const updateStatus = async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        throw new RequestValidationError(errors.array());
+    }
+    const data = { _id: req.params.id, status: true };
+    await PalletServices.findOneAndUpdate(data);
+
+    return res.status(200).send({ msg: "validate success" });
+}
