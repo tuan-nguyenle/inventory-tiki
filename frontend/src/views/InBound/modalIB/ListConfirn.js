@@ -7,12 +7,9 @@ import {
     FaSave,
 } from "react-icons/fa";
 const ListConfirn = (props) => {
-
+    const listproduct = props.product;
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
-    const SaveInbound = () => {
-        toast.success("Đã Save"); // in thông báo
-    }
     return (
         <div>
             {<p style={{ cursor: "pointer", color: "blue", textDecorationLine: "underline" }} onClick={() => toggle()}> List Products...</p>}
@@ -28,137 +25,31 @@ const ListConfirn = (props) => {
                                             <th>STT</th>
                                             <th>Product code</th>
                                             <th>Product name</th>
-                                            <th>Category</th>
                                             <th>Supplier</th>
+                                            <th>Category</th>
                                             <th>Quantity</th>
-                                            <th>Date</th>
+                                            <th>SKU</th>
+                                            <th>Unit</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>8938510904063</td>
-                                            <td>Bộ trục ròng rọc</td>
-                                            <td>Linh kiện</td>
-                                            <td>1</td>
-                                            <td>5</td>
-                                            <td>08/03/2023</td>
-                                        </tr>
-                                        {/* {
+                                        {
 
-                                            data && data.length > 0 && data.map((data, i) => {
+                                            listproduct && listproduct.length > 0 && listproduct.map((data, i) => {
                                                 return (
-
-                                                    <tr key={data.id}>
+                                                    <tr key={data._id}>
                                                         <td>{i + 1}</td>
-                                                        <td>{data.productcode}</td>
-                                                        <td>{data.productname}</td>
+                                                        <td>{data.bar_code}</td>
+                                                        <td style={{ maxWidth: "200px", wordBreak: "break-all", whiteSpace: "pre-wrap" }}>{data.product_name}</td>
+                                                        <td>{data.supplier_name}</td>
                                                         <td>{data.category}</td>
                                                         <td>{data.quantity}</td>
-                                                        <td>{data.date}</td>
+                                                        <td>{data.sku}</td>
+                                                        <td>{data.unit}</td>
                                                     </tr>
                                                 )
                                             })
-                                        } */}
+                                        }
                                     </tbody>
                                 </table>
                             </div>

@@ -33,10 +33,15 @@ function Login() {
     const callAPIlogin = async () => {
         try {
             let a = await handleLoginAPI(account);
-            // if (a && !err.errmess) {
-            //     sessionStorage.setItem('user', JSON.stringify(a));
-            //     window.location.href = "/";
-            // }
+            if (a && !err.errmess) {
+                sessionStorage.setItem('user', JSON.stringify(a));
+                // var decoded = jwt_decode(a);
+                // console.log(decoded);
+                window.location.href = "/";
+            }
+            else {
+                console.log("xuống đây r nẻ2");
+            }
             // const a = JSON.parse(sessionStorage.getItem('a'));
         } catch (error) {
             setErr({
@@ -53,13 +58,7 @@ function Login() {
             toast.error("Missing ! Please fill in the missing information.");
             return;
         }
-        let API = callAPIlogin();
-        if (API) {
-
-            // var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MWFjMWEyNDMzMjJkZmRkYmM5M2IwNiIsInVzZXJuYW1lIjoiVHVhbkxlMjUxMjIwMDEiLCJmdWxsbmFtZSI6IkxlIE5ndXllbiBUdWFuIiwicGhvbmUiOiIwODY5MjM2NTE0IiwiaWF0IjoxNjc5NDgyMTkwfQ.602TIYBoKj4XsxTXihrvkmxl1pI7RfUl5437BUicU9s";
-            // var decoded = jwt_decode(token);
-            // console.log(decoded);
-        }
+        callAPIlogin();
     }
 
     return (

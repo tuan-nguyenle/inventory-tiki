@@ -38,7 +38,7 @@ const AddUser = (props) => {
     const handleraddnew = () => {
         let isValid = checkvalue()
         if (isValid === true) {
-            toast.success("Add Success"); // in thông báo
+            toast.success("Added successfully"); // in thông báo
             props.getnewaccount(newdata);
         }
     }

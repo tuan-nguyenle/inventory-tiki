@@ -16,7 +16,7 @@ const CheckIB = (props) => {
     const data = { ...contai, id: orderid, miss };
     const handledata = [];
     const saveinbound = props.inbound;
-    const containerbow = props.container
+    console.log(contai);
     const SaveReback = async () => {
         await saveinbound.forEach((ele) => {
             let products = {
@@ -25,12 +25,14 @@ const CheckIB = (props) => {
                 bar_code: ele.bar_code,
                 quantity: ele.quantity,
                 sku: ele.sku,
+                unit: ele.unit,
                 supplier_name: ele.supplier_name
             };
             handledata.push(products);
         })
         // set lại biến cho api
         const datainput = {
+            name_pallet: contai.bowl,
             products: handledata
         };
         // gọi api ngay đây
@@ -52,12 +54,14 @@ const CheckIB = (props) => {
                 bar_code: ele.bar_code,
                 quantity: ele.quantity,
                 sku: ele.sku,
+                unit: ele.unit,
                 supplier_name: ele.supplier_name
             };
             handledata.push(products);
         })
         // set lại biến cho api
         const datainput = {
+            name_pallet: contai.bowl,
             products: handledata
         };
         // gọi api ngay đây
@@ -96,6 +100,7 @@ const CheckIB = (props) => {
                                                         <th>Supplier</th>
                                                         <th>Category</th>
                                                         <th>SKU</th>
+                                                        <th>Unit</th>
                                                         <th>Missing Quantity</th>
                                                     </tr>
                                                 </thead>
@@ -111,6 +116,7 @@ const CheckIB = (props) => {
                                                                     <td>{data.supplier_name}</td>
                                                                     <td>{data.category}</td>
                                                                     <td>{data.sku}</td>
+                                                                    <td>{data.unit}</td>
                                                                     <td style={{ color: "red" }}>{data.quantity}</td>
                                                                 </tr>
                                                             )

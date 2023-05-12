@@ -1,30 +1,19 @@
 import axios from "axios"
-const apiUrl = 'http://localhost/api/login/';
+import fakeuser from "../views/Account/fakeuser.json"
+const apiUrl = 'http://localhost/api/auth/login/';
+const fakeuser2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MWFkZDNmNTRlODJiZjkwMjVkMGY3YyIsInVzZXJuYW1lIjoiVHVhbkxlMjUxMjIwMDEiLCJmdWxsbmFtZSI6IkxlIE5ndXllbiBUdWFuIiwicGhvbmUiOiIwODY5MjM2NTE0IiwiUm9sZSI6W3siX2lkIjoiNjQxYWJkNWM5NWM2OWM4YzUzNmEyMGU1IiwiZGVzY3JpcHRpb24iOiJtYW5hZ2VyIn1dLCJEZXBhcnRtZW50IjpbeyJfaWQiOiI2NDFhYmJhZjUzMjE3NTZlMDE5Mjc3MjYiLCJkZXNjcmlwdGlvbiI6Im91dGJvdW5kIn1dLCJpYXQiOjE2ODM4NjUyMTl9.yKcu5P5CGjB61xH1fPXK_oz0n5bF-NMRMGrJZzlBdCI"
 const handleLoginAPI = async (account) => {
-    // const respone = await fetch("http://localhost:8080/api/login/", {
-    //     method: "POST", // *GET, POST, PUT, DELETE, etc.
-    //     mode: "cors", // no-cors, *cors, same-origin
-    //     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    //     credentials: "same-origin", // include, *same-origin, omit
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     redirect: "follow", // manual, *follow, error
-    //     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //     body: JSON.stringify({ username: account.username, password: account.password }), // body data type must match "Content-Type" header
-    // });
+    // return fakeuser2;
     return await axios.post(apiUrl, {
         username: account.username,
         password: account.password
     })
         .then(response => {
-            console.log("vai l luon");
             // Xử lý phản hồi từ server khi yêu cầu thành công
+            console.log(response.data);
             return response.data.user;
         })
         .catch(error => {
-            // console.log("vai l luon");
             throw error;
         });
 

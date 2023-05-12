@@ -15,7 +15,7 @@ const MainIC = () => {
 
     const menuItem = [
         {
-            path: "Home",
+            path: "MainIC/Home",
             name: "Home",
             icon: <FaTh />,
             number: ""
@@ -27,42 +27,47 @@ const MainIC = () => {
         //     number: "4"
         // },
         {
-            path: "Storage",
+            path: "MainIC/Storage",
             name: "Storage",
             icon: <FaWarehouse />,
             number: ""
         },
         {
-            path: "ProductManagement",
+            path: "MainIC/ProductManagement",
             name: "Product Management",
             icon: <FaProductHunt />,
             number: ""
         },
         {
-            path: "ShelfManagement",
+            path: "MainIC/ShelfManagement",
             name: "Shelf Management",
             icon: <FaBox />,
             number: ""
         },
         {
-            path: "DefectiveProduct",
+            path: "MainIC/DefectiveProduct",
             name: "Defective Product",
             icon: <ImBin />,
             number: ""
         },
         {
-            path: "Statistics",
+            path: "MainIC/Statistics",
             name: "Statistics",
             icon: <ImStatsBars />,
             number: ""
         },
         {
-            path: "Accountmanagement",
+            path: "MainIC/Accountmanagement",
             name: "Account management",
             icon: <FaUsers />,
             number: ""
         }
     ]
+    function handleLogout() {
+        sessionStorage.removeItem('user');
+        // window.location.reload();
+        window.location.href = '/login';
+    }
     return (
         <>
             <div className="container_sidebar">
@@ -93,7 +98,7 @@ const MainIC = () => {
                             </NavLink>
                         ))
                     }
-                    <NavLink to="/Logout" key={-1} style={{ width: isOpen ? "199px" : "50px" }} className={({ isActive }) => (isActive ? 'nonelogout' : 'nonelogout')}>
+                    <NavLink to="/Logout" key={-1} style={{ width: isOpen ? "199px" : "50px" }} className={({ isActive }) => (isActive ? 'nonelogout' : 'nonelogout')} onClick={handleLogout}>
                         <div className="icon_logout"><FaSignOutAlt /></div>
                         <div style={{ display: isOpen ? "block" : "none" }} className="link_text">Log Out</div>
                     </NavLink>

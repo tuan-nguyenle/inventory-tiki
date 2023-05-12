@@ -58,7 +58,7 @@ const start = async () => {
   }
 
   try {
-    new OrdersCreatedRequestInsetedProductToPalletListener('amqp://guest:guest@rabbitmq:', 'Orders', 'fanout', 'inventory-tiki').consumeMessages();
+    new OrdersCreatedRequestInsetedProductToPalletListener('amqp://guest:guest@rabbitmq:5672', 'Orders', 'fanout', 'inventory-tiki').consumeMessages();
   } catch (err) {
     console.log(err);
   }

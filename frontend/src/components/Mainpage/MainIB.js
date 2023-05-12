@@ -7,12 +7,11 @@ import { NavLink, Link, Outlet } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg"
 import avatar from "../../assets/images/Avatar/Loc.jpg";
 import {
-    FaBell, FaWarehouse, FaEdit, FaBars, FaUser, FaTh, FaSignOutAlt, FaBarcode, FaCheckDouble, FaUsers
+    FaBell, FaWarehouse, FaEdit, FaBars, FaUser, FaTh, FaSignOutAlt, FaBarcode, FaCheckDouble, FaUsers, FaRedoAlt
 } from "react-icons/fa";
-const MainIB = () => {
+const MainIB = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
-
     const menuItem = [
         {
             path: "MainIB/Home",
@@ -24,12 +23,18 @@ const MainIB = () => {
             path: "MainIB/Notification",
             name: "Notification",
             icon: <FaBell />,
-            number: "4"
+            number: 2
         },
         {
             path: "MainIB/InboundList",
             name: "Create Inbound List",
             icon: <FaWarehouse />,
+            number: ""
+        },
+        {
+            path: "MainIB/InputReback",
+            name: "Input Reback",
+            icon: <FaRedoAlt />,
             number: ""
         },
         {

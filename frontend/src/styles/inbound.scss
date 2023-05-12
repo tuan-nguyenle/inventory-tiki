@@ -84,6 +84,11 @@
         padding: 0px;
     }
 
+    .nutnext {
+        margin: 0px;
+        padding: 0px;
+    }
+
     .btn_next {
         font-size: 15px;
         margin: 30px 0px;
@@ -113,6 +118,18 @@
             font-size: 15px;
             margin-left: 5px;
             font-weight: bold;
+        }
+    }
+
+    .reback2 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 70vh;
+
+        .input-group {
+            width: 600px;
+            margin: auto;
         }
     }
 }
@@ -171,9 +188,26 @@
     }
 
     .barcode {
-        margin-top: 10%;
+        margin-top: 0%;
         margin-left: 40%;
     }
+
+    .header_print {
+        display: flex;
+
+        h2 {
+            text-align: center;
+            margin: 0;
+        }
+
+        .buttom_plus_pallet {
+            margin-left: auto;
+            margin-right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    }
+
 }
 
 .modal-add {
