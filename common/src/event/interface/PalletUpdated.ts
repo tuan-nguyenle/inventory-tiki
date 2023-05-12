@@ -1,7 +1,7 @@
 import { Subjects } from "../subjects";
 
 export interface PalletUpdated {
-    subject: Subjects.TransferToShelfFromPallet;
+    subject: Subjects.PalletUpdated;
     data: {
         product: {
             product_name: string,
