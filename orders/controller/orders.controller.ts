@@ -4,6 +4,7 @@ import * as Order from "../services/order.services";
 import { validationResult } from "express-validator";
 import { RequestValidationError } from "@microservies-inventory/common";
 import mongoose from "mongoose";
+import { OrdersCreatedRequestInsetedProductToPalletPublisher } from "../event/publisher/OrderRequestInsertedToPallet";
 
 export const viewAllOrders = async (req: Request, res: Response) => {
   const listOrders = await Order.viewAllOrders();
@@ -83,6 +84,17 @@ export const checkOrder = async (req: Request, res: Response) => {
       return null;
     }
   }).filter((missingPackage) => missingPackage !== null) as Package[];
+
+  try {
+    new OrdersCreatedRequestInsetedProductToPalletPublisher('amqp://guest:guest@rabbitmq:5672', 'Orders', 'fanout', 'inventory-tiki')
+      .publishMessage({
+        name_pallet: req.body.name_pallet,
+        product: req.body.products
+      });
+  } catch (error) {
+    console.log(`${error}`);
+
+  }
 
   if (missingProducts.length === 0) {
     await Order.findOneOrderAndUpdate(req.params.id, { status: "Stocked" });

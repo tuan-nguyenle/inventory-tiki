@@ -13,6 +13,27 @@ services:
     networks:
       - inventory_tiki
 
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb:/data/db
+    networks:
+      - inventory_tiki
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    container_name: 'rabbitmq'
+    ports:
+      - 5673:5672
+      - 15673:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - inventory_tiki
+
   auth:
     build:
       context: ./auth
@@ -66,27 +87,24 @@ services:
       - inventory_tiki
     stdin_open: true
     tty: true
-
-  mongodb:
-    image: mongo
+  warehouse:
+    build:
+      context: ./warehouse
+      dockerfile: Dockerfile
     ports:
-      - 27017:27017
+      - 8083:8083
+    environment:
+      SESSION_KEY: "${SESSION_KEY}"
+      ACCESS_TOKEN_PUBLIC_KEY: "${ACCESS_TOKEN_PUBLIC_KEY}"
+      ACCESS_TOKEN_PRIVATE_KEY: "${ACCESS_TOKEN_PRIVATE_KEY}"
     volumes:
-      - ./mongodb:/data/db
+      - /app/node_modules
+      - ./warehouse:/app/
     networks:
       - inventory_tiki
-  # rabbitmq:
-  #   image: rabbitmq:3.8-management-alpine
-  #   container_name: 'rabbitmq'
-  #   ports:
-  #     - 5673:5672
-  #     - 15673:15672
-  #   volumes:
-  #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-  #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-  #   networks:
-  #     - inventory_tiki
-
+    stdin_open: true
+    tty: true
+    
 networks:
   inventory_tiki:
     driver: bridge

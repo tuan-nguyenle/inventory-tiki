@@ -1,4 +1,4 @@
-import mongoose, { Document, ObjectId, Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 // gui den nhiu xe / khong du hang thi stack car
 // sau do thi tra lai phieu missing and warehouse repack
 enum OrderType {
@@ -54,7 +54,7 @@ const OrderSchema = new Schema<Order, Document>(
             quantity: { type: Number, default: 0 },
             sku: { type: String, required: true },
             unit: {
-              type: String,
+              type: String, required: true
             },
             supplier_name: { type: String, required: true },
           },
