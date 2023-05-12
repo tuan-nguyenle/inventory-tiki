@@ -1,4 +1,5 @@
-import { RabbitMQ, RequestInsertedProductToPallet, Subjects } from "@microservies-inventory/common";
+import { BadRequestError, RabbitMQ, RequestInsertedProductToPallet, Subjects } from "@microservies-inventory/common";
+import { searchPallet } from "../../services/pallet.services";
 
 export class OrdersCreatedRequestInsetedProductToPalletListener extends RabbitMQ<RequestInsertedProductToPallet>{
     readonly queueName!: Subjects.RequestInsertedProductToPallet;
@@ -8,10 +9,14 @@ export class OrdersCreatedRequestInsetedProductToPalletListener extends RabbitMQ
         }
         await this.channel.assertQueue(this.queueName, { exclusive: true });
         await this.channel.bindQueue(this.queueName, this.exchangeName, this.routingKey);
-        await this.channel.consume(this.queueName, (msg) => {
+        await this.channel.consume(this.queueName, async (msg) => {
             if (msg !== null) {
-                console.log(msg.content.toString());
-                console.clear();
+                const data = JSON.parse(msg.content.toString());
+                if (await searchPallet({ name_pallet: data.name_pallet })) {
+                    console.log(data);
+                }
+                // throw new BadRequestError("Pallet not exist");
+
                 // this.channel.ack(msg);
             }
         }, { noAck: true });
