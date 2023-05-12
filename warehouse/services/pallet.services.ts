@@ -31,7 +31,13 @@ export const findOnePallet = async (name_pallet: any): Promise<Pallet> => {
 };
 
 export const findOneAndUpdate = async (data: Record<string, any>) => {
-    const pallet = await Pallet.findOneAndUpdate(data);
-
+    const pallet = await Pallet.findOneAndUpdate({ _id: data._id }, data);
     return pallet;
 };
+
+export const updateMany = async (data: Record<string, any>) => {
+    return await Pallet.updateMany(
+        { "products": { $elemMatch: { "quantity": 0 } } },
+        { $pull: { "products": { "quantity": 0 } } }
+    )
+}

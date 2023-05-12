@@ -7,6 +7,7 @@ import { NotFoundError, errorsHandler } from "@microservies-inventory/common";
 import { ConnectDB } from "./config/mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
+import { ProductCreatedListener } from "./event/listener/ProductCreatedListener";
 
 const app = express();
 const HOST = "8081";
@@ -55,6 +56,13 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
+
+  try {
+    new ProductCreatedListener('amqp://guest:guest@rabbitmq:', 'Product', 'fanout', 'inventory-tiki').consumeMessages();
+  } catch (err) {
+    console.log(err);
+  }
+
   app.listen(HOST, () => {
     console.log(`🟢  Listening on port ${HOST}`);
   });

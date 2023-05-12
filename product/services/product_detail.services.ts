@@ -1,44 +1,27 @@
 import { ProductDetail } from "../models/product_detail.model";
+import { findOneSupplier } from "./supplier.services";
 
-// export const addNewProduct = async (product_attributes: Product) => {
-//   let supplier = await findOneSupplier(product_attributes.supplier);
-//   let category = await findOneCategory(product_attributes.category);
-//   let condition = await findCondition(product_attributes.condition);
+export const searchDetailProduct = async (data: Record<string, any>) => {
+    return ProductDetail.findOne({ data });
+};
 
-//   const product = new Product({
-//     product_name: product_attributes.product_name,
-//     bar_code: product_attributes.bar_code,
-//     quantity: product_attributes.quantity,
-//     condition: condition,
-//     category: category,
-//     supplier: supplier,
-//   });
-//   return product.save();
-// };
+export const insertDetailProduct = async (data: Record<string, any>) => {
+    let supplier = await findOneSupplier(data.supplier);
 
-// export const searchProduct = async (product_attributes: ProductDetail) => {
+    const detailProduct = new ProductDetail({
+        bar_code: data.bar_code,
+        sku: data.sku,
+        quantity: data.quantity,
+        product: data.product,
+        supplier: supplier?._id,
+        unit: data.unit
+    });
 
-// };
+    return detailProduct.save();
+}
 
-// // To update a product when it already exists, we can use the following code:
-// export const findOneUpdate = async (product_attributes: Product) => {
-//   // Find the product with the given ID and update its attributes
+export const findOneAndUpdate = async (data: Record<string, any>) => {
+    const detailProduct = await ProductDetail.findOneAndUpdate({ _id: data._id }, data);
 
-//   const updatedProduct = await Product.findOneAndUpdate(
-//     {
-//       bar_code: product_attributes.bar_code,
-//       supplier: product_attributes.supplier,
-//     },
-//     {
-//       product_name: product_attributes.product_name,
-//       bar_code: product_attributes.bar_code,
-//       quantity: product_attributes.quantity,
-//       condition: product_attributes.condition,
-//       category: product_attributes.category,
-//       supplier: product_attributes.supplier,
-//     },
-//     { new: true }
-//   );
-
-//   return updatedProduct;
-// };
+    return detailProduct;
+};
