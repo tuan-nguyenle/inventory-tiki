@@ -1,8 +1,15 @@
-// import { BadRequestError } from "@microservies-inventory/common";
+import "express-async-errors";
+import { BadRequestError } from "@microservies-inventory/common";
 import { Pallet } from "../models/pallet.model";
 
 export const searchPallet = async (pallet_record: Record<string, any>) => {
-    const listPallet = await Pallet.find(pallet_record).exec();
+    const { available, ...searchParams } = pallet_record;
+
+    const query = available
+        ? { ...searchParams, products: { $size: 0 } }
+        : searchParams;
+
+    const listPallet = await Pallet.find(query).exec();
     return listPallet;
 };
 
@@ -13,30 +20,18 @@ export const insertPallet = async (pallet_record: Record<string, any>) => {
     return new Pallet(pallet_record).save();
 };
 
-// export const findOrder = async (dataObj: Record<string, unknown>): Promise<Order> => {
-//     const order = await Order.findOne({ _id: dataObj._id });
+export const findOnePallet = async (name_pallet: any): Promise<Pallet> => {
+    const pallet = await Pallet.findOne({ name_pallet: name_pallet });
 
-//     if (!order) {
-//         throw new BadRequestError(`Order not found`);
-//     }
+    if (!pallet) {
+        throw new BadRequestError(`pallet not found`);
+    }
 
-//     if (dataObj.reback === true) {
-//         return await findOrder({ _id: order?.childID.slice(-1)[0] });
-//     }
+    return pallet;
+};
 
-//     return order;
-// };
+export const findOneAndUpdate = async (data: Record<string, any>) => {
+    const pallet = await Pallet.findOneAndUpdate(data);
 
-// export const findOneOrderAndUpdate = async (id: string, dataObj: Record<string, unknown>) => {
-//     const order = await Order.findOneAndUpdate({ _id: id }, { $set: { status: dataObj.status }, $push: { childID: dataObj.childID } }, { returnOriginal: false });
-
-//     if (order?.parentID !== null) {
-//         await findOneOrderAndUpdate(String(order?.parentID), { status: "Stocked" });
-//     }
-
-//     if (order?.parentID === null && order?.status === "Stocked") {
-//         await Order.updateMany({ _id: { $in: order.childID } }, { $set: { status: "Stocked" } });
-//     }
-
-//     return order;
-// };
+    return pallet;
+};
