@@ -87,7 +87,7 @@ services:
       - inventory_tiki
     stdin_open: true
     tty: true
-warehouse:
+  warehouse:
     build:
       context: ./warehouse
       dockerfile: Dockerfile
