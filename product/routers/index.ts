@@ -1,4 +1,4 @@
 import express from "express";
-import { warehouse } from "./warehouse";
+import { productRouter } from "./product.router";
 
-export const routes = express.Router().use(warehouse);
+export const routes = express.Router().use(productRouter);

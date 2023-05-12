@@ -7,7 +7,6 @@ import { NotFoundError, errorsHandler } from "@microservies-inventory/common";
 import { ConnectDB } from "./config/mongodb";
 import dotenv from "dotenv";
 import cors from "cors";
-import { RabbitMQ } from "./config/rabbitmq";
 
 const app = express();
 const HOST = "8082";
@@ -52,19 +51,13 @@ const start = async () => {
   }
 
   try {
-    await RabbitMQ.connect("amqp://guest:guest@rabbitmq:5672");
-  } catch (err) {
-    console.error(`🔴  ${err}`);
-  }
-
-  try {
     await ConnectDB();
   } catch (err) {
     console.error(err);
   }
 
   app.listen(HOST, () => {
-    console.log(`🟢  Listening on port ${HOST}`);
+    console.log(`🟢  Services Orders Listening on port ${HOST}`);
   });
 };
 
