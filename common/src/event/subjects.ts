@@ -1,5 +1,6 @@
 export enum Subjects {
   RequestInsertedProductToPallet = "pallet:inserted",
-  // OrdersCreated = "orders:created",
+  TransferToShelfFromPallet = "pallet:updated",
+  ProductCreated = "Product:created",
   // OrdersUpdated = "orders:updated",
 }
