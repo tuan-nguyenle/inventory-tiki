@@ -13,78 +13,97 @@ const Storage = () => {
 
     // viết hàm khi click vào trái sẽ gọi API lấy chi tiết product để show ra bên phải
     // nút save gọi một hàm truyền product vào shelf
-    const [datalist, setDatalist] = useState(dataListIB); // nhớ sửa đây thành null
+    const [datalist, setDatalist] = useState(null); // nhớ sửa đây thành null
     const [checkchange, setCheckchange] = useState(false);
     const [datadetail, setDatadetail] = useState({ shelf: "" });
-    const [idchange, setIdchange] = useState({ id: "" });
+    const [idchange, setIdchange] = useState({ _id: "" });
     const [ramdetail, setRamdetail] = useState([]);
-    const [dataleft, setDataleft] = useState(datalist);
+    const [dataleftmau, setDataleftmau] = useState(null);
+    const [dataleft, setDataleft] = useState(null);
     const [dataright, setDataright] = useState({
-        bowl: "",
-        id: "",
+        pallet: "",
+        _id: "",
     });
-    //
+
     // viết effect lấy list trái
-    // useEffect(() => {
-    //     (async () => {
-    //         try {
-    //             let notifi = await ICAPI.getNotication();
-    //             setDatalist(dataListIB)
-    //         } catch (error) {
-    //             setDatalist(null)
-    //         }
-    //     })();
-    // }, [])
+    useEffect(() => {
+        (async () => {
+            try {
+                let getpallet = await ICAPI.getallpallets();
+                setDatalist(getpallet)
+            } catch (error) {
+                setDatalist(null)
+            }
+        })();
+    }, [])
+    useEffect(() => {
+        if (datalist && datalist.length > 0) {
+            const haveproduct = datalist.filter((IB) => IB.products.length > 0 && IB.status === true);
+            setDataleftmau(haveproduct);
+            setDataleft(haveproduct)
 
-    //
-
-    const getDetail = (sitch, bowler) => {
-        if (dataright.bowl && dataright.id) {
+        }
+    }, [datalist])
+    console.log(dataleft);
+    const getDetail = async (sitch, bowler) => {
+        if (dataright.pallet && dataright._id) {
             toast.error("The action is invalid"); // in thông báo
             return;
         }
-        let a = dataleft.filter((item) => item.id !== sitch)
-        setDataright({
-            bowl: "<<< " + bowler,
-            id: sitch
-        })
-        setDataleft(a);
-        // gọi API luôn truyền đi ID nhận về select * from list inbound == id
-        // setusestate bên phải ngay đây
-        setRamdetail(datadetail1);
+        if (dataleft) {
+            let a = dataleft.filter((item) => item._id !== sitch)
+            setDataright({
+                pallet: "<<< " + bowler,
+                _id: sitch
+            })
+            setDataleft(a);
+            let b = dataleft.filter((item) => item._id === sitch)
+            let c = dataleft[0].products;
+            setRamdetail(c);
+            // try {
+            //     let getpallet = await ICAPI.getproducts(sitch);
+
+            // } catch (error) {
+            //     setDatalist(null)
+            // }
+            // gọi API luôn truyền đi ID nhận về select * from list inbound == _id
+            // setusestate bên phải ngay đây
+
+        }
+
     }
     const returndetail = () => {
-        setDataleft(datalist);
+        setDataleft(dataleftmau);
         setDataright({
-            bowl: "",
-            id: ""
+            pallet: "",
+            _id: ""
         })
         setIdchange({
-            id: ""
+            _id: ""
         })
         // return thì set lại data bên right
         setRamdetail([]);
     }
     const setShelf = (e, changeid) => {
-        const { id, value } = e.target
+        const { _id, value } = e.target
         setDatadetail(prevState => ({
             ...prevState,
-            [id]: value
+            [_id]: value
         }
         ))
         setIdchange({
-            id: changeid
+            _id: changeid
         })
     }
     const clickinput = (e, changeid) => {
-        const { id, value } = e.target
+        const { _id, value } = e.target
         setDatadetail(prevState => ({
             ...prevState,
-            [id]: value
+            [_id]: value
         }
         ))
         setIdchange({
-            id: changeid
+            _id: changeid
         })
     }
     const inputShelf = (a, b) => {
@@ -116,8 +135,8 @@ const Storage = () => {
         //                         {
         //                             dataleft.map((data) => {
         //                                 return (
-        //                                     <div key={data.id} className="detail" onClick={() => getDetail(data.id, data["bowl-container"])}>
-        //                                         <p>{data["bowl-container"]}</p>
+        //                                     <div key={data._id} className="detail" onClick={() => getDetail(data._id, data["pallet-container"])}>
+        //                                         <p>{data["pallet-container"]}</p>
         //                                         <hr></hr>
         //                                     </div>
         //                                 )
@@ -131,8 +150,8 @@ const Storage = () => {
         //                 <Col span={17}>
         //                     <Card className="card scrollable-card" title="Detail Inbound">
         //                         <form>
-        //                             <div className="detail" onClick={() => returndetail(dataright.id)}>
-        //                                 <p>{dataright.bowl}</p>
+        //                             <div className="detail" onClick={() => returndetail(dataright._id)}>
+        //                                 <p>{dataright.pallet}</p>
         //                                 <hr></hr>
         //                             </div>
         //                             {/* dùng vòng lặp ngay dây 
@@ -159,14 +178,14 @@ const Storage = () => {
         //                                                     {ramdetail && ramdetail.length > 0 && ramdetail.map((data, i) => {
         //                                                         return (
         //                                                             <tr key={i + 1}>
-        //                                                                 <td>{data.id}</td>
+        //                                                                 <td>{data._id}</td>
         //                                                                 <td>{data.productcode}</td>
         //                                                                 <td>{data.productname}</td>
         //                                                                 <td>{data.supplier}</td>
         //                                                                 <td>{data.category}</td>
         //                                                                 <td>{data.quantity}</td>
-        //                                                                 <td style={{ width: "10%" }}><input id="shelf" type="text" className="form-control" placeholder="Shelf" onClick={(e) => clickinput(e, data.id)} onChange={(e) => setShelf(e, data.id)} /></td>
-        //                                                                 {checkchange && idchange.id === data.id ? <td><Button variant="success" onClick={() => inputShelf(data.productcode, datadetail.shelf)}>Save</Button></td>
+        //                                                                 <td style={{ width: "10%" }}><input _id="shelf" type="text" className="form-control" placeholder="Shelf" onClick={(e) => clickinput(e, data._id)} onChange={(e) => setShelf(e, data._id)} /></td>
+        //                                                                 {checkchange && idchange._id === data._id ? <td><Button variant="success" onClick={() => inputShelf(data.productcode, datadetail.shelf)}>Save</Button></td>
         //                                                                     :
         //                                                                     <td><Button disabled variant="success">Save</Button></td>
         //                                                                 }
@@ -205,10 +224,10 @@ const Storage = () => {
                                     </div>
                                     <div className="card-body">
                                         {/* call API here */}
-                                        {dataleft && dataleft.length > 0 && dataleft.map((data) => {
+                                        {dataleftmau && dataleftmau.length > 0 && dataleftmau.map((data) => {
                                             return (
-                                                <div key={data.id} className="card-text detail" onClick={() => getDetail(data.id, data["bowl-container"])}>
-                                                    <p>{data["bowl-container"]}</p>
+                                                <div key={data._id} className="card-text detail" onClick={() => getDetail(data._id, data.name_pallet)}>
+                                                    <p>{data.name_pallet}</p>
                                                     <hr />
                                                 </div>
                                             )
@@ -226,8 +245,8 @@ const Storage = () => {
                                     </div>
                                     <div className="card-body">
                                         <form>
-                                            <div className="detail" onClick={() => returndetail(dataright.id)}>
-                                                <p>{dataright.bowl}</p>
+                                            <div className="detail" onClick={() => returndetail(dataright._id)}>
+                                                <p>{dataright.pallet}</p>
                                                 <hr />
                                             </div>
                                             {/* use loop and display list here */}
@@ -244,6 +263,8 @@ const Storage = () => {
                                                                         <th>Supplier</th>
                                                                         <th>Category</th>
                                                                         <th>Quantity</th>
+                                                                        <th>SKU</th>
+                                                                        <th>Unit</th>
                                                                         <th>Shelf</th>
                                                                         <th></th>
                                                                     </tr>
@@ -251,17 +272,20 @@ const Storage = () => {
                                                                 <tbody>
                                                                     {ramdetail && ramdetail.length > 0 && ramdetail.map((data, i) => {
                                                                         return (
-                                                                            <tr key={i + 1}>
-                                                                                <td>{data.id}</td>
-                                                                                <td>{data.productcode}</td>
-                                                                                <td>{data.productname}</td>
-                                                                                <td>{data.supplier}</td>
-                                                                                <td>{data.category}</td>
+                                                                            <tr key={data._id}>
+                                                                                <td>{i + 1}</td>
+                                                                                <td>{data.bar_code}</td>
+                                                                                <td style={{ maxWidth: "100px", overflow: "hidden", textOverflow: "ellipsis" }}>{data.product_name}</td>
+                                                                                <td style={{ maxWidth: "30px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{data.supplier_name}</td>
+                                                                                <td >{data.category}</td>
                                                                                 <td>{data.quantity}</td>
-                                                                                <td style={{ width: "10%" }}><input id="shelf" type="text" className="form-control" placeholder="Shelf" onClick={(e) => clickinput(e, data.id)} onChange={(e) => setShelf(e, data.id)} /></td>
-                                                                                {checkchange && idchange.id === data.id ? <td><Button variant="success" onClick={() => inputShelf(data.productcode, datadetail.shelf)}>Save</Button></td>
-                                                                                    :
-                                                                                    <td><Button disabled variant="success">Save</Button></td>
+                                                                                <td>{data.sku}</td>
+                                                                                <td>{data.unit}</td>
+                                                                                <td style={{ width: "10%" }}><input _id="shelf" type="text" className="form-control" placeholder="Shelf" onClick={(e) => clickinput(e, data._id)} onChange={(e) => setShelf(e, data._id)} /></td>
+                                                                                {
+                                                                                    checkchange && idchange._id === data._id ? <td><Button variant="success" onClick={() => inputShelf(data.productcode, datadetail.shelf)}>Save</Button></td>
+                                                                                        :
+                                                                                        <td><Button disabled variant="success">Save</Button></td>
                                                                                 }
                                                                                 {/* <td><Button variant="success" onClick={() => inputShelf(data.productcode, datadetail.shelf)}>Save</Button></td> */}
                                                                             </tr>
@@ -279,8 +303,8 @@ const Storage = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div >
+            </div >
         </>
     )
 }

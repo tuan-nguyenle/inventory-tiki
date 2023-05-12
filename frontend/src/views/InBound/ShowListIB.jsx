@@ -59,7 +59,7 @@ const ShowListIB = React.forwardRef((props, ref) => {
 
                                                 data && data.length > 0 && data.map((data, i) => {
                                                     return (
-                                                        <tr key={data.id}>
+                                                        <tr key={data._id}>
                                                             <td>{i + 1}</td>
                                                             <td>{data.bar_code}</td>
                                                             <td style={{ maxWidth: "200px", wordBreak: "break-all", whiteSpace: "pre-wrap" }}>{data.product_name}</td>

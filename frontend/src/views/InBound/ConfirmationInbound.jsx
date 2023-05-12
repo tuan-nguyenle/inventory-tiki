@@ -18,6 +18,12 @@ const ConfirmationInbound = () => {
     const uploadStatus = async (id) => {
         try {
             let res = await IBAPI.uploadstatus(id);
+            try {
+                let list = await IBAPI.getallpallets();
+                setlistPallet(list);
+            } catch (error) {
+                setlistPallet(null);
+            }
             toast.success("Update success"); // in thông báo
         } catch (error) {
             toast.error("Update Fail"); // in thông báo
@@ -39,7 +45,7 @@ const ConfirmationInbound = () => {
             setPalletProduct(haveproduct);
         }
     }, [listpallet])
-    // console.log(palletProduct);
+    console.log(palletProduct);
     return (
         <div className=" body_validatelistIB">
             <div className="container_validateIB">
@@ -68,11 +74,15 @@ const ConfirmationInbound = () => {
                                                 <td><ListConfirn product={data.products} /></td>
                                                 <td>{data.name_pallet}</td>
                                                 <td>{data.updatedAt}</td>
-                                                <td style={{ width: "300px" }}>
-                                                    <Button variant="success"><span style={{ paddingRight: "5px" }} onClick={uploadStatus(data._id)} ><FaCheck /></span>Validate</Button>{' '}
-                                                    <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
-                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
-                                                </td>
+                                                {data.status === true ? <td style={{ width: "300px" }}>
+                                                    <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>
+                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>
+                                                </td> : <td style={{ width: "300px" }}>
+                                                    <Button variant="success" onClick={() => uploadStatus(data._id)} ><span style={{ paddingRight: "5px" }}><FaCheck /></span>Validate</Button>
+                                                    <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>
+                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>
+                                                </td>}
+
                                             </tr>
                                         )
                                     })}
