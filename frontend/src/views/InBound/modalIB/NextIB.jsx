@@ -41,6 +41,7 @@ const NextIB = (props) => {
                                                     <th>Supplier</th>
                                                     <th>Category</th>
                                                     <th>SKU</th>
+                                                    <th>Unit</th>
                                                     <th style={{ width: "10%" }}>Missing Quantity</th>
                                                 </tr>
                                             </thead>
@@ -55,6 +56,7 @@ const NextIB = (props) => {
                                                                 <td>{data.supplier_name}</td>
                                                                 <td>{data.category}</td>
                                                                 <td>{data.sku}</td>
+                                                                <td>{data.unit}</td>
                                                                 <td style={{ color: "red" }}>{data.quantity}</td>
                                                             </tr>
                                                         )

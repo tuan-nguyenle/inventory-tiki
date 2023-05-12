@@ -16,6 +16,7 @@ const CheckIB = (props) => {
     const data = { ...contai, id: orderid, miss };
     const handledata = [];
     const saveinbound = props.inbound;
+    console.log(contai);
     const SaveReback = async () => {
         await saveinbound.forEach((ele) => {
             let products = {
@@ -24,12 +25,14 @@ const CheckIB = (props) => {
                 bar_code: ele.bar_code,
                 quantity: ele.quantity,
                 sku: ele.sku,
+                unit: ele.unit,
                 supplier_name: ele.supplier_name
             };
             handledata.push(products);
         })
         // set lại biến cho api
         const datainput = {
+            name_pallet: contai.bowl,
             products: handledata
         };
         // gọi api ngay đây
@@ -51,12 +54,14 @@ const CheckIB = (props) => {
                 bar_code: ele.bar_code,
                 quantity: ele.quantity,
                 sku: ele.sku,
+                unit: ele.unit,
                 supplier_name: ele.supplier_name
             };
             handledata.push(products);
         })
         // set lại biến cho api
         const datainput = {
+            name_pallet: contai.bowl,
             products: handledata
         };
         // gọi api ngay đây

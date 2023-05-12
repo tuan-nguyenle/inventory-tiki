@@ -52,7 +52,6 @@ const InboundList = (props) => {
     var day = dateObj.getUTCDate();
     var year = dateObj.getUTCFullYear();
     var newdate = day + "/" + month + "/" + year;
-
     // State
     const MAX_PALLET_LENGTH = 8;
     const MAX_PACKAGE_LENGTH = 12;
@@ -149,7 +148,7 @@ const InboundList = (props) => {
                         sku: product.sku,
                         quantity: newdata.quantity,
                         package: newdata.package,
-                        unit: newdata.unit
+                        unit: product.unit
                     };
                     setData([...data, newdatainput]);
                     setNewdata({
