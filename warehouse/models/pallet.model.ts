@@ -30,7 +30,7 @@ interface Pallet {
             unit: string;
             quantity: number;
             supplier_name: string;
-        }[]
+        }
     ];
     status: boolean;
 }
