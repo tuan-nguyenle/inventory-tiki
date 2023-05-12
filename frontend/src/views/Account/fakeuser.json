@@ -1,0 +1,19 @@
+{
+    "id": "641add3f54e82bf9025d0f7c",
+    "username": "TuanLe25122001",
+    "fullname": "Le Nguyen Tuan",
+    "phone": "0869236514",
+    "Role": [
+        {
+            "_id": "641abd5c95c69c8c536a20e5",
+            "description": "manager"
+        }
+    ],
+    "Department": [
+        {
+            "_id": "641abbaf5321756e01927726",
+            "description": "outbound"
+        }
+    ],
+    "iat": 1683865219
+}

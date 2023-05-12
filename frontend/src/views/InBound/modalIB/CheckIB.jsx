@@ -16,7 +16,6 @@ const CheckIB = (props) => {
     const data = { ...contai, id: orderid, miss };
     const handledata = [];
     const saveinbound = props.inbound;
-    const containerbow = props.container
     const SaveReback = async () => {
         await saveinbound.forEach((ele) => {
             let products = {
@@ -96,6 +95,7 @@ const CheckIB = (props) => {
                                                         <th>Supplier</th>
                                                         <th>Category</th>
                                                         <th>SKU</th>
+                                                        <th>Unit</th>
                                                         <th>Missing Quantity</th>
                                                     </tr>
                                                 </thead>
@@ -111,6 +111,7 @@ const CheckIB = (props) => {
                                                                     <td>{data.supplier_name}</td>
                                                                     <td>{data.category}</td>
                                                                     <td>{data.sku}</td>
+                                                                    <td>{data.unit}</td>
                                                                     <td style={{ color: "red" }}>{data.quantity}</td>
                                                                 </tr>
                                                             )

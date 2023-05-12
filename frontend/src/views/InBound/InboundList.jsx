@@ -79,6 +79,7 @@ const InboundList = (props) => {
         category: "",
         quantity: 1,
         sku: "",
+        unit: ""
     });
     // Hàm xử lý
     const toggle = () => setCheckSquare(!checkSquare);
@@ -147,7 +148,8 @@ const InboundList = (props) => {
                         date: newdate,
                         sku: product.sku,
                         quantity: newdata.quantity,
-                        package: newdata.package
+                        package: newdata.package,
+                        unit: newdata.unit
                     };
                     setData([...data, newdatainput]);
                     setNewdata({
@@ -155,6 +157,7 @@ const InboundList = (props) => {
                         package: newdata.package,
                         codecontainer: newdata.codecontainer,
                         quantity: newdata.quantity,
+                        unit: newdata.unit
                     });
                     return;
                 }
@@ -165,6 +168,7 @@ const InboundList = (props) => {
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
                 package: newdata.package,
+                unit: newdata.unit
             });
         } else {
             if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || !newdata.product_name || !newdata.category) {
@@ -180,6 +184,7 @@ const InboundList = (props) => {
                 sku: newdata.sku,
                 date: newdate,
                 quantity: newdata.quantity,
+                unit: newdata.unit
             }
             setData([...data, newdatainput]);
             setNewdata({
@@ -191,6 +196,7 @@ const InboundList = (props) => {
                 category: "",
                 supplier_name: "",
                 sku: "",
+                unit: ""
             });
         }
     }
@@ -210,6 +216,7 @@ const InboundList = (props) => {
                 bar_code: "",
                 quantity: newdata.quantity,
                 codecontainer: newdata.codecontainer,
+                unit: ""
             });
             return;
         }
@@ -251,35 +258,6 @@ const InboundList = (props) => {
             return missave1;
         };
     }
-    // const checksave = () => {
-    //     if (state1.length > 0) {
-    //         let newMisssave = [];
-    //         for (let i = 1; i < state1.length; i++) {
-    //             let obj = state1[i];
-    //             if (obj.hasOwnProperty("bar_code")) { // Kiểm tra xem đối tượng có chứa key "c" hay không
-    //                 let productcodeValue = obj.bar_code;
-    //                 let productquantity = obj.quantity;
-    //                 let foundproductcodeValue = data.some((o) => o.hasOwnProperty("bar_code") && o.bar_code == productcodeValue && o.quantity == productquantity); // Tìm kiếm đối tượng có chứa key ""và có giá trị bằng với productcodeValue và quantity
-    //                 if (!foundproductcodeValue) {
-    //                     let foundData = data.find((o) => o.bar_code == productcodeValue);
-    //                     let quantityDifference = foundData && foundData.quantity ? productquantity - foundData.quantity : productquantity;
-    //                     // let quantityDifference = data.find((o) => o.bar_code == productcodeValue);
-    //                     if (quantityDifference !== 0) {
-    //                         let newhaha = {
-    //                             product: obj.product_name,
-    //                             missquantity: quantityDifference,
-    //                             codecontainer: container
-    //                         }
-    //                         // setMisssave(prevMisssave => [...prevMisssave, newhaha]) // callback
-    //                         newMisssave = [...newMisssave, newhaha];
-    //                     }
-
-    //                 }
-    //             }
-    //         }
-    //         return newMisssave;
-    //     }
-    // }
     //Xử lý Print
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
@@ -297,6 +275,7 @@ const InboundList = (props) => {
             bar_code: "",
             quantity: newdata.quantity,
             codecontainer: newdata.codecontainer,
+            unit: newdata.unit
         });
         setNewmiss(null);
     }
@@ -380,6 +359,7 @@ const InboundList = (props) => {
                         bar_code: "",
                         quantity: newdata.quantity,
                         codecontainer: newdata.codecontainer,
+                        unit: ""
                     });
                     setNewmiss(null);
                     return;
@@ -396,7 +376,8 @@ const InboundList = (props) => {
                         package_code: pa,
                         product_name: p.product_name,
                         quantity: p.quantity,
-                        supplier_name: p.supplier_name
+                        supplier_name: p.supplier_name,
+                        unit: p.unit
                     }));
                     // Lưu thông tin các sản phẩm thiếu vào biến miss
                     products.forEach(p => {
@@ -410,6 +391,7 @@ const InboundList = (props) => {
                                 category: p.category,
                                 supplier_name: p.supplier_name,
                                 product_name: p.product_name,
+                                unit: p.unit,
                                 quantity: quantityMissing
                             });
                         }

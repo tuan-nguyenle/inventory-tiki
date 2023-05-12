@@ -28,7 +28,7 @@ const ShowListIB = React.forwardRef((props, ref) => {
                         <div style={{ marginTop: "20px" }} >
                             <p>Công ty TNHH hai thành viên ĐT Inventory</p>
                             <p>Địa chỉ: 566 Nguyễn Thái Sơn, Quận Gò Vấp, Thành Phố Hồ Chí Minh</p>
-                            <h2 style={{ textAlign: "center" }} >List Product</h2>
+                            <h2 style={{ textAlign: "center" }} >List Products</h2>
                             <h3 style={{ textAlign: "center" }} >Code Container: {codecontainer}&nbsp;&nbsp; ||&nbsp; Pallet: {bowl}</h3>
                         </div>
                         <div className="col-12">
@@ -44,6 +44,7 @@ const ShowListIB = React.forwardRef((props, ref) => {
                                                 <th>Category</th>
                                                 <th>Quantity</th>
                                                 <th>SKU</th>
+                                                <th>Unit</th>
                                                 <th>Date</th>
                                             </tr>
                                         </thead>
@@ -66,6 +67,7 @@ const ShowListIB = React.forwardRef((props, ref) => {
                                                             <td>{data.category}</td>
                                                             <td>{data.quantity}</td>
                                                             <td>{data.sku}</td>
+                                                            <td>{data.unit}</td>
                                                             <td>{data.date}</td>
                                                         </tr>
                                                     )

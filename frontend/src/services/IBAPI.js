@@ -33,16 +33,28 @@ export const submitIB = async (data, orderid) => {
         throw error;
     }
 }
-export const getDetailReback = async () => {
+export const getDetailReback = async (id) => {
     try {
-        const response = await axios.get('http://localhost/api/orders')
+        const response = await axios.get(`http://localhost/api/orders/${id}`)
         return response.data.data;
 
     } catch (error) {
         throw error;
     }
 }
-
+export const createPallet = async (data) => {
+    console.log(data);
+    // try {
+    //     const response = await axios.post(`link`, data, {
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     });
+    //     return response;
+    // } catch (error) {
+    //     throw error;
+    // }
+}
 export const addNewAccount = (data) => {
     return axios.post('link', data);
 }

@@ -5,7 +5,7 @@ const MoveShelf = () => {
     return (
         <div className="moveshelf_body">
             <div className="container-moveshelf">
-                <h1>Move kệ nào thì nói</h1>
+                <h1>Move Product</h1>
                 <div className="card card-default">
                     <div className="card-body">
                         <form>

@@ -48,6 +48,8 @@ const InputExcel = (props) => {
         // props.getdata(newdata); // xóa cái này bỏ props luôn cả bên notifition nữa
         try {
             await Sendexcel(newdata);
+            setNewdata(null);
+            setFileName(null);
             toast.success("Send"); // in thông báo
         } catch (error) {
             // console.log(error);
@@ -57,11 +59,11 @@ const InputExcel = (props) => {
 
     return (
         <>
-            {fileName && (
+            {/* {fileName && (
                 <p>
                     Filename: <span>{fileName}</span>
                 </p>
-            )}
+            )} */}
             <h2>Input file excel Inbound Today</h2>
             <input id="dataTransfer" type="file" onChange={(e) => handleFile(e)} />
 

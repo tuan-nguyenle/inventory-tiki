@@ -298,18 +298,18 @@ const InputReBack = (props) => {
 
     }
     useEffect(() => {
-        if (checksquarepack) {
+        if (checksquarepack && step) {
             document.getElementById("package").focus();
         }
     }, [checksquarepack]);
     useEffect(() => {
-        if (!checkcontainer) {
+        if (!checkcontainer && step) {
             // nextinput.current.focus();
             document.getElementById("bowl").focus();
         }
     }, [checkcontainer]);
     useEffect(() => {
-        if (isBarcodeScanned) {
+        if (isBarcodeScanned && step) {
             document.getElementById("btnnhapinput").click();
             setIsBarcodeScanned(false);
         }
@@ -321,7 +321,9 @@ const InputReBack = (props) => {
         }
     }, [step, data]);
     useEffect(() => {
-        begininputRef.current.focus();
+        if (step) {
+            begininputRef.current.focus();
+        }
     }, []);
     const [enough, setEnough] = useState(false);
     useEffect(() => {
@@ -385,112 +387,123 @@ const InputReBack = (props) => {
         const enough = state1.every((p) => checkEnough(newdata.package));
         setEnough(enough);
     }, [data]);
-    // console.log("miss", newmiss);
-    // console.log("miss tổng", misssave);
-    // console.log(miss1);
-    // console.log(state1);
-    // console.log(data);
-    // console.log(data);
-    // console.log(isBarcodeScanned);
-    // console.log(orderid);
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
                 <h1 style={{ textAlign: "center" }} >Input Reback</h1>
             </div>
             <hr></hr>
-            <div className="card card-default">
-                <div className="card-body">
-                    <form>
-                        <div className="row">
-                            <div style={{ maxHeight: "392px", overflow: "auto" }} className="col-md-6">
-                                <div className="card card-default">
-                                    <div className="card-body" >
-                                        <div className="col-md-12">
-                                            <div className="table-responsive mailbox-messages">
-                                                <table className="table table-hover table-striped">
-                                                    <tbody>
-                                                        {
+            {step ?
+                <div className="card card-default">
+                    <div className="card-body">
+                        <form>
+                            <div className="row">
+                                <div style={{ maxHeight: "392px", overflow: "auto" }} className="col-md-6">
+                                    <div className="card card-default">
+                                        <div className="card-body" >
+                                            <div className="col-md-12">
+                                                <div className="table-responsive mailbox-messages">
+                                                    <table className="table table-hover table-striped">
+                                                        <tbody>
+                                                            {
 
-                                                            step4.map((data, i = 0) => {
-                                                                return (
-                                                                    <tr key={data._id}>
-                                                                        <td>{data.package_code}</td>
-                                                                        <td>{data.bar_code}</td>
-                                                                        <td>{data.supplier_name}</td>
-                                                                        <td>{data.sku}</td>
-                                                                        <td style={{ color: "red" }}>{data.quantity}</td>
-                                                                    </tr>
-                                                                )
-                                                            })
-                                                        }
-                                                        {/* <tr>
-                                                            <td className="mailbox-name"><b>Package</b></td>
-                                                            <td className="mailbox-name"><b>barcode</b></td>
-                                                            <td className="mailbox-subject"><b>Supplier</b></td>
-                                                            <td className="mailbox-subject"><b>SKU</b></td>
-                                                            <td className="mailbox-date"><b>Quantity</b></td>
-                                                        </tr> */}
-                                                    </tbody>
-                                                </table>
+                                                                step4.map((data, i = 0) => {
+                                                                    return (
+                                                                        <tr key={data._id}>
+                                                                            <td>{data.package_code}</td>
+                                                                            <td>{data.bar_code}</td>
+                                                                            <td>{data.supplier_name}</td>
+                                                                            <td>{data.sku}</td>
+                                                                            <td style={{ color: "red" }}>{data.quantity}</td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }
+                                                            {/* <tr>
+                                                    <td className="mailbox-name"><b>Package</b></td>
+                                                    <td className="mailbox-name"><b>barcode</b></td>
+                                                    <td className="mailbox-subject"><b>Supplier</b></td>
+                                                    <td className="mailbox-subject"><b>SKU</b></td>
+                                                    <td className="mailbox-date"><b>Quantity</b></td>
+                                                </tr> */}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="card card-default">
-                                    <div className="card-body" >
-                                        <div className="row">
-                                            <div className="col-md-12">
-                                                <div className="form-group">
-                                                    <label>Pallet</label>
-                                                    <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} onInput={checkpallet} ref={begininputRef} />
-                                                </div>
-                                                {checkpalletright ? <p style={{ color: "red" }}>* The pallet is invalid!</p> : <p></p>}
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="form-group">
-                                                    <label>Package</label>
-                                                    <input id="package" type="text" maxLength={MAX_PACKAGE_LENGTH} className="form-control" placeholder="Package" value={newdata.package} disabled={checksquarepack ? "" : "{false}"} onChange={changeHandler} onInput={checkPack} />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="form-group">
-                                                    <label>Input Code Product</label>
-                                                    <input id="bar_code" type="text" className="form-control" placeholder="Code-container" value={newdata.bar_code} onChange={changeHandler} onInput={checkBarcode} />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-10">
-                                                <button type="button" id="btnnhapinput" className="btn btn_nhap btn-block btn-success btn-lg" onClick={inputProduct}>Input</button>
-                                            </div>
-                                            {
-                                                newmiss ?
-                                                    <div className="nutnext col-md-2">
-                                                        <NextIB misssave={newmiss} handlemissing={inputNext} />
+                                <div className="col-md-6">
+                                    <div className="card card-default">
+                                        <div className="card-body" >
+                                            <div className="row">
+                                                <div className="col-md-12">
+                                                    <div className="form-group">
+                                                        <label>Pallet</label>
+                                                        <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} onInput={checkpallet} ref={begininputRef} />
                                                     </div>
-                                                    : null
-                                            }
+                                                    {checkpalletright ? <p style={{ color: "red" }}>* The pallet is invalid!</p> : <p></p>}
+                                                </div>
+                                                <div className="col-md-12">
+                                                    <div className="form-group">
+                                                        <label>Package</label>
+                                                        <input id="package" type="text" maxLength={MAX_PACKAGE_LENGTH} className="form-control" placeholder="Package" value={newdata.package} disabled={checksquarepack ? "" : "{false}"} onChange={changeHandler} onInput={checkPack} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-12">
+                                                    <div className="form-group">
+                                                        <label>Input Code Product</label>
+                                                        <input id="bar_code" type="text" className="form-control" placeholder="Code-container" value={newdata.bar_code} onChange={changeHandler} onInput={checkBarcode} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-10">
+                                                    <button type="button" id="btnnhapinput" className="btn btn_nhap btn-block btn-success btn-lg" onClick={inputProduct}>Input</button>
+                                                </div>
+                                                {
+                                                    newmiss ?
+                                                        <div className="nutnext col-md-2">
+                                                            <NextIB misssave={newmiss} handlemissing={inputNext} />
+                                                        </div>
+                                                        : null
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                    <hr></hr>
-                    <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
-                    <div style={{ float: "right" }} className="row">
-                        <div className="btn-button">
-                            {data && data.length > 0 ?
-                                <>
-                                    <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
-                                    <CheckIB misssave={misssave} inbound={data} container={containerbowl} orderid={orderid} />
-                                </>
-                                : null}
+                        </form>
+                        <hr></hr>
+                        <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
+                        <div style={{ float: "right" }} className="row">
+                            <div className="btn-button">
+                                {data && data.length > 0 ?
+                                    <>
+                                        <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
+                                        <CheckIB misssave={misssave} inbound={data} container={containerbowl} orderid={orderid} />
+                                    </>
+                                    : null}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                :
+                <>
+                    <div className="reback2">
+                        <div className="row">
+                            <div className="col-md-8">
+                                <form>
+                                    <div className="input-group">
+                                        <input type="text" className="form-control form-control-lg" placeholder="Reback code" />
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </>
+                //ref={inputbill}
+            }
+
         </div >
     )
 }

@@ -6,11 +6,14 @@ import "../../styles/inventorycontrol.scss";
 import {
     FaAngleDoubleRight
 } from "react-icons/fa";
+import * as ICAPI from "../../services/ICAPI";
 import dataListIB from "./data/dataListIB.json";
 import datadetail1 from "./data/datalistDetail.json";
 const Storage = () => {
 
-    const [datalist, setDatalist] = useState(dataListIB);
+    // viết hàm khi click vào trái sẽ gọi API lấy chi tiết product để show ra bên phải
+    // nút save gọi một hàm truyền product vào shelf
+    const [datalist, setDatalist] = useState(dataListIB); // nhớ sửa đây thành null
     const [checkchange, setCheckchange] = useState(false);
     const [datadetail, setDatadetail] = useState({ shelf: "" });
     const [idchange, setIdchange] = useState({ id: "" });
@@ -20,7 +23,20 @@ const Storage = () => {
         bowl: "",
         id: "",
     });
+    //
+    // viết effect lấy list trái
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             let notifi = await ICAPI.getNotication();
+    //             setDatalist(dataListIB)
+    //         } catch (error) {
+    //             setDatalist(null)
+    //         }
+    //     })();
+    // }, [])
 
+    //
 
     const getDetail = (sitch, bowler) => {
         if (dataright.bowl && dataright.id) {
@@ -189,7 +205,7 @@ const Storage = () => {
                                     </div>
                                     <div className="card-body">
                                         {/* call API here */}
-                                        {dataleft.map((data) => {
+                                        {dataleft && dataleft.length > 0 && dataleft.map((data) => {
                                             return (
                                                 <div key={data.id} className="card-text detail" onClick={() => getDetail(data.id, data["bowl-container"])}>
                                                     <p>{data["bowl-container"]}</p>
