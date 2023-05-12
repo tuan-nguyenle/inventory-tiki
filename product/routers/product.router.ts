@@ -20,4 +20,4 @@ router.get("/api/product/supplier", SupplierController.getAllSupplier);
 router.get("/api/product/:slug", ProductController.showProduct);
 router.post("/api/product", ProductController.insertProduct);
 
-export { router as warehouse };
+export { router as productRouter };

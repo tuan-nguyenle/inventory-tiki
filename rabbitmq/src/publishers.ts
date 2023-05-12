@@ -16,12 +16,10 @@ export interface TicketCreatedEvent {
 
 //  Connect RabbitMQ
 async function connectRabbitMQ() {
-  const rabbitMQ = new MyRabbitMQ('Hi', 'fanout', 'myRoutingKey');
+  const rabbitMQ = new MyRabbitMQ('amqp://localhost:5673', 'Orders', 'fanout', 'inventory-tiki');
   // Connect to RabbitMQ
-  await rabbitMQ.connect();
   // Publish a message to the exchange
-  await rabbitMQ.sendMessage({ id: "12", title: "1234", price: 123, userId: "1234" });
-  console.log("Send message success");
+  await rabbitMQ.publishMessage({ id: "13332", title: "1234", price: 123, userId: "1234" });
 }
 
 try {

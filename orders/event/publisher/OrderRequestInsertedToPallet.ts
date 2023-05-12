@@ -1,5 +1,5 @@
 import { RabbitMQ, RequestInsertedProductToPallet, Subjects } from "@microservies-inventory/common";
 
-export class OrdersCreatedRequestInsetedProductToPallet extends RabbitMQ<RequestInsertedProductToPallet>{
-    readonly queueName: Subjects.RequestInsertedProductToPallet;
+export class OrdersCreatedRequestInsetedProductToPalletPublisher extends RabbitMQ<RequestInsertedProductToPallet>{
+    readonly queueName!: Subjects.RequestInsertedProductToPallet;
 }

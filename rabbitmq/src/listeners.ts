@@ -18,13 +18,11 @@ export interface TicketCreatedEvent {
 //  Connect RabbitMQ
 async function connectRabbitMQ() {
   try {
-    const rabbitMQ = new MyRabbitMQ('Hi', 'fanout', 'myRoutingKey');
+    const rabbitMQ = new MyRabbitMQ('amqp://localhost:5673', 'Orders', 'fanout', 'inventory-tiki');
     // Connect to RabbitMQ
-    await rabbitMQ.connect();
     // Consume messages from the queue
-    rabbitMQ.consumeMessage();
+    rabbitMQ.consumeMessages();
   } catch (error) {
-
   }
 }
 try {
