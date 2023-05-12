@@ -8,9 +8,9 @@ export const searchPallet = async (pallet_record: Record<string, any>) => {
 
 export const insertPallet = async (pallet_record: Record<string, any>) => {
     if (Array.isArray(pallet_record)) {
-        Pallet.insertMany(pallet_record);
+        return Pallet.insertMany(pallet_record);
     }
-    new Pallet(pallet_record).save();
+    return new Pallet(pallet_record).save();
 };
 
 // export const findOrder = async (dataObj: Record<string, unknown>): Promise<Order> => {
