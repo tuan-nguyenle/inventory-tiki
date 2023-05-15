@@ -19,9 +19,9 @@ export const getAllAccounts = async () => {
 }
 export const submitIB = async (data, orderid) => {
     try {
-        // const combinedJson = JSON.stringify(data, null, 2);
-        // console.log(combinedJson);
-        // console.log(orderid);
+        const combinedJson = JSON.stringify(data, null, 2);
+        console.log(combinedJson);
+        console.log(orderid);
         const response = await axios.post(`http://localhost/api/orders/${orderid}`, data, {
             headers: {
                 'Content-Type': 'application/json'
@@ -65,8 +65,9 @@ export const getallpallets = async () => {
     }
 }
 export const uploadstatus = async (id) => {
+    console.log(id);
     try {
-        const response = await axios.get(`http://localhost/api/warehouse/pallets/${id}`)
+        const response = await axios.post(`http://localhost/api/warehouse/pallets/${id}`)
         return response;
     } catch (error) {
         throw error;

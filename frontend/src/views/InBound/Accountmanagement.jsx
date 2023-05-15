@@ -44,72 +44,52 @@ const Accountmanagement = () => {
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-body table-responsive p-0">
-                                        <table className="table table-hover text-nowrap">
-                                            <thead>
-                                                <tr>
-                                                    <th>STT</th>
-                                                    <th>Full Name</th>
-                                                    <th>Account</th>
-                                                    <th>Phone</th>
-                                                    <th style={{ width: "200px" }} >Extends</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {/* <tr>
-                                                <td>1</td>
-                                                <td>Inbound123456</td>
-                                                <td>4354676575asdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa32aabb</td>
-                                                <td>
-                                                    <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaUserEdit /></span>Edit</Button>{' '}
-                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
-                                                </td>
-                                            </tr> */}
-                                                {!allaccount ?
-                                                    <>
-                                                        <div>
-                                                            <h1 style={{ textAlign: "center" }}>Loading...</h1>
-                                                        </div>
-                                                    </>
-                                                    :
-                                                    allaccount && allaccount.length > 0 && allaccount.map((data, i) => {
-                                                        return (
-                                                            <tr key={data.id}>
-                                                                <td>{i + 1}</td>
-                                                                <td>{data.fullname}</td>
-                                                                <td>{data.username}</td>
-                                                                <td>{data.phone}</td>
-                                                                <td>
-                                                                    <div className="Button-extends">
-                                                                        <div className="button">
-                                                                            <EditUser />
-                                                                        </div>
-                                                                        <div className="button">
-                                                                            <DeleteUser />
-                                                                        </div>
+                                        {
+                                            !allaccount ?
+                                                <>
+                                                    <div>
+                                                        <h1 style={{ textAlign: "center" }}>Loading...</h1>
+                                                    </div>
+                                                </>
+                                                :
+                                                <table className="table table-hover text-nowrap">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Full Name</th>
+                                                            <th>Account</th>
+                                                            <th>Phone</th>
+                                                            <th style={{ width: "200px" }} >Extends</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {
+                                                            allaccount && allaccount.length > 0 && allaccount.map((data, i) => {
+                                                                return (
+                                                                    <tr key={data._id}>
+                                                                        <td>{i + 1}</td>
+                                                                        <td>{data.fullname}</td>
+                                                                        <td>{data.username}</td>
+                                                                        <td>{data.phone}</td>
+                                                                        <td>
+                                                                            <div className="Button-extends">
+                                                                                <div className="button">
+                                                                                    <EditUser />
+                                                                                </div>
+                                                                                <div className="button">
+                                                                                    <DeleteUser />
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                )
 
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        )
+                                                            }
+                                                            )}
+                                                    </tbody>
+                                                </table>
+                                        }
 
-                                                    })}
-
-                                                {/* {
-
-                                        data && data.length > 0 && data.map((data, i) => {
-                                            return (
-
-                                                <tr key={data.id}>
-                                                    <td>{i + 1}</td>
-                                                    <td>{data.productcode}</td>
-                                                    <td>{data.date}</td>
-                                                    <td>1</td>
-                                                </tr>
-                                            )
-                                        })
-                                    } */}
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>

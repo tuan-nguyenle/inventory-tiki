@@ -71,6 +71,7 @@ const InputReBack = (props) => {
         category: "",
         quantity: 1,
         sku: "",
+        unit: ""
     });
     // Hàm xử lý
     const changeHandler = (e) => {
@@ -138,7 +139,8 @@ const InputReBack = (props) => {
                         date: newdate,
                         sku: product.sku,
                         quantity: newdata.quantity,
-                        package: newdata.package
+                        package: newdata.package,
+                        unit: product.unit
                     };
                     setData([...data, newdatainput]);
                     setNewdata({
@@ -146,6 +148,7 @@ const InputReBack = (props) => {
                         package: newdata.package,
                         codecontainer: newdata.codecontainer,
                         quantity: newdata.quantity,
+                        unit: newdata.unit
                     });
                     return;
                 }
@@ -156,6 +159,7 @@ const InputReBack = (props) => {
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
                 package: newdata.package,
+                unit: newdata.unit
             });
         } else {
             if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || !newdata.product_name || !newdata.category) {
@@ -171,6 +175,7 @@ const InputReBack = (props) => {
                 sku: newdata.sku,
                 date: newdate,
                 quantity: newdata.quantity,
+                unit: newdata.unit
             }
             setData([...data, newdatainput]);
             setNewdata({
@@ -182,6 +187,7 @@ const InputReBack = (props) => {
                 category: "",
                 supplier_name: "",
                 sku: "",
+                unit: ""
             });
         }
     }
@@ -201,6 +207,7 @@ const InputReBack = (props) => {
                 bar_code: "",
                 quantity: newdata.quantity,
                 codecontainer: newdata.codecontainer,
+                unit: newdata.unit
             });
             return;
         }
@@ -259,6 +266,7 @@ const InputReBack = (props) => {
             bar_code: "",
             quantity: newdata.quantity,
             codecontainer: newdata.codecontainer,
+            unit: newdata.unit
         });
         setNewmiss(null);
     }
@@ -344,6 +352,7 @@ const InputReBack = (props) => {
                         bar_code: "",
                         quantity: newdata.quantity,
                         codecontainer: newdata.codecontainer,
+                        unit: newdata.unit
                     });
                     setNewmiss(null);
                     return;
@@ -374,7 +383,8 @@ const InputReBack = (props) => {
                                 category: p.category,
                                 supplier_name: p.supplier_name,
                                 product_name: p.product_name,
-                                quantity: quantityMissing
+                                quantity: quantityMissing,
+                                unit: p.unit
                             });
                         }
                     });
@@ -414,6 +424,7 @@ const InputReBack = (props) => {
                                                                             <td>{data.bar_code}</td>
                                                                             <td>{data.supplier_name}</td>
                                                                             <td>{data.sku}</td>
+                                                                            <td>{data.unit}</td>
                                                                             <td style={{ color: "red" }}>{data.quantity}</td>
                                                                         </tr>
                                                                     )

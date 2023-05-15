@@ -1,21 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import "../../styles/inventorycontrol.scss";
 import Button from 'react-bootstrap/Button';
+import * as ICAPI from "../../services/ICAPI";
 import {
     FaPrint, FaCheck, FaTimes, FaSearch,
 } from "react-icons/fa";
+import Addshelve from "./modalIC/Addshelve";
+import Addshelfrow from "./modalIC/Addshelverow";
 const ShelfManagement = () => {
-
+    const [datashelf, setDatashelf] = useState(null);
+    useEffect(() => {
+        (async () => {
+            try {
+                let getshelf = await ICAPI.getallshelf();
+                setDatashelf(getshelf)
+            } catch (error) {
+                setDatashelf(null)
+            }
+        })();
+    }, [])
     return (
         <div className="shelfmanagement_body">
             <div className="container-shelfmanagement">
                 <div className="header">
-                    <div>
-                        <h1 style={{ textAlign: "center" }} >Shelf Management</h1>
+                    <div className="texs">
+                        <h1>Shelf Management</h1>
                     </div>
-                    <div style={{ float: "right" }}>
-                        <Button variant="primary" size="lg">+ New Shelf</Button>
+
+                    <div className="buttoma" style={{ float: "right", cursor: "pointer", marginRight: "20px" }}>
+                        <Addshelve />
+                        <Addshelfrow />
                     </div>
                 </div>
                 <hr></hr>
