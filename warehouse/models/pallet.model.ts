@@ -33,6 +33,7 @@ interface Pallet {
         }
     ];
     status: boolean;
+    validate: boolean;
 }
 
 const PalletSchema = new Schema<Pallet, Document>(
@@ -58,6 +59,7 @@ const PalletSchema = new Schema<Pallet, Document>(
             },
         ],
         status: { type: Boolean, default: false },
+        validate: { type: Boolean, default: false },
     },
     {
         timestamps: true,

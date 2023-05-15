@@ -105,6 +105,21 @@ services:
     stdin_open: true
     tty: true
 
+  # frontend:
+  #   stdin_open: true
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile.dev
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - inventory_tiki
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./frontend:/app/
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+
 networks:
   inventory_tiki:
     driver: bridge

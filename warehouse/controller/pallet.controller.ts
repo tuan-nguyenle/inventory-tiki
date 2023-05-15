@@ -35,7 +35,7 @@ export const updateStatus = async (req: Request, res: Response) => {
     if (!errors.isEmpty()) {
         throw new RequestValidationError(errors.array());
     }
-    const data = { _id: req.params.id, status: true };
+    const data = { _id: req.params.id, validate: true };
     await PalletServices.findOneAndUpdate(data);
 
     return res.status(200).send({ msg: "validate success" });
