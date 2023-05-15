@@ -13,11 +13,12 @@ const Storage = () => {
 
     // viết hàm khi click vào trái sẽ gọi API lấy chi tiết product để show ra bên phải
     // nút save gọi một hàm truyền product vào shelf
-    const [datalist, setDatalist] = useState(null); // nhớ sửa đây thành null
+    const [datalist, setDatalist] = useState(null);
+    const [updateData, setUpdateData] = useState(false); // biến gọi lại useffect lấy pallet mới nhất
     const [checkchange, setCheckchange] = useState(false);
     const [datadetail, setDatadetail] = useState({ shelf: "" });
     const [idchange, setIdchange] = useState({ _id: "" });
-    const [ramdetail, setRamdetail] = useState([]);
+    const [ramdetail, setRamdetail] = useState(null);
     const [dataleftmau, setDataleftmau] = useState(null);
     const [dataleft, setDataleft] = useState(null);
     const [dataright, setDataright] = useState({
@@ -25,26 +26,7 @@ const Storage = () => {
         _id: "",
     });
 
-    // viết effect lấy list trái
-    useEffect(() => {
-        (async () => {
-            try {
-                let getpallet = await ICAPI.getallpallets();
-                setDatalist(getpallet)
-            } catch (error) {
-                setDatalist(null)
-            }
-        })();
-    }, [])
-    useEffect(() => {
-        if (datalist && datalist.length > 0) {
-            const haveproduct = datalist.filter((IB) => IB.products.length > 0 && IB.status === true);
-            setDataleftmau(haveproduct);
-            setDataleft(haveproduct)
-
-        }
-    }, [datalist])
-    console.log(dataleft);
+    // click trái lấy product bên phải
     const getDetail = async (sitch, bowler) => {
         if (dataright.pallet && dataright._id) {
             toast.error("The action is invalid"); // in thông báo
@@ -53,12 +35,12 @@ const Storage = () => {
         if (dataleft) {
             let a = dataleft.filter((item) => item._id !== sitch)
             setDataright({
-                pallet: "<<< " + bowler,
+                pallet: bowler,
                 _id: sitch
             })
             setDataleft(a);
-            let b = dataleft.filter((item) => item._id === sitch)
-            let c = dataleft[0].products;
+            let b = dataleftmau.filter((item) => item._id === sitch)
+            let c = b[0].products;
             setRamdetail(c);
             // try {
             //     let getpallet = await ICAPI.getproducts(sitch);
@@ -72,6 +54,7 @@ const Storage = () => {
         }
 
     }
+    // click phải trả về rỗng
     const returndetail = () => {
         setDataleft(dataleftmau);
         setDataright({
@@ -84,31 +67,65 @@ const Storage = () => {
         // return thì set lại data bên right
         setRamdetail([]);
     }
+    // có nhập save thì hiệnn nút save
     const setShelf = (e, changeid) => {
-        const { _id, value } = e.target
+        const { id, value } = e.target
         setDatadetail(prevState => ({
             ...prevState,
-            [_id]: value
+            [id]: value
         }
         ))
         setIdchange({
-            _id: changeid
+            id: changeid
         })
     }
+    // click vào mà có giá trị shelf thì hiển thị nút save
     const clickinput = (e, changeid) => {
-        const { _id, value } = e.target
+        const { id, value } = e.target
         setDatadetail(prevState => ({
             ...prevState,
-            [_id]: value
+            [id]: value
         }
         ))
         setIdchange({
-            _id: changeid
+            id: changeid
         })
     }
-    const inputShelf = (a, b) => {
-        console.log("product code " + a, "//  " + "shelf " + b);
+    // tranfershelf
+    const inputShelf = async (data, shelf) => {
+        let datane = {
+            pallet_name: dataright.pallet,
+            shelf_code: shelf,
+            product: data
+        }
+        try {
+            let res = await ICAPI.transfershelf(datane);
+            toast.success("Success"); // in thông báo
+            setUpdateData(!updateData); // gọi lại hàm useEffect
+        } catch (error) {
+            toast.error("Error"); // in thông báo
+        }
     }
+    // viết effect lấy list trái
+    useEffect(() => {
+        (async () => {
+            try {
+                let getpallet = await ICAPI.getallpallets();
+                setDatalist(getpallet)
+            } catch (error) {
+                setDatalist(null)
+            }
+        })();
+    }, [updateData])
+    // lấy pallet có products
+    useEffect(() => {
+        if (datalist && datalist.length > 0) {
+            const haveproduct = datalist.filter((IB) => IB.products.length > 0 && IB.status === true);
+            setDataleftmau(haveproduct);
+            setDataleft(haveproduct)
+
+        }
+    }, [datalist])
     useEffect(() => {
         if (datadetail.shelf) {
             setCheckchange(true)
@@ -117,95 +134,14 @@ const Storage = () => {
             setCheckchange(false)
         }
     }, [datadetail]);
-
+    useEffect(() => {
+        if (dataright._id) {
+            let b = datalist.filter((item) => item._id === dataright._id)
+            let c = b[0].products;
+            setRamdetail(c);
+        }
+    }, [datalist]);
     return (
-        // <>
-        //     <div className="Stogare_body" >
-        //         <div>
-        //             <div className="Header">
-        //                 <h1 style={{ textAlign: "center" }} >Storage</h1>
-        //             </div>
-        //             <hr></hr>
-        //         </div>
-        //         <div>
-        //             <Row gutter={16}>
-        //                 <Col span={6}>
-        //                     <Card className="card scrollable-card" title="List Inbound">
-        //                         {/* gọi api chỗ này */}
-        //                         {
-        //                             dataleft.map((data) => {
-        //                                 return (
-        //                                     <div key={data._id} className="detail" onClick={() => getDetail(data._id, data["pallet-container"])}>
-        //                                         <p>{data["pallet-container"]}</p>
-        //                                         <hr></hr>
-        //                                     </div>
-        //                                 )
-        //                             })
-        //                         }
-        //                     </Card>
-        //                 </Col>
-        //                 <Col span={1}>
-        //                     <p className="Fa" ><FaAngleDoubleRight /></p>
-        //                 </Col>
-        //                 <Col span={17}>
-        //                     <Card className="card scrollable-card" title="Detail Inbound">
-        //                         <form>
-        //                             <div className="detail" onClick={() => returndetail(dataright._id)}>
-        //                                 <p>{dataright.pallet}</p>
-        //                                 <hr></hr>
-        //                             </div>
-        //                             {/* dùng vòng lặp ngay dây 
-        //                             in list ngay đây
-        //                             */}
-        //                             <div>
-        //                                 <div className="col-12">
-        //                                     <div className="card">
-        //                                         <div className="card-body table-responsive p-0">
-        //                                             <table className="table table-hover text-nowrap">
-        //                                                 <thead>
-        //                                                     <tr>
-        //                                                         <th>STT</th>
-        //                                                         <th>Product code</th>
-        //                                                         <th>Product name</th>
-        //                                                         <th>Supplier</th>
-        //                                                         <th>Category</th>
-        //                                                         <th>Quantity</th>
-        //                                                         <th>Shelf</th>
-        //                                                         <th></th>
-        //                                                     </tr>
-        //                                                 </thead>
-        //                                                 <tbody>
-        //                                                     {ramdetail && ramdetail.length > 0 && ramdetail.map((data, i) => {
-        //                                                         return (
-        //                                                             <tr key={i + 1}>
-        //                                                                 <td>{data._id}</td>
-        //                                                                 <td>{data.productcode}</td>
-        //                                                                 <td>{data.productname}</td>
-        //                                                                 <td>{data.supplier}</td>
-        //                                                                 <td>{data.category}</td>
-        //                                                                 <td>{data.quantity}</td>
-        //                                                                 <td style={{ width: "10%" }}><input _id="shelf" type="text" className="form-control" placeholder="Shelf" onClick={(e) => clickinput(e, data._id)} onChange={(e) => setShelf(e, data._id)} /></td>
-        //                                                                 {checkchange && idchange._id === data._id ? <td><Button variant="success" onClick={() => inputShelf(data.productcode, datadetail.shelf)}>Save</Button></td>
-        //                                                                     :
-        //                                                                     <td><Button disabled variant="success">Save</Button></td>
-        //                                                                 }
-        //                                                                 {/* <td><Button variant="success" onClick={() => inputShelf(data.productcode, datadetail.shelf)}>Save</Button></td> */}
-        //                                                             </tr>
-        //                                                         )
-        //                                                     })}
-        //                                                 </tbody>
-        //                                             </table>
-        //                                         </div>
-        //                                     </div>
-        //                                 </div>
-        //                             </div>
-        //                         </form>
-        //                     </Card>
-        //                 </Col>
-        //             </Row>
-        //         </div>
-        //     </div>
-        // </>
         <>
             <div className="Stogare_body" >
                 <div className="container-fluid">
@@ -224,7 +160,7 @@ const Storage = () => {
                                     </div>
                                     <div className="card-body">
                                         {/* call API here */}
-                                        {dataleftmau && dataleftmau.length > 0 && dataleftmau.map((data) => {
+                                        {dataleft && dataleft.length > 0 && dataleft.map((data) => {
                                             return (
                                                 <div key={data._id} className="card-text detail" onClick={() => getDetail(data._id, data.name_pallet)}>
                                                     <p>{data.name_pallet}</p>
@@ -245,10 +181,13 @@ const Storage = () => {
                                     </div>
                                     <div className="card-body">
                                         <form>
-                                            <div className="detail" onClick={() => returndetail(dataright._id)}>
-                                                <p>{dataright.pallet}</p>
-                                                <hr />
-                                            </div>
+                                            {
+                                                dataright && dataright.pallet ? <div className="detail" onClick={() => returndetail(dataright._id)}>
+                                                    <p>{"<<< " + dataright.pallet}</p>
+                                                    <hr />
+                                                </div> : null
+                                            }
+
                                             {/* use loop and display list here */}
                                             <div className="row">
                                                 <div className="col-12">
@@ -276,14 +215,14 @@ const Storage = () => {
                                                                                 <td>{i + 1}</td>
                                                                                 <td>{data.bar_code}</td>
                                                                                 <td style={{ maxWidth: "100px", overflow: "hidden", textOverflow: "ellipsis" }}>{data.product_name}</td>
-                                                                                <td style={{ maxWidth: "30px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{data.supplier_name}</td>
+                                                                                <td style={{ width: "30px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{data.supplier_name}</td>
                                                                                 <td >{data.category}</td>
                                                                                 <td>{data.quantity}</td>
                                                                                 <td>{data.sku}</td>
                                                                                 <td>{data.unit}</td>
-                                                                                <td style={{ width: "10%" }}><input _id="shelf" type="text" className="form-control" placeholder="Shelf" onClick={(e) => clickinput(e, data._id)} onChange={(e) => setShelf(e, data._id)} /></td>
+                                                                                <td style={{ width: "10%" }}><input id="shelf" type="text" className="form-control" placeholder="Shelf" onClick={(e) => clickinput(e, data._id)} onChange={(e) => setShelf(e, data._id)} /></td>
                                                                                 {
-                                                                                    checkchange && idchange._id === data._id ? <td><Button variant="success" onClick={() => inputShelf(data.productcode, datadetail.shelf)}>Save</Button></td>
+                                                                                    checkchange && idchange.id === data._id ? <td><Button variant="success" onClick={() => inputShelf(data, datadetail.shelf)}>Save</Button></td>
                                                                                         :
                                                                                         <td><Button disabled variant="success">Save</Button></td>
                                                                                 }

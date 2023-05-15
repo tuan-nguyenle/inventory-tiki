@@ -8,6 +8,20 @@ export const getallpallets = async () => {
         throw error;
     }
 }
+export const transfershelf = async (data) => {
+    const combinedJson = JSON.stringify(data, null, 2);
+    console.log(combinedJson);
+    try {
+        const response = await axios.post("http://localhost/api/warehouse/shelf", data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
 // export const getproducts = async (id) => {
 //     try {
 //         const response = await axios.post(`http://localhost/api/warehouse/pallets/${id}`);

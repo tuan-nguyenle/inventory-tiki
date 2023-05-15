@@ -74,7 +74,7 @@ const Notification = () => {
                                 <li className="nav-item active">
                                     <a href="#" className="nav-link">
                                         <i className="fas fa-inbox"></i> Inbox
-                                        <span className="badge bg-primary float-right">12</span>
+                                        <span className="badge bg-primary float-right"></span>
                                     </a>
                                 </li>
                                 <li className="nav-item">
