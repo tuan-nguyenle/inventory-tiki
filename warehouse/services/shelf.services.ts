@@ -17,3 +17,11 @@ export const findOneAndUpdate = async (data: Record<string, any>) => {
 
     return shelf;
 };
+
+export const findShelf = async (data: Record<string, any>) => {
+    console.log(data);
+
+    // const shelf = await Shelf.find({ _id: data._id }, data);
+
+    // return shelf;
+};
