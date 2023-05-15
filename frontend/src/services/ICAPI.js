@@ -22,6 +22,14 @@ export const transfershelf = async (data) => {
         throw error;
     }
 }
+export const getallshelf = async () => {
+    try {
+        const response = await axios.get('link');
+        return response.data.shelve;
+    } catch (error) {
+        throw error;
+    }
+}
 // export const getproducts = async (id) => {
 //     try {
 //         const response = await axios.post(`http://localhost/api/warehouse/pallets/${id}`);

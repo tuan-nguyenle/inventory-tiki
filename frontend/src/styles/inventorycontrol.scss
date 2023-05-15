@@ -116,7 +116,21 @@
     }
 
     .header {
-        height: 100px;
+        display: flex;
+
+        .texs {
+            text-align: center;
+            margin: auto;
+            margin-left: 600px;
+            /* Thêm thuộc tính margin:auto để căn giữa nội dung */
+        }
+
+        .buttoma {
+            margin-left: auto;
+            margin-right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
     }
 
     .nav-tabs {

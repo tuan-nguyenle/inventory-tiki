@@ -166,7 +166,7 @@ const Notification = () => {
                                                         <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="/MainIB/InboundList" state={about} > Create inbound this container</Link>}
                                                         </td>
                                                         <td className="mailbox-star" style={{ color: "red" }} >New</td>
-                                                        <td className="mailbox-date">5 mins ago</td>
+                                                        <td className="mailbox-date">{about.createdAt}</td>
                                                     </tr>
                                                 )
                                             })
@@ -241,7 +241,7 @@ const Notification = () => {
                                                         <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="#" onClick={(event) => DetailReback(event, about._id)} > Create inbound this container</Link>}
                                                         </td>
                                                         <td className="mailbox-star" style={{ color: "red" }} >Reback</td>
-                                                        <td className="mailbox-date">5 mins ago</td>
+                                                        <td className="mailbox-date">{about.createdAt}</td>
                                                     </tr>
                                                 )
                                             })

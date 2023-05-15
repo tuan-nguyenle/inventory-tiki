@@ -47,6 +47,7 @@ const InputExcel = (props) => {
     const handledata = async () => {
         // props.getdata(newdata); // xóa cái này bỏ props luôn cả bên notifition nữa
         try {
+            console.log(newdata);
             await Sendexcel(newdata);
             setNewdata(null);
             setFileName(null);

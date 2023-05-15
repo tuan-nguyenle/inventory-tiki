@@ -104,7 +104,7 @@ services:
       - inventory_tiki
     stdin_open: true
     tty: true
-    
+
 networks:
   inventory_tiki:
     driver: bridge
