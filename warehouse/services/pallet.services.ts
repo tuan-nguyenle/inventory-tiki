@@ -3,6 +3,8 @@ import { BadRequestError } from "@microservies-inventory/common";
 import { Pallet } from "../models/pallet.model";
 
 export const searchPallet = async (pallet_record: Record<string, any>) => {
+    console.log(pallet_record);
+    
     const { available, ...searchParams } = pallet_record;
 
     const query = available

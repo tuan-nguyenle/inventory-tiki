@@ -13,7 +13,7 @@ export class PalletUpdatedListener extends RabbitMQ<PalletUpdated>{
         await this.channel.consume(this.queueName, async (msg) => {
             if (msg !== null) {
                 const { name_pallet, product } = JSON.parse(msg.content.toString());
-                console.log(name_pallet, product);
+                // console.log(name_pallet, product);
                 try {
                     const pallets = await findOnePallet(name_pallet);
                     const matchingProduct = pallets.products.find(
@@ -24,9 +24,15 @@ export class PalletUpdatedListener extends RabbitMQ<PalletUpdated>{
                     if (matchingProduct) {
                         matchingProduct.quantity -= product.quantity;
                     }
-                    await findOneAndUpdate(pallets);
+                    const pallet = await findOneAndUpdate(pallets);
                     if (matchingProduct?.quantity === 0) {
                         await updateMany(pallets);
+                        const quantity: number = (await findOnePallet(name_pallet)).products.length;
+                        if (quantity === 0) {
+                            const temp = pallet!._id;
+                            findOneAndUpdate({ _id: temp, validate: false });
+                        }
+                        //  await updateMany(pallets);
                     }
                 } catch (error) {
                     console.error(error);
