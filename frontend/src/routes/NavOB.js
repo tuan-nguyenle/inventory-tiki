@@ -22,7 +22,7 @@ import ConfirmationInbound from '../views/InBound/ConfirmationInbound';
 import Accountmanagement from '../views/InBound/Accountmanagement';
 import InputExcel from '../views/InputExcel';
 import PrintPalletOB from '../views/Outbound/PrintPalletOB';
-
+import Error from "../views/Error";
 const NavIB = () => {
     return (
         <>
@@ -41,6 +41,7 @@ const NavIB = () => {
                         <Route path='MainOB/Accountmanagement' element={<Accountmanagement />} />
                         {/* <Route path='MainIB/Reback' element={<Reback />} /> */}
                         <Route path='MainOB/PrintPalletOB' element={<PrintPalletOB />} />
+                        <Route path="*" element={<Error />} />
                     </Route>
                     {/* <Route path='/LogOut' element={<LogOut />} /> */}
                 </Routes>

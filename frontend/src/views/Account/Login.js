@@ -34,18 +34,15 @@ function Login() {
         try {
             let a = await handleLoginAPI(account);
             if (a && !err.errmess) {
-                // sessionStorage.setItem('user', JSON.stringify(a));
+                sessionStorage.setItem('user', JSON.stringify(a));
                 // var decoded = jwt_decode(a); /
                 // console.log(decoded);
                 window.location.href = "/";
             }
-            else {
-                console.log("xuống đây r nẻ2");
-            }
             // const a = JSON.parse(sessionStorage.getItem('a'));
         } catch (error) {
             setErr({
-                errmess: "The username or password you entered is incorrect!!!!!!!!!!"
+                errmess: "The username or password you entered is incorrect!"
             })
         }
     }

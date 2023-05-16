@@ -120,7 +120,7 @@ const Storage = () => {
     // lấy pallet có products
     useEffect(() => {
         if (datalist && datalist.length > 0) {
-            const haveproduct = datalist.filter((IB) => IB.products.length > 0 && IB.status === true);
+            const haveproduct = datalist.filter((IB) => IB.products.length > 0 && IB.validate === true);
             setDataleftmau(haveproduct);
             setDataleft(haveproduct)
 

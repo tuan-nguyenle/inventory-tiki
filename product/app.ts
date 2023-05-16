@@ -58,7 +58,7 @@ const start = async () => {
   }
 
   try {
-    new ProductCreatedListener('amqp://guest:guest@rabbitmq:', 'Product', 'fanout', 'inventory-tiki').consumeMessages();
+    new ProductCreatedListener('amqp://guest:guest@rabbitmq:5672', 'Product', 'fanout', 'inventory-tiki').consumeMessages();
   } catch (err) {
     console.log(err);
   }

@@ -21,6 +21,7 @@ import ShelfManagement from '../views/InventoryControl/ShelfManagement';
 import ProductDetail from '../views/InventoryControl/productdetail/ProductDetail';
 import DefectiveP from '../views/InventoryControl/DefectiveP';
 import Statistics from '../views/InventoryControl/Statistics';
+import Error from "../views/Error";
 const NavIC = () => {
     return (
         <>
@@ -39,11 +40,13 @@ const NavIC = () => {
                             <Route path='ProductDetail' element={<ProductDetail />} />
                             <Route path='ShelfInformation' element={<ShelfInformation />} />
                             <Route path='MoveShelf' element={<MoveShelf />} />
+                            <Route path="*" element={<Error />} />
                         </Route>
 
                         <Route path='MainIC/ShelfManagement' element={<ShelfManagement />} />
                         <Route path='MainIC/DefectiveProduct' element={<DefectiveP />} />
                         <Route path='MainIC/Statistics' element={<Statistics />} />
+                        <Route path="*" element={<Error />} />
                     </Route>
                 </Routes>
             </BrowserRouter >

@@ -74,7 +74,7 @@ const ConfirmationInbound = () => {
                                                 <td><ListConfirn product={data.products} /></td>
                                                 <td>{data.name_pallet}</td>
                                                 <td>{data.updatedAt}</td>
-                                                {data.status === true ? <td style={{ width: "300px" }}>
+                                                {data.validate === true ? <td style={{ width: "300px" }}>
                                                     <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>
                                                     <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>
                                                 </td> : <td style={{ width: "300px" }}>
