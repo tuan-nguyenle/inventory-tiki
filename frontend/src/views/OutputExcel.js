@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { toast } from 'react-toastify';
 import { Sendexcel } from "../services/BOSSAPI"
-import OutputExcel from "./OutputExcel";
-const InputExcel = (props) => {
+const OutputExcel = (props) => {
     const [fileName, setFileName] = useState(null);
     const [newdata, setNewdata] = useState(null);
     const [drive, setDrive] = useState({
-        fullname: "Nguyễn Văn A",
+        fullname: "Nguyễn Văn B",
         phone: "05598996663",
         license_plates: "79N3 195-123",
         store_keeper: "Jane Smith"
@@ -35,7 +34,7 @@ const InputExcel = (props) => {
             license_plates: drive.license_plates,
             store_keeper: drive.store_keeper,
             packages: order,
-            order_type: "Warehouse Order",
+            order_type: "Warehouse Export",
             status: "Unchecked",
             stack_car: false
         };
@@ -61,16 +60,17 @@ const InputExcel = (props) => {
 
     return (
         <>
-            <div>
-                <h2>Input file excel Inbound Today</h2>
-                <input id="dataTransfer" type="file" onChange={(e) => handleFile(e)} />
+            {/* {fileName && (
+                <p>
+                    Filename: <span>{fileName}</span>
+                </p>
+            )} */}
+            <h2>Input file excel Outbound Today</h2>
+            <input id="dataTransfer" type="file" onChange={(e) => handleFile(e)} />
 
-                <div style={{ marginTop: "20px" }} ><button type="button" className="btn btn-success" onClick={handledata} >Success</button></div>
-            </div>
-            <hr></hr>
-            <OutputExcel />
+            <div style={{ marginTop: "20px" }} ><button type="button" className="btn btn-success" onClick={handledata} >Success</button></div>
         </>
     )
 }
 
-export default InputExcel;
+export default OutputExcel;

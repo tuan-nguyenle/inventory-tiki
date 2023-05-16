@@ -1,27 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import "../../styles/inbound.scss";
-import { Link } from "react-router-dom";
-import billlist from "./listoutbound.json";
-import InputExcel from "../InputExcel";
-// import * as IBAPI from "../../services/IBAPI";
-
-let DataIB = "";
+import { Link, useNavigate } from "react-router-dom";
+import * as IBAPI from "../../services/IBAPI";
+import fakeoutlist from "./fakeoutlist.json"
 const Notification = () => {
-    const getdata = (a) => {
-        DataIB = a;
-        console.log(DataIB);
-    }
-    // useEffect(() => {
-    //     let notifi = IBAPI.getNotication();
-    //     // tạo một usestate rồi lưu vào đó
-    //     // rồi dưới return .map
-    // }, [])
+    const navigate = useNavigate();
+    const [allnotifi, setAllnotifi] = useState(null);
+    const [notifiun, setNotifiun] = useState(null);
+    useEffect(() => {
+        (async () => {
+            try {
+                let notifi = await IBAPI.getNotication();
+                setAllnotifi(notifi);
+            } catch (error) {
+                setAllnotifi(null);
+            }
 
+        })();
+    }, [])
+    useEffect(() => {
+        if (allnotifi && allnotifi.length > 0) {
+            const uncheckedNotifi = allnotifi.filter((notifi) => notifi.status === "Unchecked" && notifi.order_type === "Warehouse Export");
+            setNotifiun(uncheckedNotifi);
+        }
+    }, [allnotifi])
     return (
         <div className="container_notification">
             <div>
-                <h1 style={{ textAlign: "center" }} >Notification OutBound</h1>
+                <h1 style={{ textAlign: "center" }} >Notification</h1>
             </div>
             <hr></hr>
             <div className="row">
@@ -37,7 +44,7 @@ const Notification = () => {
                                 <li className="nav-item active">
                                     <a href="#" className="nav-link">
                                         <i className="fas fa-inbox"></i> Inbox
-                                        <span className="badge bg-primary float-right">12</span>
+                                        <span className="badge bg-primary float-right"></span>
                                     </a>
                                 </li>
                                 <li className="nav-item">
@@ -84,7 +91,7 @@ const Notification = () => {
                 <div className="col-md-9">
                     <div className="card card-primary card-outline">
                         <div className="card-header">
-                            <h3 className="card-title">Inbox</h3>
+                            <h3 className="card-title">Unchecked</h3>
 
                             <div className="card-tools">
                                 <div className="input-group input-group-sm">
@@ -98,36 +105,29 @@ const Notification = () => {
                             </div>
                         </div>
                         <div className="card-body p-0">
-                            <div className="mailbox-controls">
-                                <div className="float-right">
-                                    01-10/02
-                                    <div className="btn-group">
-                                        <button type="button" className="btn btn-default btn-sm">
-                                            <i className="fas"><FaAngleLeft /></i>
-                                        </button>
-                                        <button type="button" className="btn btn-default btn-sm">
-                                            <i className="fas"><FaAngleRight /></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                             <div className="table-responsive mailbox-messages">
                                 <table className="table table-hover table-striped">
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <div className="icheck-primary">
-                                                    <input type="checkbox" value="" id="check1" />
-                                                    <label htmlFor="check1"></label>
-                                                </div>
-                                            </td>
-                                            <td className="mailbox-star"><a href="#"><i className="fas fa-star text-warning"></i></a></td>
-                                            <td className="mailbox-name">BOSS</td>
-                                            <td className="mailbox-subject"><b>DTI36229896659</b>  - {<Link to="/MainOB/Outboundlist" state={billlist} > Create inbound this container</Link>}
-                                            </td>
-                                            <td className="mailbox-attachment"></td>
-                                            <td className="mailbox-date">5 mins ago</td>
-                                        </tr>
+                                        {
+                                            notifiun && notifiun.length > 0 && notifiun.map((about) => {
+                                                return (
+                                                    <tr key={about._id}>
+                                                        <td>
+                                                            <div className="icheck-primary">
+                                                                <input type="checkbox" value="" id="check1" />
+                                                                <label htmlFor="check1"></label>
+                                                            </div>
+                                                        </td>
+                                                        <td className="mailbox-attachment">{about._id}</td>
+                                                        <td className="mailbox-name">Inventory management</td>
+                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="/MainOB/OutboundList" state={fakeoutlist} > Create inbound this container</Link>}
+                                                        </td>
+                                                        <td className="mailbox-star" style={{ color: "red" }} >New</td>
+                                                        <td className="mailbox-date">{about.createdAt}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -150,10 +150,8 @@ const Notification = () => {
                     </div>
                 </div>
             </div>
-            <div>
-                <InputExcel getdata={getdata} />
-            </div>
         </div >
     );
 };
 export default Notification;
+
