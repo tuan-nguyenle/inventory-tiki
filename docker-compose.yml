@@ -116,23 +116,6 @@ services:
     stdin_open: true
     tty: true
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-    networks:
-      - inventory_tiki
-    environment:
-      WATCHPACK_POLLING: "${WATCHPACK_POLLING}"
-    volumes:
-      - /app/node_modules
-      - ./frontend:/app/
-    restart: on-failure
-    stdin_open: true
-    tty: true
-
 networks:
   inventory_tiki:
     driver: bridge
