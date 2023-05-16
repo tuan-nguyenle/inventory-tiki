@@ -14,7 +14,8 @@ export const findShelf = async (req: Request, res: Response) => {
     }
 
     try {
-        await ShelfServices.findShelf(req.params);
+        const shelf = await ShelfServices.findShelf(req.query);
+        res.send({ data: shelf });
     } catch (error) {
         console.log(error);
     }

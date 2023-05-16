@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import "../styles/home.scss";
-import avatar from "../assets/images/inventory2.jpg"
+import avatar from "../assets/images/inventory2.jpg";
 import { FaEnvelope, FaHardHat, FaGuitar, FaBed } from "react-icons/fa";
 
 const Home = () => {
