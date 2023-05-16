@@ -22,7 +22,7 @@ root.render(
   <>
     {!getuser && !session && <Login />}
     {session && session.departments && session.roles &&
-      session.departments.some(dept => dept.description === "inbounds") &&
+      session.departments.some(dept => dept.description === "inbound") &&
       session.roles.some(role => role.description === "manager") &&
       <NavIB />}
     {session && session.departments && session.roles &&

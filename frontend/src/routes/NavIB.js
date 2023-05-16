@@ -23,6 +23,7 @@ import Accountmanagement from '../views/InBound/Accountmanagement';
 import PrintBowl from '../views/InBound/PrintBowl';
 import InputExcel from '../views/InputExcel';
 import InputReback from '../views/InBound/InputReback';
+import Error from "../views/Error";
 const NavIB = () => {
     return (
         <>
@@ -42,8 +43,8 @@ const NavIB = () => {
                         <Route path='MainIB/Accountmanagement' element={<Accountmanagement />} />
                         <Route path='MainIB/Reback' element={<Reback />} />
                         <Route path='MainIB/PrintBowl' element={<PrintBowl />} />
+                        <Route path="*" element={<Error />} />
                     </Route>
-                    {/* <Route path='/LogOut' element={<LogOut />} /> */}
                 </Routes>
             </BrowserRouter >
             {/* </React.StrictMode> */}

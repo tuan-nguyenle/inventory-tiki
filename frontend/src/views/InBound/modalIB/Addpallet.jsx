@@ -56,7 +56,8 @@ const Addpallet = (props) => {
                 },
                 weight: newdata.weight,
                 products: [],
-                status: false
+                status: false,
+                validate: false
             }]
             // gọi api ở dây
             try {
