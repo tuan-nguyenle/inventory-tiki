@@ -108,6 +108,20 @@ const Notification = () => {
                             <div className="table-responsive mailbox-messages">
                                 <table className="table table-hover table-striped">
                                     <tbody>
+                                        < tr>
+                                            <td>
+                                                <div className="icheck-primary">
+                                                    <input type="checkbox" value="" id="check1" />
+                                                    <label htmlFor="check1"></label>
+                                                </div>
+                                            </td>
+                                            <td className="mailbox-attachment"></td>
+                                            <td className="mailbox-name">Inventory management</td>
+                                            <td className="mailbox-subject"><b></b>  - {<Link to="/MainOB/OutboundList" state={fakeoutlist} > Create inbound this container</Link>}
+                                            </td>
+                                            <td className="mailbox-star" style={{ color: "red" }} >New</td>
+                                            <td className="mailbox-date"></td>
+                                        </tr>
                                         {
                                             notifiun && notifiun.length > 0 && notifiun.map((about) => {
                                                 return (

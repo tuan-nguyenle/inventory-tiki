@@ -38,6 +38,7 @@ const OutboundList = (props) => {
     const [data, setData] = useState([]);
     const [misssave, setMisssave] = useState([]);
     const [newmiss, setNewmiss] = useState(null);
+    const [arrange, setArrange] = useState(null);
     const [containerbowl, setContainerbowl] = useState(
         {
             codecontainervalidate: container,
@@ -71,6 +72,8 @@ const OutboundList = (props) => {
             [id]: value
         }))
     }
+
+
     const checkexists = (item, pa) => {
         let dt = data;
         let check = false;
@@ -382,6 +385,43 @@ const OutboundList = (props) => {
         const enough = state1.every((p) => checkEnough(newdata.shelf));
         setEnough(enough);
     }, [data]);
+
+    // useEffect(() => {
+    //     const shelfCodes = state1.flatMap(item => item.shelf_code);
+
+    //     // chia danh sách kệ thành các danh sách nhỏ
+    //     const chunkSize = 3;
+    //     const shelfChunks = [];
+    //     for (let i = 0; i < shelfCodes.length; i += chunkSize) {
+    //         shelfChunks.push(shelfCodes.slice(i, i + chunkSize));
+    //     }
+    //     shelfCodes.sort((a, b) => {
+    //         // chuyển các kệ thành mảng chữ cái và số
+    //         const aArr = a.match(/[a-z]+|\d+/gi);
+    //         const bArr = b.match(/[a-z]+|\d+/gi);
+
+    //         // so sánh các phần tử theo thứ tự
+    //         for (let i = 0; i < aArr.length && i < bArr.length; i++) {
+    //             const aEl = aArr[i];
+    //             const bEl = bArr[i];
+
+    //             if (isNaN(aEl) && isNaN(bEl)) { // cả 2 đều là chữ cái
+    //                 if (aEl < bEl) return -1;
+    //                 if (aEl > bEl) return 1;
+    //             } else if (!isNaN(aEl) && !isNaN(bEl)) { // cả 2 đều là số
+    //                 return aEl - bEl;
+    //             } else { // trường hợp còn lại
+    //                 return isNaN(aEl) ? 1 : -1;
+    //             }
+    //         }
+
+    //         // trường hợp các phần tử còn lại giống nhau
+    //         return aArr.length - bArr.length;
+    //     });
+    //     setArrange(shelfCodes);
+    // }, []);
+    console.log("arrange", arrange);
+    console.log(state1);
     // console.log("miss tổng", misssave);
     // console.log(miss1);
     // console.log(state1);
@@ -419,7 +459,7 @@ const OutboundList = (props) => {
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <label>The position of the shelf</label>
-                                                <input id="shelfvalidate" type="text" value={newdata.shelfvalidate} className="form-control" placeholder="Shelf" disabled />
+                                                <input id="shelfvalidate" type="text" value="A1.1" className="form-control" placeholder="Shelf" disabled />
                                             </div>
                                         </div>
                                         <div className="col-md-6">
@@ -431,19 +471,19 @@ const OutboundList = (props) => {
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <label>Product name</label>
-                                                <input id="productname" type="text" className="form-control" value={newdata.productname} placeholder="Product Name" disabled />
+                                                <input id="productname" type="text" className="form-control" value="something" placeholder="Product Name" disabled />
                                             </div>
                                         </div>
                                         <div className="col-md-4">
                                             <div className="form-group">
                                                 <label>Product code</label>
-                                                <input id="productcode" type="text" className="form-control" value={newdata.productcode} placeholder="Product code" disabled />
+                                                <input id="productcode" type="text" className="form-control" value="2154521212" placeholder="Product code" disabled />
                                             </div>
                                         </div>
                                         <div className="col-md-2">
                                             <div className="form-group">
                                                 <label>Quantity</label>
-                                                <input id="quantity" type="number" value={newdata.quantity} className="form-control" placeholder="Number" disabled />
+                                                <input id="quantity" type="number" value="3" className="form-control" placeholder="Number" disabled />
                                             </div>
                                         </div>
                                         <div className="col-md-6">
