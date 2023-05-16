@@ -11,6 +11,8 @@ enum StatusType {
   UNCHECK = "Unchecked",
   MISSING = "Not Enough Stock",
   STOCKED = "Stocked",
+  CHECKED = "Checked",
+  DELIVERY = "Delivery"
 }
 
 interface Order {
