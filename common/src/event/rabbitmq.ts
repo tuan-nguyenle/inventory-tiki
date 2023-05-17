@@ -48,5 +48,8 @@ export abstract class RabbitMQ<T extends Event> {
     }
     await this.channel.publish(this.exchangeName, this.routingKey, Buffer.from(JSON.stringify(message)));
     console.log(`Message '${JSON.stringify(message)}' sent to exchange '${this.exchangeName}'`);
+    setTimeout(() => {
+      this.close();
+    }, 500);
   }
 }

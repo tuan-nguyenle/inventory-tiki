@@ -20,6 +20,26 @@ export const findOneAndUpdate = async (data: Record<string, any>) => {
 
 export const findShelf = async (data: Record<string, any>) => {
     try {
+        const query: any = {};
+        if (data.product_name) {
+            query["products.product_name"] = data.product_name;
+        }
+        if (data.bar_code) {
+            query["products.bar_code"] = data.bar_code;
+        }
+        if (data.supplier) {
+            query["products.supplier_name"] = data.supplier;
+        }
+        if (data.sku) {
+            query["products.sku"] = data.sku;
+        }
+
+        if (Object.keys(query).length > 0) {
+            return await Shelf.find(query,
+                { shelf_code: 1, "products.$": 1 }
+            ).exec();
+        }
+
         return await Shelf.find(data).exec();
     } catch (error) {
     }
