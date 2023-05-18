@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN npm install -g npm@9.6.6
+
 EXPOSE 8080
 
 CMD ["npm","run","dev"]

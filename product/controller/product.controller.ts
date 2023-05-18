@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { RequestValidationError } from "@microservies-inventory/common";
 import { validationResult } from "express-validator";
 import * as Product from "../services/product.services";
-import { SearchShelfPublisher } from "../event/publisher/ShelfSearchPublisher";
 
 export const showProduct = async (req: Request, res: Response) => {
   const errors = validationResult(req);
