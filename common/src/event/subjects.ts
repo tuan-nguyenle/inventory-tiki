@@ -3,4 +3,6 @@ export enum Subjects {
   PalletUpdated = "pallet:updated",
   ProductCreated = "Product:created",
   // OrdersUpdated = "orders:updated",
+
+  ShelfSearch = "Shelf:Search"
 }
