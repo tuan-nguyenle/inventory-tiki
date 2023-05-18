@@ -5,11 +5,16 @@ import ShowListOB from "./ShowListOB";
 import { toast } from 'react-toastify';
 import { useReactToPrint } from 'react-to-print';
 import NextIB from "../InBound/modalIB/NextIB";
-
+import "../../styles/inventorycontrol.scss"
+import Button from 'react-bootstrap/Button';
+import CheckOB from "./CheckOB";
+import {
+    FaRegCheckSquare, FaRegSquare, FaPrint
+} from "react-icons/fa";
 const OutboundList = (props) => {
     const location = useLocation();
     const step = location.state;
-    console.log(step);
+    // console.log(step);
     let orderid = "";
     let container = "";
     const state1 = [];
@@ -17,7 +22,41 @@ const OutboundList = (props) => {
     if (step) {
         orderid = step._id;
         const state3 = step.shelve;
-        state1.push(...state3);
+        if (state3) {
+            for (let i = 0; i < state3.length; i++) {
+                const pkg = state3[i];
+                const products = pkg.products.map(product => {
+                    return {
+                        ...product,
+                        shelf_code: pkg.shelf_code
+                    };
+                });
+                step4.push(...products);
+            }
+        }
+        const state4 = [...state3];
+        state4.sort((a, b) => {
+            const aArr = a.shelf_code.match(/[a-z]+|\d+/gi);
+            const bArr = b.shelf_code.match(/[a-z]+|\d+/gi);
+
+            for (let i = 0; i < aArr.length && i < bArr.length; i++) {
+                const aEl = aArr[i];
+                const bEl = bArr[i];
+
+                if (isNaN(aEl) && isNaN(bEl)) {
+                    if (aEl < bEl) return -1;
+                    if (aEl > bEl) return 1;
+                } else if (!isNaN(aEl) && !isNaN(bEl)) {
+                    return aEl - bEl;
+                } else {
+                    return isNaN(aEl) ? 1 : -1;
+                }
+            }
+
+            return aArr.length - bArr.length;
+        });
+
+        state1.push(...state4);
         container = step.container_code;
     }
     // Lấy ngày
@@ -37,22 +76,31 @@ const OutboundList = (props) => {
     const [checkpalletright, setCheckpalletright] = useState(false);
     const [data, setData] = useState([]);
     const [misssave, setMisssave] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
     const [newmiss, setNewmiss] = useState(null);
+    const [arrange, setArrange] = useState(null);
+    const [nextClicked, setNextClicked] = useState(false); // biến cờ chỉ chạy lần đầu
     const [containerbowl, setContainerbowl] = useState(
         {
             codecontainervalidate: container,
             bowl: "",
         });
     const [newdata, setNewdata] = useState({
-        shelf: "",
         bar_code: "",
-        codecontainer: "",
-        product_name: "",
-        supplier_name: "",
+        shelf_code: "",
         category: "",
         quantity: 1,
         sku: "",
         unit: ""
+    });
+    const [show, setShow] = useState({
+        bar_code: "",
+        product_name: "",
+        sku: "",
+        quantity: ""
+    });
+    const [predata, setPredata] = useState({
+        shelfvalidate: "",
     });
     // Hàm xử lý
     const toggle = () => setCheckSquare(!checkSquare);
@@ -71,12 +119,41 @@ const OutboundList = (props) => {
             [id]: value
         }))
     }
+    const handleNext = () => {
+        if (currentIndex < state1.length - 1) {
+            setCurrentIndex(currentIndex + 1);
+            // setNextClicked(true); // Đặt giá trị của biến cờ khi nhấn nút Next
+        }
+        else {
+            setShow({
+                bar_code: "",
+                product_name: "",
+                sku: "",
+                quantity: ""
+            })
+            setPredata({
+                shelfvalidate: "",
+            })
+        }
+    };
+    const updateInputs = () => {
+        if (step) {
+            const currentData = state1[currentIndex];
+            setPredata({
+                shelfvalidate: currentData.shelf_code,
+            })
+        }
+    };
+    useEffect(() => {
+        updateInputs();
+        setNextClicked(true); // Đặt lại giá trị của biến cờ sau khi gọi hàm updateInputs
+    }, [currentIndex]);
     const checkexists = (item, pa) => {
         let dt = data;
         let check = false;
         // let productToUpdate = null; // sản phẩm cần được cập nhật quantity
         for (let i = 0; i < data.length; i++) {
-            if (dt[i].bar_code == item && dt[i].shelf == pa) {
+            if (dt[i].bar_code == item && dt[i].shelf_code == pa) {
                 let product = dt[i];
                 // let productToUpdate = state1.find(p => p.shelf_code == pa && p.bar_code == item);
                 // if (productToUpdate) {
@@ -103,18 +180,13 @@ const OutboundList = (props) => {
         }
         return check;
     }
-
     const allinfo = (item, pa) => {
         if (state1 && state1.length > 0) {
             const packageIndex = state1.findIndex((p) => p.shelf_code == pa);
-
             if (packageIndex !== -1) {
                 const productIndex = state1[packageIndex].products.findIndex((p) => p.bar_code == item);
-                console.log("vào gòi", state1[0].products);
-                console.log(newdata);
                 if (productIndex !== -1) {
                     const product = state1[packageIndex].products[productIndex];
-
                     const newdatainput = {
                         id: Math.floor(Math.random() * 199999999 + 1),
                         bar_code: newdata.bar_code,
@@ -124,13 +196,13 @@ const OutboundList = (props) => {
                         date: newdate,
                         sku: product.sku,
                         quantity: newdata.quantity,
-                        shelf: newdata.shelf,
+                        shelf_code: predata.shelfvalidate,
                         unit: product.unit
                     };
                     setData([...data, newdatainput]);
                     setNewdata({
                         bar_code: "",
-                        shelf: newdata.shelf,
+                        shelf_code: newdata.shelf_code,
                         codecontainer: newdata.codecontainer,
                         quantity: newdata.quantity,
                         unit: newdata.unit
@@ -143,7 +215,7 @@ const OutboundList = (props) => {
                 bar_code: "",
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
-                shelf: newdata.shelf,
+                shelf_code: newdata.shelf_code,
                 unit: newdata.unit
             });
         } else {
@@ -164,7 +236,7 @@ const OutboundList = (props) => {
             }
             setData([...data, newdatainput]);
             setNewdata({
-                shelf: newdata.shelf,
+                shelf_code: newdata.shelf_code,
                 bar_code: "",
                 codecontainer: newdata.codecontainer,
                 quantity: newdata.quantity,
@@ -179,16 +251,16 @@ const OutboundList = (props) => {
     const inputProduct = (e) => {
         // console.log(state1);
         e.preventDefault();
-        if (!newdata.bar_code || checkpalletright || checkcontainer || !newdata.shelf) {
+        if (!newdata.bar_code || checkpalletright || checkcontainer || !newdata.shelf_code) {
             toast.error("Missing info - The information is incorrect"); // in thông báo
             return;
         }
-        // let enough = check_enough(newdata.shelf); // check đủ rồi thì next
-        let isValid = checkexists(newdata.bar_code, newdata.shelf); // check trùng thì tăng lên
+        // let enough = check_enough(newdata.shelf_code); // check đủ rồi thì next
+        let isValid = checkexists(newdata.bar_code, newdata.shelf_code); // check trùng thì tăng lên
         if (isValid == true) {
             setData([...data]);
             setNewdata({
-                shelf: newdata.shelf,
+                shelf_code: newdata.shelf_code,
                 bar_code: "",
                 quantity: newdata.quantity,
                 codecontainer: newdata.codecontainer,
@@ -196,7 +268,7 @@ const OutboundList = (props) => {
             });
             return;
         }
-        allinfo(newdata.bar_code, newdata.shelf); //check có trong excel không
+        allinfo(newdata.bar_code, newdata.shelf_code); //check có trong excel không
     }
     const checksave = () => {
         if (step4.length > 0) {
@@ -209,7 +281,7 @@ const OutboundList = (props) => {
                 // Kiểm tra xem sản phẩm có trong biến data hay không dựa trên các thuộc tính
                 for (let j = 0; j < data.length; j++) {
                     if (step4[i].bar_code == data[j].bar_code &&
-                        step4[i].shelf_code == data[j].shelf &&
+                        step4[i].shelf_code == data[j].shelf_code &&
                         step4[i].supplier_name == data[j].supplier_name &&
                         step4[i].sku == data[j].sku) {
                         found = true;
@@ -247,7 +319,7 @@ const OutboundList = (props) => {
             // setMisssave(prevMisssave => [...prevMisssave, ...newmiss.map(item => ({ ...item }))]);
         }
         setNewdata({
-            shelf: "",
+            shelf_code: "",
             bar_code: "",
             quantity: newdata.quantity,
             codecontainer: newdata.codecontainer,
@@ -264,75 +336,65 @@ const OutboundList = (props) => {
             setIsBarcodeScanned(true);
         }
     };
-    // const checkPack = (event) => {
-    //     const packregex = /^[A-Za-z0-9]{12}$/;
-    //     if (packregex.test(event.target.value)) {
-    //         document.getElementById("bar_code").focus();
-    //     }
-    // }
     const checkpallet = (event) => {
         const palletregex = /^OB-\d{5}$/;
         if (palletregex.test(event.target.value)) {
             setCheckpalletright(false);
-            document.getElementById("shelf").focus();
+            document.getElementById("shelf_code").focus();
         }
         else {
             setCheckpalletright(true);
         }
     };
     const checkcontai = (event) => {
-        const contaitregex = new RegExp(containerbowl.codecontainervalidate + "$");
+        const contaitregex = new RegExp(predata.shelfvalidate + "$");
         if (contaitregex.test(event.target.value)) {
             setCheckcontainer(false);
+            document.getElementById("bar_code").focus();
         }
         else {
             setCheckcontainer(true);
         }
 
     }
-    // useEffect(() => {
-    //     if (checksquarepack) {
-    //         document.getElementById("shelf").focus();
-    //     }
-    // }, [checksquarepack]);
-    // useEffect(() => {
-    //     if (!checkcontainer) {
-    //         // nextinput.current.focus();
-    //         document.getElementById("bowl").focus();
-    //     }
-    // }, [checkcontainer]);
-    // useEffect(() => {
-    //     if (isBarcodeScanned) {
-    //         document.getElementById("btnnhapinput").click();
-    //         setIsBarcodeScanned(false);
-    //     }
-    // }, [isBarcodeScanned]);
-    // useEffect(() => {
-    //     if (step) {
-    //         const newMisssave = checksave();
-    //         setMisssave(newMisssave);
-    //     }
-    // }, [step, data]);
-    // useEffect(() => {
-    //     begininputRef.current.focus();
-    // }, []);
+    useEffect(() => {
+        if (checksquarepack) {
+            document.getElementById("shelf_code").focus();
+        }
+    }, [checksquarepack]);
+    useEffect(() => {
+        if (isBarcodeScanned) {
+            document.getElementById("btnnhapinput").click();
+            setIsBarcodeScanned(false);
+        }
+    }, [isBarcodeScanned]);
+    useEffect(() => {
+        if (step) {
+            const newMisssave = checksave();
+            setMisssave(newMisssave);
+        }
+    }, [step, data]);
+    useEffect(() => {
+        begininputRef.current.focus();
+    }, []);
+
     const [enough, setEnough] = useState(false);
     useEffect(() => {
         const checkEnough = (pa) => {
-            console.log(pa);
             let dt = data;
             const packageIndex = state1.findIndex(p => p.shelf_code == pa);
             if (packageIndex < 0) {
                 // Không tìm thấy shelf_code trong state1
                 return false;
             } else {
-                // Tính tổng số lượng các sản phẩm trong biến data có shelf trùng với pa
-                const products = dt.filter(p => p.shelf == pa);
+                // Tính tổng số lượng các sản phẩm trong biến data có shelf_code trùng với pa
+                const products = dt.filter(p => p.shelf_code == pa);
                 const productsQuantity = products.reduce((acc, cur) => acc + cur.quantity, 0);
                 if (productsQuantity >= state1[packageIndex].products.reduce((acc, cur) => acc + cur.quantity, 0)) {
+
                     setChecksquarepack(true);
                     setNewdata({
-                        shelf: "",
+                        shelf_code: "",
                         bar_code: "",
                         quantity: newdata.quantity,
                         codecontainer: newdata.codecontainer,
@@ -379,9 +441,32 @@ const OutboundList = (props) => {
                 }
             }
         };
-        const enough = state1.every((p) => checkEnough(newdata.shelf));
+        const enough = state1.every((p) => checkEnough(predata.shelfvalidate));
         setEnough(enough);
-    }, [data]);
+    }, [predata.shelfvalidate, data]);
+
+    useEffect(() => {
+        if (newmiss && newmiss.length > 0) {
+            setShow({
+                bar_code: newmiss[0].bar_code,
+                product_name: newmiss[0].product_name,
+                sku: newmiss[0].sku,
+                quantity: newmiss[0].quantity
+            })
+        }
+        if (!newmiss && nextClicked) {
+            handleNext();
+            setNewdata({
+                bar_code: "",
+                shelf_code: "",
+                quantity: 1,
+                sku: "",
+                unit: ""
+            })
+        }
+    }, [newmiss]);
+
+    // console.log("miss", newmiss);
     // console.log("miss tổng", misssave);
     // console.log(miss1);
     // console.log(state1);
@@ -412,52 +497,62 @@ const OutboundList = (props) => {
                                         <div className="col-md-4">
                                             <div className="form-group">
                                                 <label>Pallet</label>
-                                                <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} onInput={checkpallet} />
+                                                <input id="bowl" type="text" maxLength={MAX_PALLET_LENGTH} className="form-control" placeholder="Pallet" onChange={changeHandler2} onInput={checkpallet} ref={begininputRef} />
                                             </div>
                                             {checkpalletright ? <p style={{ color: "red" }}>* The pallet is invalid!</p> : <p></p>}
                                         </div>
                                         <div className="col-md-6">
                                             <div className="form-group">
-                                                <label>The position of the shelf</label>
-                                                <input id="shelfvalidate" type="text" value={newdata.shelfvalidate} className="form-control" placeholder="Shelf" disabled />
+                                                <label>The position of the shelf_code</label>
+                                                <input id="shelfvalidate" type="text" className="form-control" value={predata.shelfvalidate} placeholder="Shelf" onChange={changeHandler} disabled />
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                             <div className="form-group">
                                                 <label>Shelf</label>
-                                                <input id="shelf" type="text" className="form-control" value={newdata.shelf} placeholder="Shelf" onChange={changeHandler} />
+                                                <input id="shelf_code" type="text" className="form-control" value={newdata.shelf_code} placeholder="Shelf" onChange={changeHandler} onInput={checkcontai} />
+                                                {checkcontainer ? <p style={{ color: "red" }}>* Mismatched!</p> : <p></p>}
                                             </div>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-5">
                                             <div className="form-group">
                                                 <label>Product name</label>
-                                                <input id="productname" type="text" className="form-control" value={newdata.productname} placeholder="Product Name" disabled />
+                                                <input id="product_name" type="text" className="form-control" value={show.product_name} placeholder="Product Name" disabled />
                                             </div>
                                         </div>
-                                        <div className="col-md-4">
+                                        <div className="col-md-3">
                                             <div className="form-group">
                                                 <label>Product code</label>
-                                                <input id="productcode" type="text" className="form-control" value={newdata.productcode} placeholder="Product code" disabled />
+                                                <input id="productcode" type="text" className="form-control" value={show.bar_code} placeholder="Product code" disabled />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-2">
+                                            <div className="form-group">
+                                                <label>SKU</label>
+                                                <input id="SKU" type="text" className="form-control" value={show.sku} placeholder="Product code" disabled />
                                             </div>
                                         </div>
                                         <div className="col-md-2">
                                             <div className="form-group">
                                                 <label>Quantity</label>
-                                                <input id="quantity" type="number" value={newdata.quantity} className="form-control" placeholder="Number" disabled />
+                                                <input id="quantity" type="number" className="form-control" value={show.quantity} placeholder="Number" disabled />
                                             </div>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-8">
                                             <div className="form-group">
                                                 <label>Input Code Product</label>
-                                                <input id="bar_code" type="text" className="form-control" placeholder="Code-container" value={newdata.bar_code} onChange={changeHandler} onInput={checkBarcode} />
+                                                <input id="bar_code" type="text" className="form-control" value={newdata.bar_code} placeholder="Code-container" onChange={changeHandler} onInput={checkBarcode} />
                                             </div>
                                         </div>
                                         <div className="col-md-2">
                                             <button type="button" id="btnnhapinput" className="btn btn_nhap btn-block btn-success btn-lg" onClick={inputProduct}>Input</button>
                                         </div>
+                                        {/* <div className="col-md-2">
+                                            <button type="button" id="btnnhapinput1" className="btn btn_nhap btn-block btn-success btn-lg" onClick={handleNext}>Next</button>
+                                        </div> */}
                                         {
                                             newmiss ?
-                                                <div className="next col-md-1">
+                                                <div className="next col-md-2">
                                                     <NextIB misssave={newmiss} handlemissing={inputNext} />
                                                 </div>
                                                 : null
@@ -465,9 +560,16 @@ const OutboundList = (props) => {
                                     </div>
                                 </form>
                                 <hr></hr>
-                                <ShowListOB />
-                                {/* <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} /> */}
+                                <ShowListOB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
                                 <div style={{ float: "right" }} className="row">
+                                    <div className="btn-button">
+                                        {data && data.length > 0 ?
+                                            <>
+                                                <Button variant="warning" onClick={handlePrint}><span style={{ paddingRight: "5px" }}><FaPrint /></span> Print</Button>
+                                                <CheckOB misssave={misssave} inbound={data} container={containerbowl} orderid={orderid} />
+                                            </>
+                                            : null}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -490,4 +592,3 @@ const OutboundList = (props) => {
     )
 }
 export default OutboundList;
-// ref={inputbill}

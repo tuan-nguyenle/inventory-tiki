@@ -24,8 +24,16 @@ export const transfershelf = async (data) => {
 }
 export const getallshelf = async () => {
     try {
-        const response = await axios.get('link');
-        return response.data.shelve;
+        const response = await axios.get('http://localhost/api/warehouse/shelf');
+        return response.data.data;
+    } catch (error) {
+        throw error;
+    }
+}
+export const searchproduct = async (id, sup) => {
+    try {
+        const response = await axios.get(`http://localhost/api/warehouse/shelf?bar_code=${id}&supplier_name=${sup}`)
+        return response.data.data;
     } catch (error) {
         throw error;
     }

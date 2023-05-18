@@ -10,6 +10,7 @@ import Addshelve from "./modalIC/Addshelve";
 import Addshelfrow from "./modalIC/Addshelverow";
 const ShelfManagement = () => {
     const [datashelf, setDatashelf] = useState(null);
+    const [locshelf, setLocshelf] = useState(null);
     useEffect(() => {
         (async () => {
             try {
@@ -20,6 +21,34 @@ const ShelfManagement = () => {
             }
         })();
     }, [])
+    useEffect(() => {
+        if (datashelf && datashelf.length > 0) {
+            let filteredShelves = Object.values(datashelf).filter(obj => obj.shelf_code.length > 3);
+
+            let sortedShelves = filteredShelves.sort((a, b) => {
+                const aArr = a.shelf_code.match(/[a-z]+|\d+/gi);
+                const bArr = b.shelf_code.match(/[a-z]+|\d+/gi);
+
+                for (let i = 0; i < aArr.length && i < bArr.length; i++) {
+                    const aEl = aArr[i];
+                    const bEl = bArr[i];
+
+                    if (isNaN(aEl) && isNaN(bEl)) {
+                        if (aEl < bEl) return -1;
+                        if (aEl > bEl) return 1;
+                    } else if (!isNaN(aEl) && !isNaN(bEl)) {
+                        return aEl - bEl;
+                    } else {
+                        return isNaN(aEl) ? 1 : -1;
+                    }
+                }
+
+                return aArr.length - bArr.length;
+            });
+
+            setLocshelf(sortedShelves);
+        }
+    }, [datashelf])
     return (
         <div className="shelfmanagement_body">
             <div className="container-shelfmanagement">
@@ -51,12 +80,13 @@ const ShelfManagement = () => {
                                             <tr>
                                                 <th>STT</th>
                                                 <th>Area</th>
+                                                <th>Shelf Row</th>
                                                 <th>Shelf</th>
                                                 <th style={{ width: "200px" }} >Extends</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            {/* <tr>
                                                 <td>1</td>
                                                 <td>A</td>
                                                 <td>A1A1</td>
@@ -64,16 +94,25 @@ const ShelfManagement = () => {
                                                     <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
                                                     <Button variant="danger"><span style={{ paddingRight: "5px" }} ><FaTimes /></span>Delete</Button>{' '}
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>A</td>
-                                                <td>A1A2</td>
-                                                <td>
-                                                    <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
-                                                    <Button variant="danger"><span style={{ paddingRight: "5px" }}><FaTimes /></span>Delete</Button>{' '}
-                                                </td>
-                                            </tr>
+                                            </tr> */}
+                                            {
+
+                                                locshelf && locshelf.length > 0 && locshelf.map((data, i) => {
+                                                    return (
+                                                        <tr key={data._id}>
+                                                            <td>{i + 1}</td>
+                                                            <td>{data.shelf_code.slice(0, 1)}</td>
+                                                            {/* <td style={{ maxWidth: "200px", wordBreak: "break-all", whiteSpace: "pre-wrap" }}>{data.product_name}</td> */}
+                                                            <td>{data.shelf_code.slice(0, 2)}</td>
+                                                            <td>{data.shelf_code}</td>
+                                                            <td>
+                                                                <Button variant="warning"><span style={{ paddingRight: "5px" }}><FaPrint /></span>Print</Button>{' '}
+                                                                <Button variant="danger"><span style={{ paddingRight: "5px" }} ><FaTimes /></span>Delete</Button>{' '}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
