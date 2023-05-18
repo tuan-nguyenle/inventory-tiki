@@ -1,22 +1,94 @@
-import React, { useState } from "react";
+import { React, useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
+import * as ICAPI from "../../../services/ICAPI";
 import {
     FaSearch
 } from "react-icons/fa";
-import UpdateQuantity from "./UpdateQuantity";
+import Productinshelf from "../modalIC/Productinshelf";
 const ShelfInformation = () => {
-    const [edit, setEdit] = useState(false);
-    const changeIconedit = () => setEdit(!edit);
-    const changechild = () => {
-        setEdit(!edit)
-        toast.success("Add Success"); // in thông báo
+
+    const [shelf, setShelf] = useState(null)
+    const [locshelf, setLocshelf] = useState([]);
+    const [searchshelf, setSearchshelf] = useState([]);
+
+    const [search, setSeach] = useState({
+        textsearch: ""
+    })
+    useEffect(() => {
+        (async () => {
+            try {
+                let getshelf = await ICAPI.getallshelf();
+                setShelf(getshelf)
+            } catch (error) {
+                setShelf(null)
+            }
+        })();
+    }, [])
+
+    const changeHandler = async (e) => {
+        const { id, value } = e.target
+        setSeach(prevState => ({
+            ...prevState,
+            [id]: value
+        }
+        ))
+        if (!value) {
+            setSearchshelf(locshelf);
+        }
+        filterShelfBySearch(value);
     }
+    console.log(locshelf);
+    useEffect(() => {
+        if (shelf && shelf.length > 0) {
+            let filteredShelves = Object.values(shelf).filter(obj => obj.shelf_code.length > 3);
+
+            let sortedShelves = filteredShelves.sort((a, b) => {
+                const aArr = a.shelf_code.match(/[a-z]+|\d+/gi);
+                const bArr = b.shelf_code.match(/[a-z]+|\d+/gi);
+
+                for (let i = 0; i < aArr.length && i < bArr.length; i++) {
+                    const aEl = aArr[i];
+                    const bEl = bArr[i];
+
+                    if (isNaN(aEl) && isNaN(bEl)) {
+                        if (aEl < bEl) return -1;
+                        if (aEl > bEl) return 1;
+                    } else if (!isNaN(aEl) && !isNaN(bEl)) {
+                        return aEl - bEl;
+                    } else {
+                        return isNaN(aEl) ? 1 : -1;
+                    }
+                }
+
+                return aArr.length - bArr.length;
+            });
+
+            setLocshelf(sortedShelves);
+            setSearchshelf(sortedShelves);
+        }
+    }, [shelf])
+
+    const filterShelfBySearch = (value) => {
+        const textsearch = value;
+        // Chuyển đổi textsearch thành chuỗi viết thường và loại bỏ khoảng trắng
+        const searchValue = textsearch.toLowerCase().trim();
+
+        // Sử dụng hàm filter để lọc các đối tượng có shelf_code giống từng ký tự trong searchValue
+        const filteredShelf = locshelf.filter(item => {
+            const { shelf_code } = item;
+            const shelfCode = shelf_code.toLowerCase();
+
+            return shelfCode.startsWith(searchValue);
+        });
+
+        setSearchshelf(filteredShelf);
+    };
     return (
         <>
             <div className="shelfinformation_body">
                 <div className="search input-group col-md-6">
-                    <input type="text" className="form-control" placeholder="Ex: A12B1" aria-label="Recipient's username" aria-describedby="basic-addon2" />
+                    <input type="text" id="textsearch" className="form-control" placeholder="Ex: A1.1" aria-label="Recipient's username" aria-describedby="basic-addon2" onChange={changeHandler} />
                     <div className="input-group-append">
                         <Button variant="primary"><FaSearch /></Button>
                     </div>
@@ -29,48 +101,25 @@ const ShelfInformation = () => {
                                     <thead>
                                         <tr>
                                             <th>STT</th>
+                                            <th>Shelf Row</th>
                                             <th>Shelf</th>
-                                            <th>Product Name</th>
-                                            <th>Product Code</th>
-                                            <th>Supplier</th>
-                                            <th>Quantity</th>
                                             <th style={{ width: "10%" }}>Extends</th>
                                         </tr>
                                     </thead>
                                     <tbody id="datarow">
-                                        <tr>
-                                            <td>1</td>
-                                            <td>A12B1</td>
-                                            <td>Thùng tu vít 2 đầu thùng 300 cái</td>
-                                            <td>102</td>
-                                            <td>1</td>
-                                            <td>20</td>
-                                            <td>
-                                                {edit ?
-                                                    <>
-                                                        {/* {data.id === item.id && */}
-                                                        <div style={{ padding: "0px", }}>
-                                                            < div style={{ display: "flex" }}>
-                                                                <div style={{ paddingRight: "5px", paddingLeft: "0px" }} className="col-sm-7 col-md-7">
-                                                                    <input type="text" className="form-control" value="20" />
-                                                                </div>
-                                                                <div style={{ paddingLeft: "1px" }} className="col-sm-5 col-md-5">
-                                                                    {/* <Button variant="success" onClick={changeIconedit}>Save</Button> */}
-                                                                    <UpdateQuantity changechild={changechild} />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        {/* } */}
-                                                    </>
-                                                    :
-                                                    <div>
-                                                        <Button style={{ marginRight: "5px" }} variant="warning" onClick={changeIconedit}>Quantity</Button>
-                                                        <Button variant="danger">Defect</Button>
-                                                    </div>
-
-                                                }
-                                            </td>
-                                        </tr>
+                                        {
+                                            searchshelf && searchshelf.length > 0 && searchshelf.map((data, i) => {
+                                                return (
+                                                    <tr style={{ cursor: "pointer" }} key={data._id}>
+                                                        <td>{i + 1}</td>
+                                                        <td>{data.shelf_code.slice(0, 2)}</td>
+                                                        <td>{data.shelf_code}</td>
+                                                        <td>
+                                                            <Productinshelf data={data} />
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
                                     </tbody>
                                 </table>
                             </div>

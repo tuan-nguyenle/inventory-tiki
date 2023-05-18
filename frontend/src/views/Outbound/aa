@@ -1,30 +1,3 @@
-{
-    "container_code": "STRONGBERI2333 ",
-    "_id": "64618f454123213123123123",
-    "shelve": [
-        {
-            "shelf_code": "A1.1",
-            "products": [
-                {
-                    "bar_code": 2663665987651,
-                    "product_name": "Asus Zenbook 14 UX425EA",
-                    "category": "Laptop",
-                    "quantity": 2,
-                    "supplier_name": "FPT Company",
-                    "sku": "A234",
-                    "unit": "pieces"
-                },
-                {
-                    "bar_code": 8663332355234,
-                    "product_name": "Intel Core i9-11900K",
-                    "category": "Computer",
-                    "quantity": 1,
-                    "supplier_name": "FPT Company",
-                    "sku": "A342",
-                    "unit": "pieces"
-                }
-            ]
-        },
         {
             "shelf_code": "B1.1",
             "products": [
@@ -131,5 +104,3 @@
                 }
             ]
         }
-    ]
-}
