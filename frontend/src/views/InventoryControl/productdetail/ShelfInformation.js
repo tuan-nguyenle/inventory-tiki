@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import * as ICAPI from "../../../services/ICAPI";
 import {
     FaSearch
@@ -10,7 +10,11 @@ const ShelfInformation = () => {
 
     const [shelf, setShelf] = useState(null)
     const [locshelf, setLocshelf] = useState([]);
+    const [searchshelf, setSearchshelf] = useState([]);
 
+    const [search, setSeach] = useState({
+        textsearch: ""
+    })
     useEffect(() => {
         (async () => {
             try {
@@ -21,6 +25,20 @@ const ShelfInformation = () => {
             }
         })();
     }, [])
+
+    const changeHandler = async (e) => {
+        const { id, value } = e.target
+        setSeach(prevState => ({
+            ...prevState,
+            [id]: value
+        }
+        ))
+        if (!value) {
+            setSearchshelf(locshelf);
+        }
+        filterShelfBySearch(value);
+    }
+    console.log(locshelf);
     useEffect(() => {
         if (shelf && shelf.length > 0) {
             let filteredShelves = Object.values(shelf).filter(obj => obj.shelf_code.length > 3);
@@ -47,14 +65,30 @@ const ShelfInformation = () => {
             });
 
             setLocshelf(sortedShelves);
+            setSearchshelf(sortedShelves);
         }
     }, [shelf])
-    console.log(shelf);
+
+    const filterShelfBySearch = (value) => {
+        const textsearch = value;
+        // Chuyển đổi textsearch thành chuỗi viết thường và loại bỏ khoảng trắng
+        const searchValue = textsearch.toLowerCase().trim();
+
+        // Sử dụng hàm filter để lọc các đối tượng có shelf_code giống từng ký tự trong searchValue
+        const filteredShelf = locshelf.filter(item => {
+            const { shelf_code } = item;
+            const shelfCode = shelf_code.toLowerCase();
+
+            return shelfCode.startsWith(searchValue);
+        });
+
+        setSearchshelf(filteredShelf);
+    };
     return (
         <>
             <div className="shelfinformation_body">
                 <div className="search input-group col-md-6">
-                    <input type="text" className="form-control" placeholder="Ex: A12B1" aria-label="Recipient's username" aria-describedby="basic-addon2" />
+                    <input type="text" id="textsearch" className="form-control" placeholder="Ex: A1.1" aria-label="Recipient's username" aria-describedby="basic-addon2" onChange={changeHandler} />
                     <div className="input-group-append">
                         <Button variant="primary"><FaSearch /></Button>
                     </div>
@@ -74,7 +108,7 @@ const ShelfInformation = () => {
                                     </thead>
                                     <tbody id="datarow">
                                         {
-                                            locshelf && locshelf.length > 0 && locshelf.map((data, i) => {
+                                            searchshelf && searchshelf.length > 0 && searchshelf.map((data, i) => {
                                                 return (
                                                     <tr style={{ cursor: "pointer" }} key={data._id}>
                                                         <td>{i + 1}</td>

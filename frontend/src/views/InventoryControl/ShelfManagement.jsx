@@ -11,7 +11,6 @@ import Addshelfrow from "./modalIC/Addshelverow";
 const ShelfManagement = () => {
     const [datashelf, setDatashelf] = useState(null);
     const [locshelf, setLocshelf] = useState(null);
-    const arrange = [];
     useEffect(() => {
         (async () => {
             try {
@@ -50,8 +49,6 @@ const ShelfManagement = () => {
             setLocshelf(sortedShelves);
         }
     }, [datashelf])
-    console.log(datashelf);
-    console.log(locshelf);
     return (
         <div className="shelfmanagement_body">
             <div className="container-shelfmanagement">

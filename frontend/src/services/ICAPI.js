@@ -30,6 +30,14 @@ export const getallshelf = async () => {
         throw error;
     }
 }
+export const searchproduct = async (id, sup) => {
+    try {
+        const response = await axios.get(`http://localhost/api/warehouse/shelf?bar_code=${id}&supplier_name=${sup}`)
+        return response.data.data;
+    } catch (error) {
+        throw error;
+    }
+}
 // export const getproducts = async (id) => {
 //     try {
 //         const response = await axios.post(`http://localhost/api/warehouse/pallets/${id}`);
