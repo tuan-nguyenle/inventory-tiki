@@ -9,10 +9,16 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { ProductCreatedListener } from "./event/listener/ProductCreatedListener";
 
+// import http from "http";
+// import * as sockjs from "sockjs";
+
 const app = express();
 const HOST = "8081";
-dotenv.config();
 
+// const server = http.createServer(app);
+// const sockjsServer = sockjs.createServer();
+
+dotenv.config();
 app.set("trust proxy", true);
 
 app.use(cors());
@@ -40,6 +46,7 @@ app.use(errorsHandler);
 
 const start = async () => {
   console.clear();
+
   if (
     !process.env.ACCESS_TOKEN_PUBLIC_KEY ||
     !process.env.ACCESS_TOKEN_PRIVATE_KEY

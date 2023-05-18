@@ -27,7 +27,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.11-management
-    container_name: 'rabbitmq'
+    restart: always # because it is routing traffic to our entire app
     ports:
       - 5673:5672
       - 15673:15672
@@ -96,6 +96,25 @@ services:
       - inventory_tiki
     stdin_open: true
     tty: true
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    networks:
+      - inventory_tiki
+    environment:
+      WATCHPACK_POLLING: "${WATCHPACK_POLLING}"
+      CHOKIDAR_USEPOLLING: "${CHOKIDAR_USEPOLLING}"
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app/
+    restart: on-failure
+    stdin_open: true
+    tty: true
+
   warehouse:
     build:
       context: ./warehouse

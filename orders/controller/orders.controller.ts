@@ -5,6 +5,7 @@ import { validationResult } from "express-validator";
 import { RequestValidationError } from "@microservies-inventory/common";
 import mongoose from "mongoose";
 import { OrdersCreatedRequestInsetedProductToPalletPublisher } from "../event/publisher/OrderRequestInsertedToPallet";
+import { OrdersExportCreatedPublisher } from "../event/publisher/OrdersExportCreatedPublisher";
 
 export const viewAllOrders = async (req: Request, res: Response) => {
   const listOrders = await Order.viewAllOrders();
@@ -16,6 +17,15 @@ export const insertOrders = async (req: Request, res: Response) => {
 
   if (!errors.isEmpty()) {
     throw new RequestValidationError(errors.array());
+  }
+
+  if (req.body.order_type === "Warehouse Export") {
+    new OrdersExportCreatedPublisher('amqp://guest:guest@rabbitmq:5672', 'OrdersOutbound', 'fanout', 'inventory-tiki')
+      .publishMessage({ products: req.body.packages[0].products });
+
+    return res.status(201).send({
+      message: "hello"
+    });
   }
 
   const order = await Order.insertOrder(req.body);

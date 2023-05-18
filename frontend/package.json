@@ -24,6 +24,7 @@
     "react-toastify": "9.1.1",
     "reactstrap": "^9.1.6",
     "sass": "^1.57.1",
+    "sockjs-client": "^1.6.1",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },
