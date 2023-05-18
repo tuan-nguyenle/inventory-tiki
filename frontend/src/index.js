@@ -20,7 +20,7 @@ if (getuser) {
 }
 root.render(
   <>
-    {!getuser && !session && <Login />}
+    {/* {!getuser && !session && <Login />}
     {session && session.departments && session.roles &&
       session.departments.some(dept => dept.description === "inbound") &&
       session.roles.some(role => role.description === "manager") &&
@@ -32,9 +32,9 @@ root.render(
     {session && session.departments && session.roles &&
       session.departments.some(dept => dept.description === "outbound") &&
       session.roles.some(role => role.description === "manager") &&
-      <NavOB />}
+      <NavOB />} */}
 
-
+    <NavOB />
 
     {/* <Error /> */}
     <ToastContainer

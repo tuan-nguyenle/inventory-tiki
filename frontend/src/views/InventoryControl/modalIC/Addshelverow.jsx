@@ -19,14 +19,12 @@ const Addshelfrow = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
     const [newdata, setNewdata] = useState({
-        name_pallet: "",
-        area: "Inbound",
-        type: "Metal",
-        weight: "800",
-        length: "100",
-        width: "100",
-        height: "120",
+        area: "A",
+        shelf_row: "",
 
+    });
+    const [newdatab, setNewdatab] = useState({
+        shelf_detail: newdata.area + newdata.shelf_row
     });
 
     const handlechangeinfo = (e) => {
@@ -36,6 +34,12 @@ const Addshelfrow = (props) => {
             [id]: value
         }))
     };
+    useEffect(() => {
+        setNewdatab({
+            shelf_detail: newdata.area + newdata.shelf_row
+        })
+    }, [newdata])
+    console.log();
     const checkvalue = () => {
         let isValid = true;
         let arrInput = ["name_pallet", "area", "type", "length", "width", "height", "weight"];
@@ -99,9 +103,6 @@ const Addshelfrow = (props) => {
             <Modal isOpen={modal} toggle={() => toggle()} {...props} className="modal-add">
                 <ModalHeader toggle={() => toggle()} className="modal-header" >Add New Shelf Row</ModalHeader>
                 <ModalBody>
-                    <button onClick={() => toggleModalA()}>Shelf</button>
-                    <button onClick={() => toggleModalB()}>Shelf Row</button>
-                    <hr></hr>
                     <form>
                         <div className="row">
                             {/* <div className="col-12">
@@ -109,34 +110,25 @@ const Addshelfrow = (props) => {
                                     <input id="area" value="Inbound" type="hidden" />
                                 </div>
                             </div> */}
-                            <div className="col-4">
+                            <div className="col-6">
                                 <div className="form-group">
                                     <label><b>Choose Area</b></label>
                                     <select id="area" onChange={handlechangeinfo} className="form-control">
-                                        <option value="Metal">A</option>
-                                        <option value="Wood">B</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
                                     </select>
                                 </div>
                             </div>
-                            <div className="col-4">
+                            <div className="col-6">
                                 <div className="form-group">
-                                    <label><b>Shlef Row</b></label>
-                                    <select id="area" onChange={handlechangeinfo} className="form-control">
-                                        <option value="Metal">A1</option>
-                                        <option value="Wood">A2</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-4">
-                                <div className="form-group">
-                                    <label><b>Shelf Numer</b></label>
-                                    <input id="name_pallet" value={newdata.name_pallet} maxLength={MAX_SHELVE_LENGTH} onChange={handlechangeinfo} type="text" className="form-control" placeholder="1-20" />
+                                    <label><b>Shelf Row</b></label>
+                                    <input id="shelf_row" value={newdata.shelf_row} maxLength={MAX_SHELVE_LENGTH} onChange={handlechangeinfo} type="text" className="form-control" placeholder="1-60" />
                                 </div>
                             </div>
                             <div className="col-12">
                                 <div className="form-group">
                                     <label><b>Shelf Detail</b></label>
-                                    <input id="name_pallet" value={newdata.name_pallet} maxLength={MAX_SHELVE_LENGTH} type="text" className="form-control" placeholder="A1.1" disabled />
+                                    <input id="shelf_detail" value={newdatab.shelf_detail} maxLength={MAX_SHELVE_LENGTH} type="text" className="form-control" placeholder="A1.1" disabled />
                                 </div>
                             </div>
                         </div>
