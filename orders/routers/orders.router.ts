@@ -1,14 +1,13 @@
 import express from "express";
 import * as OrderController from "../controller/orders.controller";
-import { requireAuthor } from "@microservies-inventory/common";
 const router = express.Router();
 
-router.post("/api/orders", requireAuthor, OrderController.insertOrders);
+router.post("/api/orders", OrderController.insertOrders);
 
-router.get("/api/orders", requireAuthor, OrderController.viewAllOrders);
+router.get("/api/orders", OrderController.viewAllOrders);
 
-router.post("/api/orders/:id", requireAuthor, OrderController.checkOrder);
+router.post("/api/orders/:id", OrderController.checkOrder);
 
-router.get("/api/orders/:id", requireAuthor, OrderController.getDetailOrder);
+router.get("/api/orders/:id", OrderController.getDetailOrder);
 
 export { router as ordersRouter };
