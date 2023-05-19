@@ -57,7 +57,7 @@ const start = async () => {
   }
 
   app.listen(HOST, () => {
-    console.log(`🟢  Services Orders Listening on port ${HOST}`);
+    console.log(`🚀  Services Orders Listening on port ${HOST}`);
   });
 };
 

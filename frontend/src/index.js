@@ -11,6 +11,8 @@ import NavOB from './routes/NavOB';
 import Error from './views/Error';
 import Login from './views/Account/Login';
 import jwt_decode from "jwt-decode";
+import io from 'socket.io-client';
+const socket = io('http://localhost:8081');
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const getuser = JSON.parse(sessionStorage.getItem('user'));
 let session = null;

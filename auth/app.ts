@@ -59,7 +59,7 @@ const start = async () => {
     console.error(err);
   }
   app.listen(HOST, () => {
-    console.log(`🟢  Services Authencation Listening on port ${HOST}`);
+    console.log(`🚀  Services Authencation Listening on port ${HOST}`);
   });
 };
 
