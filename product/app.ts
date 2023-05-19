@@ -1,22 +1,32 @@
 import "express-async-errors";
+import dotenv from "dotenv";
+import cors from "cors";
 import express from "express";
 import SessionCookie from "cookie-session";
 import { json } from "body-parser";
 import { routes } from "./routers";
 import { NotFoundError, errorsHandler } from "@microservies-inventory/common";
 import { ConnectDB } from "./config/mongodb";
-import dotenv from "dotenv";
-import cors from "cors";
 import { ProductCreatedListener } from "./event/listener/ProductCreatedListener";
-
-// import http from "http";
-// import * as sockjs from "sockjs";
+import { createServer } from "http";
+import { Server } from 'socket.io';
+import SocketServices from "./utils/SocketServices";
 
 const app = express();
 const HOST = "8081";
 
-// const server = http.createServer(app);
-// const sockjsServer = sockjs.createServer();
+declare global {
+  var _io: Server;
+}
+
+const http = createServer(app);
+const io: Server = new Server(http, {
+  cors: {
+    origin: 'http://localhost',
+    methods: ['GET', 'POST']
+  }
+});
+global._io = io;
 
 dotenv.config();
 app.set("trust proxy", true);
@@ -65,13 +75,19 @@ const start = async () => {
   }
 
   try {
+    global._io.on('connection', SocketServices.connection);
+  } catch (error) {
+    console.log(error);
+  }
+
+  try {
     new ProductCreatedListener('amqp://guest:guest@rabbitmq:5672', 'Product', 'fanout', 'inventory-tiki').consumeMessages();
   } catch (err) {
     console.log(err);
   }
 
-  app.listen(HOST, () => {
-    console.log(`🟢  Listening on port ${HOST}`);
+  http.listen(HOST, () => {
+    console.log(`🚀  Listening on port ${HOST}`);
   });
 };
 
