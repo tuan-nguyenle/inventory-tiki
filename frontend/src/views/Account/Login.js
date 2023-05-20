@@ -33,9 +33,10 @@ function Login() {
     const callAPIlogin = async () => {
         try {
             let a = await handleLoginAPI(account);
+            console.log(a);
             if (a && !err.errmess) {
                 sessionStorage.setItem('user', JSON.stringify(a));
-                // var decoded = jwt_decode(a); /
+                // var decoded = jwt_decode(a);
                 // console.log(decoded);
                 window.location.href = "/";
             }

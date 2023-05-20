@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import io from 'socket.io-client';
 import './styles/global.scss';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,28 +12,31 @@ import NavOB from './routes/NavOB';
 import Error from './views/Error';
 import Login from './views/Account/Login';
 import jwt_decode from "jwt-decode";
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const getuser = JSON.parse(sessionStorage.getItem('user'));
+
+let Role = null;
+let Department = null;
 let session = null;
+
 if (getuser) {
-  // session = jwt_decode(getuser);
-  session = getuser;
+  const socket = io.connect('http://localhost:8081');
+  socket.on("notify",(data)=>{
+    alert(data.msg);
+    console.log(data.msg);
+  })
+  session = jwt_decode(getuser);
+  Role = session.Role[0].description;
+  Department = session.Department[0].description;
 }
+
 root.render(
   <>
     {!getuser && !session && <Login />}
-    {session && session.departments && session.roles &&
-      session.departments.some(dept => dept.description === "inbound") &&
-      session.roles.some(role => role.description === "manager") &&
-      <NavIB />}
-    {session && session.departments && session.roles &&
-      session.departments.some(dept => dept.description === "inventory-control") &&
-      session.roles.some(role => role.description === "manager") &&
-      <NavIC />}
-    {session && session.departments && session.roles &&
-      session.departments.some(dept => dept.description === "outbound") &&
-      session.roles.some(role => role.description === "manager") &&
-      <NavOB />}
+    {session && Department === "inbound" && Role === "manager" && <NavIB />}
+    {session && Department === "inventory-control" && Role === "manager" && <NavIC />}
+    {session && Department === "outbound" && Role === "manager" && <NavOB />}
 
     {/* <NavOB /> */}
 

@@ -2,7 +2,7 @@ import { ProductDetail } from "../models/product_detail.model";
 import { findOneSupplier } from "./supplier.services";
 
 export const searchDetailProduct = async (data: Record<string, any>) => {
-    return ProductDetail.findOne({ data });
+    return ProductDetail.findOne({ ...data });
 };
 
 export const insertDetailProduct = async (data: Record<string, any>) => {

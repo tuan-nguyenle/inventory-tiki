@@ -6,6 +6,7 @@ import { RequestValidationError } from "@microservies-inventory/common";
 import mongoose from "mongoose";
 import { OrdersCreatedRequestInsetedProductToPalletPublisher } from "../event/publisher/OrderRequestInsertedToPallet";
 import { OrdersExportCreatedPublisher } from "../event/publisher/OrdersExportCreatedPublisher";
+import { ProductStatusCheckedListener } from "../event/listener/ProductStatusCheckedListener";
 
 export const viewAllOrders = async (req: Request, res: Response) => {
   const listOrders = await Order.viewAllOrders();
@@ -22,9 +23,17 @@ export const insertOrders = async (req: Request, res: Response) => {
   if (req.body.order_type === "Warehouse Export") {
     new OrdersExportCreatedPublisher('amqp://guest:guest@rabbitmq:5672', 'OrdersOutbound', 'fanout', 'inventory-tiki')
       .publishMessage({ products: req.body.packages[0].products });
-
+    new ProductStatusCheckedListener('amqp://guest:guest@rabbitmq:5672', 'ProductChecked', 'fanout', 'inventory-tiki')
+      .consumeMessages().then((message) => {
+        if (message.status === true) {
+          Order.insertOrder(req.body);
+        }
+      })
+      .catch((error) => {
+        console.error(error); // Handle any errors that occurred during consumption
+      });
     return res.status(201).send({
-      message: "hello"
+      message: "Waiting to check condition ...",
     });
   }
 

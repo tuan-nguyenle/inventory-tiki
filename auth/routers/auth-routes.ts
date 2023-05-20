@@ -1,5 +1,5 @@
 import "express-async-errors";
-import express from "express";
+import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import {
   requireAuthor,
@@ -7,6 +7,7 @@ import {
 } from "@microservies-inventory/common/build";
 import * as userController from "../controller/user.controller";
 import * as departmentController from "../controller/department.controller";
+import { Role } from "../models/account/role.model";
 
 const router = express.Router();
 
@@ -18,15 +19,13 @@ router.post(
 );
 
 // Add new New Role
-// router.post(
-//   "/roles",
-//   // [body("department").trim().isLength({ min: 4, max: 25 })],
-//   async () => {
-//     await new Role({
-//       description: "manager",
-//     }).save();
-//   }
-// );
+router.post(
+  "api/auth/role", (req: Request, res: Response) => {
+    new Role({
+      description: req.body.role || null,
+    }).save();
+  }
+);
 
 // Login
 

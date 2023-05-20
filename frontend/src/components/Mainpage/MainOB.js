@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, Link, Outlet } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg"
+import axios from "axios";
 import avatar from "../../assets/images/Avatar/long.jpg";
 import {
     FaBell, FaWarehouse, FaEdit, FaBars, FaUser, FaTh, FaSignOutAlt, FaBarcode, FaCheckDouble, FaUsers
@@ -54,6 +55,7 @@ const MainIB = () => {
         }
     ]
     function handleLogout() {
+        axios.post("http://localhost/api/auth/users/logout/");
         sessionStorage.removeItem('user');
         // window.location.reload();
         window.location.href = '/login';

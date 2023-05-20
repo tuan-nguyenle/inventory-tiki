@@ -1,6 +1,6 @@
 {
   "name": "@microservies-inventory/common",
-  "version": "2.0.38",
+  "version": "2.0.39",
   "description": "",
   "main": "./build/index.js",
   "files": [
