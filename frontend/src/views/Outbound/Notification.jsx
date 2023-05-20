@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as IBAPI from "../../services/IBAPI";
 import * as OBAPI from "../../services/OBAPI";
 import fakeoutlist from "./fakeoutlist.json"
+import ChatGPT from "./GPT/ChatGPT";
 const Notification = () => {
     const navigate = useNavigate();
     const [allnotifi, setAllnotifi] = useState(null);
@@ -190,6 +191,14 @@ const Notification = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div>
+                <textarea name="myText" id="myText" rows="5" cols="50">
+                    "A1A1", "A12B4", "A1A2", "A1A4", "B8A44", "C33A12",
+                    "A55C22", "B13A2", "B2D54", "C32A12"
+                    Tính theo thứ tự từ trái qua phải , là chữ cái thì sắp xếp tăng dần theo alphabet, là số thì xếp theo thứ tự tăng dần
+                    Chia danh sách kệ trên thành các list nhỏ, mỗi danh sách gồm tối thiểu 1 kệ và tối đa là 3 kệ</textarea>
+                <ChatGPT />
             </div>
         </div >
     );
