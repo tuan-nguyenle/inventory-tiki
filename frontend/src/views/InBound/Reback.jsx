@@ -111,7 +111,7 @@ const Reback = (props) => {
         setData(state);
     }, [state]);
     const SaveReback = async () => {
-        window.location.assign("http://localhost:3000/MainIB/Notification");
+        window.location.assign("http://localhost/MainIB/ConfirmationInbound");
         toast.success("Saving process has been completed"); // in thông báo
     }
     return (

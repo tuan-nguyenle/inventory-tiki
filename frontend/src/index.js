@@ -22,7 +22,7 @@ let session = null;
 
 if (getuser) {
   const socket = io.connect('http://localhost:8081');
-  socket.on("notify",(data)=>{
+  socket.on("notify", (data) => {
     alert(data.msg);
     console.log(data.msg);
   })
@@ -34,14 +34,14 @@ if (getuser) {
 root.render(
   <>
     {!getuser && !session && <Login />}
-    {session && Department === "inbound" && Role === "manager" && <NavIB />}
-    {session && Department === "inventory-control" && Role === "manager" && <NavIC />}
-    {session && Department === "outbound" && Role === "manager" && <NavOB />}
+    {session && Department === "Inbound" && Role === "manager" && <NavIB />}
+    {session && Department === "Inventory-control" && Role === "manager" && <NavIC />}
+    {session && Department === "Outbound" && Role === "manager" && <NavOB />}
 
     {/* <NavOB /> */}
 
     {/* <Error /> */}
-    <ToastContainer
+    < ToastContainer
       position="top-right"
       autoClose={3000}
       hideProgressBar={false}

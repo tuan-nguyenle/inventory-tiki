@@ -3,11 +3,38 @@ import { FaSearch, FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import "../../styles/inbound.scss";
 import { Link, useNavigate } from "react-router-dom";
 import * as IBAPI from "../../services/IBAPI";
+import * as OBAPI from "../../services/OBAPI";
 import fakeoutlist from "./fakeoutlist.json"
 const Notification = () => {
     const navigate = useNavigate();
     const [allnotifi, setAllnotifi] = useState(null);
     const [notifiun, setNotifiun] = useState(null);
+    const getProduct = async (event, products) => {
+        event.preventDefault(); // Ngăn chặn sự kiện mặc định khi click vào link
+        if (products) {
+            const a = [];
+            products[0].products.forEach(product => {
+                const { _id, ...rest } = product;
+                a.push(rest);
+            });
+            if (a) {
+                let b = {
+                    products: a
+                }
+                try {
+                    let response = await OBAPI.sendproducts(b)
+                    if (response) {
+                        // console.log(response);
+                        navigate('/MainOB/OutboundList',
+                            { state: response });
+                    }
+                } catch (error) {
+                    alert('Lỗi'); // Thông báo lỗi
+                    return;
+                }
+            }
+        }
+    }
     useEffect(() => {
         (async () => {
             try {
@@ -134,7 +161,7 @@ const Notification = () => {
                                                         </td>
                                                         <td className="mailbox-attachment">{about._id}</td>
                                                         <td className="mailbox-name">Inventory management</td>
-                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="/MainOB/OutboundList" state={fakeoutlist} > Create inbound this container</Link>}
+                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="#" onClick={(event) => getProduct(event, about.packages)}> Create inbound this container</Link>}
                                                         </td>
                                                         <td className="mailbox-star" style={{ color: "red" }} >New</td>
                                                         <td className="mailbox-date">{about.createdAt}</td>
@@ -169,3 +196,4 @@ const Notification = () => {
 };
 export default Notification;
 
+{/* <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="/MainOB/OutboundList" state={fakeoutlist} > Create inbound this container</Link>} */ }

@@ -67,12 +67,13 @@ export const getallpallets = async () => {
 export const uploadstatus = async (id) => {
     console.log(id);
     try {
-        const response = await axios.post(`http://localhost/api/warehouse/pallets/${id}`)
+        const response = await axios.post(`http://localhost/api/warehouse/pallets/${id}?validate=true`)
         return response;
     } catch (error) {
         throw error;
     }
 }
+
 export const addNewAccount = (data) => {
     return axios.post('link', data);
 }

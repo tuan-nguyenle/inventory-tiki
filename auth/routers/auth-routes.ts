@@ -20,10 +20,11 @@ router.post(
 
 // Add new New Role
 router.post(
-  "api/auth/role", (req: Request, res: Response) => {
+  "/api/auth/role", (req: Request, res: Response) => {
     new Role({
       description: req.body.role || null,
     }).save();
+    res.send("new role success");
   }
 );
 
