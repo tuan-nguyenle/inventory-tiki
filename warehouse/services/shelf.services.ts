@@ -33,6 +33,12 @@ export const findShelf = async (data: Record<string, any>) => {
         if (data.sku) {
             query["products.sku"] = data.sku;
         }
+        if (data.supplier_name) {
+            query["products.supplier_name"] = data.supplier_name;
+        }
+        if (data.category) {
+            query["products.category"] = data.category;
+        }
 
         if (Object.keys(query).length > 0) {
             return await Shelf.find(query,

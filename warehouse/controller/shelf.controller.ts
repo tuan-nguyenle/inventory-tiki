@@ -21,6 +21,20 @@ export const findShelf = async (req: Request, res: Response) => {
     }
 }
 
+export const findMultipleShelf = async (req: Request, res: Response) => {
+    const listShelf = await Promise.all(
+        req.body.products.map(async (product: any) => {
+            const shelf = await ShelfServices.findShelf(product);
+            return { product_name: product.product_name, shelves: shelf };
+        })
+    );
+
+
+    res.status(200).send({
+        msg: listShelf
+    });
+}
+
 export const transferToShelf = async (req: Request, res: Response) => {
     const errors = validationResult(req);
 
