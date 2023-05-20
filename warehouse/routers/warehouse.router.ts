@@ -13,5 +13,6 @@ router.post("/api/warehouse/pallets/:id", PalletController.updateStatus);
 // shelf
 router.post("/api/warehouse/shelf", ShelfController.transferToShelf);
 router.get("/api/warehouse/shelf", ShelfController.findShelf);
+router.post("/api/warehouse/findMultipleShelf", ShelfController.findMultipleShelf);
 
 export { router as warehouse };
