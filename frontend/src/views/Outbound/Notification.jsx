@@ -108,7 +108,7 @@ const Notification = () => {
                             <div className="table-responsive mailbox-messages">
                                 <table className="table table-hover table-striped">
                                     <tbody>
-                                        < tr>
+                                        {/* < tr>
                                             <td>
                                                 <div className="icheck-primary">
                                                     <input type="checkbox" value="" id="check1" />
@@ -121,7 +121,7 @@ const Notification = () => {
                                             </td>
                                             <td className="mailbox-star" style={{ color: "red" }} >New</td>
                                             <td className="mailbox-date"></td>
-                                        </tr>
+                                        </tr> */}
                                         {
                                             notifiun && notifiun.length > 0 && notifiun.map((about) => {
                                                 return (

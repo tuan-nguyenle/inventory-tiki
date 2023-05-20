@@ -2,6 +2,7 @@
 // import Nav from 'react-bootstrap/Nav';
 // import Navbar from 'react-bootstrap/Navbar';
 // import NavDropdown from 'react-bootstrap/NavDropdown';
+import axios from "axios";
 import React, { useState } from "react";
 import { NavLink, Link, Outlet } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg"
@@ -63,6 +64,7 @@ const MainIB = (props) => {
         }
     ]
     function handleLogout() {
+        axios.post("http://localhost/api/auth/users/logout/");
         sessionStorage.removeItem('user');
         // window.location.reload();
         window.location.href = '/login';

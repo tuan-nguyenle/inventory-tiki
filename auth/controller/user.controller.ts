@@ -60,7 +60,7 @@ export const login = async (req: Request, res: Response) => {
     jwt: userJwt,
   };
 
-  return res.status(201).send({ user: user });
+  return res.status(201).send({ user: userJwt });
 };
 
 export const getCurrentUser = async (req: Request, res: Response) => {

@@ -3,4 +3,5 @@ export enum Subjects {
   PalletUpdated = "pallet:updated",
   ProductCreated = "Product:created",
   OrdersExportCreated = "orders:created",
+  ProductStatusChecked = "product:checked",
 }

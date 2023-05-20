@@ -10,7 +10,7 @@ const handleLoginAPI = async (account) => {
     })
         .then(response => {
             // Xử lý phản hồi từ server khi yêu cầu thành công
-            console.log(response.data);
+            // console.log(response.data);
             return response.data.user;
         })
         .catch(error => {

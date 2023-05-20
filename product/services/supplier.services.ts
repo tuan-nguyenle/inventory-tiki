@@ -5,6 +5,8 @@ export const findOneSupplier = async (name_supplier: any) => {
 };
 
 export const insertSupplier = async (supplier_attribute: Supplier) => {
+  console.log(supplier_attribute);
+
   const supplier = new Supplier({
     name_supplier: supplier_attribute.name_supplier,
     business: supplier_attribute.business,
