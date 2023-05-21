@@ -20,7 +20,6 @@ import {
 import "../styles/nav.scss";
 import ConfirmationInbound from '../views/InBound/ConfirmationInbound';
 import Accountmanagement from '../views/InBound/Accountmanagement';
-import InputExcel from '../views/InputExcel';
 import PrintPalletOB from '../views/Outbound/PrintPalletOB';
 import Error from "../views/Error";
 const NavIB = () => {
@@ -30,7 +29,6 @@ const NavIB = () => {
             < BrowserRouter >
                 <Routes>
                     <Route path="/" element={<MainOB />} >
-                        <Route path="InputExcel" exact element={<InputExcel />} />
                         <Route index element={<Home />} />
                         <Route path="MainOB" exact element={<Home />} />
                         <Route path="MainOB/User" exact element={<User />} />

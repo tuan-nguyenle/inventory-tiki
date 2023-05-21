@@ -9,8 +9,6 @@ export const getallpallets = async () => {
     }
 }
 export const transfershelf = async (data) => {
-    const combinedJson = JSON.stringify(data, null, 2);
-    console.log(combinedJson);
     try {
         const response = await axios.post("http://localhost/api/warehouse/shelf", data, {
             headers: {

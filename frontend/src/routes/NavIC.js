@@ -12,7 +12,8 @@ import {
     Routes,
     Route
 } from 'react-router-dom';
-import Accountmanagement from '../views/InBound/Accountmanagement';
+import Accountmanagement from '../views/InventoryControl/Accountmanagement';
+// import Accountmanagement from '../views/InBound/Accountmanagement';
 import Storage from '../views/InventoryControl/Storage';
 import ProductManagement from '../views/InventoryControl/ProductManagement';
 import ShelfInformation from '../views/InventoryControl/productdetail/ShelfInformation';

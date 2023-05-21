@@ -21,7 +21,6 @@ import "../styles/nav.scss";
 import ConfirmationInbound from '../views/InBound/ConfirmationInbound';
 import Accountmanagement from '../views/InBound/Accountmanagement';
 import PrintBowl from '../views/InBound/PrintBowl';
-import InputExcel from '../views/InputExcel';
 import InputReback from '../views/InBound/InputReback';
 import Error from "../views/Error";
 const NavIB = () => {
@@ -31,7 +30,6 @@ const NavIB = () => {
             < BrowserRouter >
                 <Routes>
                     <Route path="/" element={<MainIB />} >
-                        <Route path="InputExcel" exact element={<InputExcel />} />
                         <Route index element={<Home />} />
                         <Route path="MainIB" exact element={<Home />} />
                         <Route path="MainIB/User" exact element={<User />} />

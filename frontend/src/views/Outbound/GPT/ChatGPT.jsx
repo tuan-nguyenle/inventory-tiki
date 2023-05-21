@@ -20,11 +20,15 @@ function ChatGPT() {
 
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `tôi có danh sách kệ gồm "A1A1, A12B4, A1A2, A1A4, B8A44, C33A12, A55C22 B13A2, B2D54, C32A12 " bạn có thể chia và sắp xếp thứ tự các kệ với quy tắc sau không:
-             Tính theo thứ tự từ trái qua phải , là chữ cái thì sắp xếp tăng dần theo alphabet, là số thì xếp theo thứ tự tăng dần
-            Chia danh sách kệ trên thành các list nhỏ, mỗi danh sách gồm tối thiểu 1 kệ và tối đa là 3 kệ
-            và chỉ trả json danh sách list đó để lấy API đừng giải thích gì hết đừng đây là.. hay gì hết chỉ tra json thôi`,
+            // prompt: `tôi có danh sách kệ gồm "A1A1, A12B4, A1A2, A1A4, B8A44, C33A12, A55C22 B13A2, B2D54, C32A12 " bạn có thể chia và sắp xếp thứ tự các kệ với quy tắc sau không:
+            //  Tính theo thứ tự từ trái qua phải , là chữ cái thì sắp xếp tăng dần theo alphabet, là số thì xếp theo thứ tự tăng dần
+            // Chia danh sách kệ trên thành các list nhỏ, mỗi danh sách gồm tối thiểu 1 kệ và tối đa là 3 kệ
+            // và chỉ trả json danh sách list đó để lấy API đừng giải thích gì hết đừng đây là.. hay gì hết chỉ tra json thôi`,
+
             // prompt: `Thời tiết thành phố hồ chí minh hôm nay thế nào. với nhiệt độ này cần làm gì để đảm báo lưu kho được diễn ra an toàn`,
+
+            prompt: `Hãy đưa ra đánh giá,nhận xét, cũng như đưa ra dự báo trong tương lai đối với những thông tin sau "Nhập kho tháng 1: 120,
+             Nhập kho tháng 2: 249, Nhập kho tháng 3:500. Xuất kho tháng 1: 12, Xuất kho tháng 2: 49, Xuất kho tháng 3: 90"`,
             temperature: 0.7,
             max_tokens: 1000,
             top_p: 1,

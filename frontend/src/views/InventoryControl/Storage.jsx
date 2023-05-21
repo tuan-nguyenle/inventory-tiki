@@ -112,6 +112,7 @@ const Storage = () => {
             try {
                 let getpallet = await ICAPI.getallpallets();
                 setDatalist(getpallet)
+                console.log("1");
             } catch (error) {
                 setDatalist(null)
             }
@@ -137,10 +138,28 @@ const Storage = () => {
     useEffect(() => {
         if (dataright._id) {
             let b = datalist.filter((item) => item._id === dataright._id)
-            let c = b[0].products;
+            let c = b[0].products.filter((product) => product.quantity !== 0);
             setRamdetail(c);
         }
     }, [datalist]);
+    useEffect(() => {
+        if (dataright._id) {
+            if (ramdetail.length === 0) {
+                let c = dataleftmau.filter((product) => product._id !== dataright._id);
+                setDataleft(dataleftmau);
+                setDataright({
+                    pallet: "",
+                    _id: ""
+                })
+                setIdchange({
+                    _id: ""
+                })
+                // return thì set lại data bên right
+                setRamdetail([]);
+            }
+        }
+    }, [ramdetail]);
+    console.log(dataleftmau);
     return (
         <>
             <div className="Stogare_body" >

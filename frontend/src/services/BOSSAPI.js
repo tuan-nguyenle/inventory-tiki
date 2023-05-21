@@ -14,7 +14,7 @@ import axios from 'axios';
 // export { Sendexcel }
 export const Sendexcel = async (newdata) => {
     try {
-        const response = await axios.post("http://localhost/api/orders", newdata, {
+        const response = await axios.post("http://localhost/api/orders/", newdata, {
             headers: {
                 'Content-Type': 'application/json'
             }

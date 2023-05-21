@@ -62,6 +62,12 @@ const InputExcel = (props) => {
     return (
         <>
             <div>
+                <h1 style={{ textAlign: "center" }}>
+                    I'm Inventory management
+                </h1>
+            </div>
+            <hr></hr>
+            <div>
                 <h2>Input file excel Inbound Today</h2>
                 <input id="dataTransfer" type="file" onChange={(e) => handleFile(e)} />
 
