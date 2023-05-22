@@ -72,10 +72,10 @@ const Notification = () => {
                         };
                         // const combinedJson = JSON.stringify(data, null, 2);
                         // console.log(Handel);shelfObjects
-                        console.log(shelfObjects);
-                        console.log(response);
-                        // navigate('/MainOB/OutboundList',
-                        //     { state: Handel });
+                        // console.log(shelfObjects);
+                        // console.log(response);
+                        navigate('/MainOB/OutboundList',
+                            { state: Handel });
                     }
                 } catch (error) {
                     alert('Lỗi'); // Thông báo lỗi
@@ -239,15 +239,15 @@ const Notification = () => {
                         </div>
                     </div>
                 </div>
+                <div className="col-md-12" >
+                    <textarea style={{ width: "1000px", height: "100px" }} defaultValue={
+                        `"A1A1", "A12B4", "A1A2", "A1A4", "B8A44", "C33A12","A55C22", "B13A2", "B2D54", "C32A12"
+                         Tính theo thứ tự từ trái qua phải , là chữ cái thì sắp xếp tăng dần theo alphabet, là số thì xếp theo thứ tự tăng dần
+                         Chia danh sách kệ trên thành các list nhỏ, mỗi danh sách gồm tối thiểu 1 kệ và tối đa là 3 kệ `} />
+                    <ChatGPT />
+                </div>
             </div>
-            <div>
-                <textarea name="myText" id="myText" rows="5" cols="50">
-                    "A1A1", "A12B4", "A1A2", "A1A4", "B8A44", "C33A12",
-                    "A55C22", "B13A2", "B2D54", "C32A12"
-                    Tính theo thứ tự từ trái qua phải , là chữ cái thì sắp xếp tăng dần theo alphabet, là số thì xếp theo thứ tự tăng dần
-                    Chia danh sách kệ trên thành các list nhỏ, mỗi danh sách gồm tối thiểu 1 kệ và tối đa là 3 kệ</textarea>
-                <ChatGPT />
-            </div>
+
         </div >
     );
 };

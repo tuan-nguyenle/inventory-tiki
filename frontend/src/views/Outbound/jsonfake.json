@@ -1,0 +1,39 @@
+[
+    {
+        "shelf_code": "A1.1",
+        "products": [
+            {
+                "bar_code": "2663665999999",
+                "category": "Manufacturing",
+                "product_name": "Custromboone",
+                "quantity": 2,
+                "sku": "A123",
+                "supplier_name": "DISOOM",
+                "unit": "pieces"
+            },
+            {
+                "bar_code": "8663332355442",
+                "category": "Tools",
+                "product_name": "Oppo Hemlls",
+                "quantity": 1,
+                "sku": "A542",
+                "supplier_name": "DISOOM",
+                "unit": "pieces"
+            }
+        ]
+    },
+    {
+        "shelf_code": "A1.2",
+        "products": [
+            {
+                "bar_code": "2000000000004",
+                "category": "Tools",
+                "product_name": "USA Standard Gear (ZG GM8.5-373) Ring & Pinion Gear Set for GM 8.5 Differential",
+                "quantity": 1,
+                "sku": "A542",
+                "supplier_name": "Mobile World JSC",
+                "unit": "pieces"
+            }
+        ]
+    }
+]
