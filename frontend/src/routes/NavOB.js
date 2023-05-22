@@ -16,8 +16,7 @@ import {
     Route
 } from 'react-router-dom';
 import "../styles/nav.scss";
-import ConfirmationInbound from '../views/InBound/ConfirmationInbound';
-// import ConfirmationOutbound from '../views/Outbound/ConfirmationOutbound';
+import ConfirmationOutbound from '../views/Outbound/ConfirmationOutbound';
 import Accountmanagement from '../views/InBound/Accountmanagement';
 import PrintPalletOB from '../views/Outbound/PrintPalletOB';
 import Error from "../views/Error";
@@ -34,7 +33,7 @@ const NavIB = () => {
                         <Route path='MainOB/Home' element={<Home />} />
                         <Route path='MainOB/Notification' element={<Notification />} />
                         <Route path='MainOB/OutboundList' element={<OutboundList />} />
-                        <Route path='MainOB/ConfirmationInbound' element={<ConfirmationInbound />} />
+                        <Route path='MainOB/ConfirmationOutbound' element={<ConfirmationOutbound />} />
                         <Route path='MainOB/Accountmanagement' element={<Accountmanagement />} />
                         {/* <Route path='MainIB/Reback' element={<Reback />} /> */}
                         <Route path='MainOB/PrintPalletOB' element={<PrintPalletOB />} />

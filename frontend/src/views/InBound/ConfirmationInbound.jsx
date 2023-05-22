@@ -41,7 +41,7 @@ const ConfirmationInbound = () => {
     }, [])
     useEffect(() => {
         if (listpallet && listpallet.length > 0) {
-            const haveproduct = listpallet.filter((IB) => IB.products.length > 0);
+            const haveproduct = listpallet.filter((IB) => IB.products.length > 0 && IB.area === "Inbound");
             setPalletProduct(haveproduct);
         }
     }, [listpallet])
