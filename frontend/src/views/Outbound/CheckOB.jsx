@@ -51,26 +51,50 @@ const CheckOB = (props) => {
 
     const SaveInbound = async () => {
         await saveinbound.forEach((ele) => {
-            let products = {
-                product_name: ele.product_name,
-                category: ele.category,
-                bar_code: ele.bar_code,
-                quantity: ele.quantity,
-                sku: ele.sku,
-                unit: ele.unit,
-                supplier_name: ele.supplier_name
-            };
-            handledata.push(products);
-        })
+            let existingShelf = handledata.find((item) => item.shelf_code === ele.shelf_code);
+
+            if (existingShelf) {
+                existingShelf.products.push({
+                    bar_code: ele.bar_code,
+                    category: ele.category,
+                    product_name: ele.product_name,
+                    quantity: ele.quantity,
+                    sku: ele.sku,
+                    supplier_name: ele.supplier_name,
+                    unit: ele.unit
+                });
+            } else {
+                let newShelf = {
+                    shelf_code: ele.shelf_code,
+                    products: [
+                        {
+                            bar_code: ele.bar_code,
+                            category: ele.category,
+                            product_name: ele.product_name,
+                            quantity: ele.quantity,
+                            sku: ele.sku,
+                            supplier_name: ele.supplier_name,
+                            unit: ele.unit
+                        }
+                    ]
+                };
+                handledata.push(newShelf);
+            }
+        });
+        // console.log(saveinbound);
+        // console.log(handledata);
         // set lại biến cho api
         const datainput = {
             name_pallet: contai.bowl,
-            products: handledata
+            packages: handledata
         };
-        // gọi api ngay đây
+        // const combinedJson = JSON.stringify(datainput, null, 2);
+        // console.log(combinedJson);
+        console.log(orderid);
+        // // gọi api ngay đây
         try {
             await OBAPI.submitOB(datainput, orderid);
-            window.location.assign("http://localhost:3000/MainOB/ConfirmationInbound");
+            window.location.assign("http://localhost/MainOB/ConfirmationOutbound");
             toast.success("Saving process has been completed"); // in thông báo
         } catch (error) {
             toast.error("Can't send. Please check again"); // in thông báo

@@ -21,7 +21,7 @@ const Accountmanagement = () => {
                 const getUsers = await IBAPI.getAllAccounts();
                 console.log(getUsers);
                 if (getUsers) {
-                    const UserIB = getUsers.filter((user) => user.departments[0] === "646893dbd68783117dd0feac" && user.roles[0] === "646894543a3d0a7a5b4cbf00");
+                    const UserIB = getUsers.filter((user) => user.departments[0] === "6468949c3a3d0a7a5b4cbf06" && user.roles[0] === "646894543a3d0a7a5b4cbf00");
                     setAllaccount(UserIB);
                 }
             } catch (error) {

@@ -9,9 +9,9 @@ const ShowListOB = React.forwardRef((props, ref) => {
     const data = props.listinput; // bắt props
     const codecontainer = props.container;
     const bowl = props.bowl;
-    console.log(data);
-    console.log(codecontainer);
-    console.log(bowl);
+    // console.log(data);
+    // console.log(codecontainer);
+    // console.log(bowl);
     return (
         <div className="card card-default">
             <div className="card-body" >

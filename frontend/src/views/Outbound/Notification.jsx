@@ -5,11 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import * as IBAPI from "../../services/IBAPI";
 import * as OBAPI from "../../services/OBAPI";
 import fakeoutlist from "./fakeoutlist.json"
+import ChatGPT from "./GPT/ChatGPT";
 const Notification = () => {
     const navigate = useNavigate();
     const [allnotifi, setAllnotifi] = useState(null);
     const [notifiun, setNotifiun] = useState(null);
-    const getProduct = async (event, products) => {
+    const getProduct = async (event, products, order, container) => {
         event.preventDefault(); // Ngăn chặn sự kiện mặc định khi click vào link
         if (products) {
             const a = [];
@@ -24,9 +25,57 @@ const Notification = () => {
                 try {
                     let response = await OBAPI.sendproducts(b)
                     if (response) {
+                        // Tạo một đối tượng từ điển để lưu trữ các đối tượng theo shelf_code
+                        var shelfObjects = {};
+
+                        // Lặp qua mảng "msg" trong đối tượng response
+                        response.msg.forEach((item) => {
+                            var shelfCode = item.shelves[0].shelf_code;
+
+                            if (!shelfObjects.hasOwnProperty(shelfCode)) {
+                                // Nếu shelfCode chưa tồn tại trong shelfObjects, thêm một đối tượng mới
+                                shelfObjects[shelfCode] = {
+                                    shelf_code: shelfCode,
+                                    products: [],
+                                };
+                            }
+
+                            // Lặp qua mảng "products" trong mỗi phần tử của "msg"
+                            item.shelves[0].products.forEach((product) => {
+                                // Tìm sản phẩm tương ứng trong biến b
+                                var matchingProduct = b.products.find((p) => (
+                                    p.bar_code === product.bar_code &&
+                                    p.supplier_name === product.supplier_name &&
+                                    p.sku === product.sku
+                                ));
+
+                                if (matchingProduct) {
+                                    var productObj = {
+                                        bar_code: parseInt(product.bar_code),
+                                        product_name: product.product_name,
+                                        category: product.category,
+                                        quantity: matchingProduct.quantity, // Sử dụng giá trị quantity từ biến b
+                                        supplier_name: product.supplier_name,
+                                        sku: product.sku,
+                                        unit: product.unit,
+                                    };
+
+                                    // Thêm đối tượng product vào mảng products của shelfObject tương ứng
+                                    shelfObjects[shelfCode].products.push(productObj);
+                                }
+                            });
+                        });
+                        const Handel = {
+                            container_code: container,
+                            _id: order,
+                            shelve: Object.values(shelfObjects)
+                        };
+                        // const combinedJson = JSON.stringify(data, null, 2);
+                        // console.log(Handel);shelfObjects
+                        // console.log(shelfObjects);
                         // console.log(response);
                         navigate('/MainOB/OutboundList',
-                            { state: response });
+                            { state: Handel });
                     }
                 } catch (error) {
                     alert('Lỗi'); // Thông báo lỗi
@@ -161,7 +210,7 @@ const Notification = () => {
                                                         </td>
                                                         <td className="mailbox-attachment">{about._id}</td>
                                                         <td className="mailbox-name">Inventory management</td>
-                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="#" onClick={(event) => getProduct(event, about.packages)}> Create inbound this container</Link>}
+                                                        <td className="mailbox-subject"><b>{about.container_code}</b>  - {<Link to="#" onClick={(event) => getProduct(event, about.packages, about._id, about.container_code)}> Create inbound this container</Link>}
                                                         </td>
                                                         <td className="mailbox-star" style={{ color: "red" }} >New</td>
                                                         <td className="mailbox-date">{about.createdAt}</td>
@@ -190,7 +239,15 @@ const Notification = () => {
                         </div>
                     </div>
                 </div>
+                <div className="col-md-12" >
+                    <textarea style={{ width: "1000px", height: "100px" }} defaultValue={
+                        `"A1A1", "A12B4", "A1A2", "A1A4", "B8A44", "C33A12","A55C22", "B13A2", "B2D54", "C32A12"
+                         Tính theo thứ tự từ trái qua phải , là chữ cái thì sắp xếp tăng dần theo alphabet, là số thì xếp theo thứ tự tăng dần
+                         Chia danh sách kệ trên thành các list nhỏ, mỗi danh sách gồm tối thiểu 1 kệ và tối đa là 3 kệ `} />
+                    <ChatGPT />
+                </div>
             </div>
+
         </div >
     );
 };

@@ -1,9 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/global.scss';
-import Login from '../views/Account/Login';
 import MainOB from '../components/Mainpage/MainOB';
-import Reback from '../views/InBound/Reback';
 import Notification from '../views/Outbound/Notification.jsx'
 import OutboundList from '../views/Outbound/OutboundList';
 import User from '../views/InBound/User';
@@ -19,8 +17,8 @@ import {
 } from 'react-router-dom';
 import "../styles/nav.scss";
 import ConfirmationInbound from '../views/InBound/ConfirmationInbound';
+// import ConfirmationOutbound from '../views/Outbound/ConfirmationOutbound';
 import Accountmanagement from '../views/InBound/Accountmanagement';
-import InputExcel from '../views/InputExcel';
 import PrintPalletOB from '../views/Outbound/PrintPalletOB';
 import Error from "../views/Error";
 const NavIB = () => {
@@ -30,7 +28,6 @@ const NavIB = () => {
             < BrowserRouter >
                 <Routes>
                     <Route path="/" element={<MainOB />} >
-                        <Route path="InputExcel" exact element={<InputExcel />} />
                         <Route index element={<Home />} />
                         <Route path="MainOB" exact element={<Home />} />
                         <Route path="MainOB/User" exact element={<User />} />

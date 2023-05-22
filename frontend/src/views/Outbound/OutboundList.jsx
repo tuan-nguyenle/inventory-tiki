@@ -470,11 +470,12 @@ const OutboundList = (props) => {
     // console.log("miss tổng", misssave);
     // console.log(miss1);
     // console.log(state1);
-    // console.log(data);
+    console.log(data);
     // console.log(step4);
     // console.log(data);
     // console.log(isBarcodeScanned);
     // console.log(orderid);
+
     return (
         < div className="body_outboundlist" >
             < div className="container_outboundlist" >

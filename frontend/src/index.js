@@ -12,6 +12,7 @@ import NavOB from './routes/NavOB';
 import Error from './views/Error';
 import Login from './views/Account/Login';
 import jwt_decode from "jwt-decode";
+import Boss from './routes/Boss';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const getuser = JSON.parse(sessionStorage.getItem('user'));
@@ -37,7 +38,7 @@ root.render(
     {session && Department === "Inbound" && Role === "manager" && <NavIB />}
     {session && Department === "Inventory-control" && Role === "manager" && <NavIC />}
     {session && Department === "Outbound" && Role === "manager" && <NavOB />}
-
+    {session && Department === "Boss" && Role === "manager" && <Boss />}
     {/* <NavOB /> */}
 
     {/* <Error /> */}

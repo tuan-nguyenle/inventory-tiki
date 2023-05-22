@@ -79,6 +79,7 @@ const Storage = () => {
             id: changeid
         })
     }
+    const [tempDatalist, setTempDatalist] = useState(null); // Tạo một state tạm thời để lưu trữ datalist
     // click vào mà có giá trị shelf thì hiển thị nút save
     const clickinput = (e, changeid) => {
         const { id, value } = e.target
@@ -100,8 +101,10 @@ const Storage = () => {
         }
         try {
             let res = await ICAPI.transfershelf(datane);
-            toast.success("Success"); // in thông báo
-            setUpdateData(!updateData); // gọi lại hàm useEffect
+            if (res) {
+                toast.success("Success"); // in thông báo
+                setUpdateData(!updateData); // gọi lại hàm useEffect
+            }
         } catch (error) {
             toast.error("Error"); // in thông báo
         }
@@ -111,14 +114,18 @@ const Storage = () => {
         (async () => {
             try {
                 let getpallet = await ICAPI.getallpallets();
-                setDatalist(getpallet)
+                setDatalist(getpallet);
+                setTempDatalist(getpallet); // Lưu trữ datalist trong state tạm thời
+                console.log("2");
             } catch (error) {
-                setDatalist(null)
+                setDatalist(null);
+                setTempDatalist(null); // Đặt state tạm thời thành null nếu có lỗi
             }
         })();
-    }, [updateData])
+    }, [updateData]);
     // lấy pallet có products
     useEffect(() => {
+        console.log(tempDatalist);
         if (datalist && datalist.length > 0) {
             const haveproduct = datalist.filter((IB) => IB.products.length > 0 && IB.validate === true);
             setDataleftmau(haveproduct);
@@ -137,10 +144,29 @@ const Storage = () => {
     useEffect(() => {
         if (dataright._id) {
             let b = datalist.filter((item) => item._id === dataright._id)
-            let c = b[0].products;
+            let c = b[0].products.filter((product) => product.quantity !== 0);
             setRamdetail(c);
+            console.log(c);
         }
     }, [datalist]);
+    useEffect(() => {
+        if (dataright._id) {
+            if (ramdetail.length === 0) {
+                let c = dataleftmau.filter((product) => product._id !== dataright._id);
+                setDataleft(dataleftmau);
+                setDataright({
+                    pallet: "",
+                    _id: ""
+                })
+                setIdchange({
+                    _id: ""
+                })
+                // return thì set lại data bên right
+                setRamdetail([]);
+            }
+        }
+    }, [ramdetail]);
+    console.log("dataliset", datalist);
     return (
         <>
             <div className="Stogare_body" >
