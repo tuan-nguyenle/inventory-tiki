@@ -1,7 +1,9 @@
 import { React, useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
-import ListConfirn from "./modalIB/ListConfirn";
+// import ListConfirn from "./modalIB/ListConfirn";
+import ListConfirn from "./ListConfirm";
 import * as IBAPI from "../../services/IBAPI";
+import * as OBAPI from "../../services/OBAPI";
 import { toast } from 'react-toastify';
 import {
     FaPrint, FaCheck, FaTimes
@@ -41,7 +43,7 @@ const ConfirmationOutbound = () => {
     }, [])
     useEffect(() => {
         if (listpallet && listpallet.length > 0) {
-            const haveproduct = listpallet.filter((IB) => IB.products.length > 0);
+            const haveproduct = listpallet.filter((IB) => IB.products.length > 0 && IB.area === "Outbound");
             setPalletProduct(haveproduct);
         }
     }, [listpallet])
