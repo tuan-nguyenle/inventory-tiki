@@ -5,7 +5,7 @@ export const submitOB = async (data, orderid) => {
         const combinedJson = JSON.stringify(data, null, 2);
         console.log(combinedJson);
         console.log(orderid);
-        const response = await axios.post(`http://localhost/api/orders/outbound/${orderid}`, data, {
+        const response = await axios.post(`http://localhost/api/orders/export/${orderid}`, data, {
             headers: {
                 'Content-Type': 'application/json'
             }

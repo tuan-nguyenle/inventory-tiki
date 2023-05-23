@@ -52,8 +52,7 @@ const CheckOB = (props) => {
     const SaveInbound = async () => {
         await saveinbound.forEach((ele) => {
             let obj = {
-                shelf_name: ele.shelf_code,
-                product: {
+                // shelf_name: ele.shelf_code,
                     bar_code: ele.bar_code,
                     category: ele.category,
                     product_name: ele.product_name,
@@ -61,7 +60,7 @@ const CheckOB = (props) => {
                     sku: ele.sku,
                     supplier_name: ele.supplier_name,
                     unit: ele.unit
-                }
+                
             };
             handledata.push(obj);
         });

@@ -67,6 +67,7 @@ export const checkOrder = async (req: Request, res: Response) => {
   }
 
   const detailOrder = await Order.findOrder({ _id: req.params.id });
+
   const checkProduct = req.body.products;
   let missingProducts: Array<Package> = [];
 
@@ -112,7 +113,6 @@ export const checkOrder = async (req: Request, res: Response) => {
       });
   } catch (error) {
     console.log(`${error}`);
-
   }
 
   if (missingProducts.length === 0) {
@@ -151,3 +151,23 @@ export const getDetailOrder = async (req: Request, res: Response) => {
   const orderDetail = await Order.findOrder({ _id: req.params.id, reback: true });
   res.status(200).send({ data: orderDetail });
 }
+
+export const exportProduct = async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new RequestValidationError(errors.array());
+  }
+
+  // console.log(req.body);
+
+  // new OrdersCreatedRequestInsetedProductToPalletPublisher('amqp://guest:guest@rabbitmq:5672', 'Orders', 'fanout', 'inventory-tiki')
+  //   .publishMessage({
+  //     name_pallet: req.body.name_pallet,
+  //     product: req.body.products
+  //   });
+
+  // await Order.findOneOrderAndUpdate(req.params.id, { status: "Delivery" });
+
+  res.status(200).send({ msg: "...." });
+};
