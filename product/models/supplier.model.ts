@@ -12,7 +12,7 @@ const SupplierSchema = new Schema<Supplier, Document>(
     name_supplier: { type: String, required: true, unique: true },
     business: { type: String, required: true },
     location: { type: String, required: true },
-    phone: { type: String, required: true, unique: true },
+    phone: { type: String, required: true },
   },
   {
     timestamps: true,
