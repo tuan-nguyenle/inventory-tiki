@@ -51,10 +51,9 @@ const CheckOB = (props) => {
 
     const SaveInbound = async () => {
         await saveinbound.forEach((ele) => {
-            let existingShelf = handledata.find((item) => item.shelf_code === ele.shelf_code);
-
-            if (existingShelf) {
-                existingShelf.products.push({
+            let obj = {
+                shelf_name: ele.shelf_code,
+                product: {
                     bar_code: ele.bar_code,
                     category: ele.category,
                     product_name: ele.product_name,
@@ -62,35 +61,20 @@ const CheckOB = (props) => {
                     sku: ele.sku,
                     supplier_name: ele.supplier_name,
                     unit: ele.unit
-                });
-            } else {
-                let newShelf = {
-                    shelf_code: ele.shelf_code,
-                    products: [
-                        {
-                            bar_code: ele.bar_code,
-                            category: ele.category,
-                            product_name: ele.product_name,
-                            quantity: ele.quantity,
-                            sku: ele.sku,
-                            supplier_name: ele.supplier_name,
-                            unit: ele.unit
-                        }
-                    ]
-                };
-                handledata.push(newShelf);
-            }
+                }
+            };
+            handledata.push(obj);
         });
         // console.log(saveinbound);
         // console.log(handledata);
         // set lại biến cho api
         const datainput = {
             name_pallet: contai.bowl,
-            packages: handledata
+            products: handledata
         };
         // const combinedJson = JSON.stringify(datainput, null, 2);
         // console.log(combinedJson);
-        console.log(orderid);
+        // console.log(orderid);
         // // gọi api ngay đây
         try {
             await OBAPI.submitOB(datainput, orderid);
