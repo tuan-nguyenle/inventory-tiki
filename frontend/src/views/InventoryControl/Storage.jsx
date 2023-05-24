@@ -14,7 +14,6 @@ const Storage = () => {
     // viết hàm khi click vào trái sẽ gọi API lấy chi tiết product để show ra bên phải
     // nút save gọi một hàm truyền product vào shelf
     const [datalist, setDatalist] = useState(null);
-    const [updateData, setUpdateData] = useState(false); // biến gọi lại useffect lấy pallet mới nhất
     const [checkchange, setCheckchange] = useState(false);
     const [datadetail, setDatadetail] = useState({ shelf: "" });
     const [idchange, setIdchange] = useState({ _id: "" });
@@ -92,6 +91,21 @@ const Storage = () => {
             id: changeid
         })
     }
+    const updatePalletList = async () => {
+        if (dataright._id) {
+            try {
+                let getpalleta = await ICAPI.getallpallets2();
+                setDatalist(getpalleta);
+                console.log(getpalleta);
+                setTempDatalist(getpalleta); // Lưu trữ datalist trong state tạm thời
+                let haveproduct = getpalleta.filter((IB) => IB.products.length > 0 && IB.validate === true);
+                setDataleftmau(haveproduct);
+            } catch (error) {
+                setDatalist(null);
+                setTempDatalist(null); // Đặt state tạm thời thành null nếu có lỗi
+            }
+        }
+    }
     // tranfershelf
     const inputShelf = async (data, shelf) => {
         let datane = {
@@ -101,9 +115,11 @@ const Storage = () => {
         }
         try {
             let res = await ICAPI.transfershelf(datane);
+            console.log(res);
             if (res) {
                 toast.success("Success"); // in thông báo
-                setUpdateData(!updateData); // gọi lại hàm useEffect
+                // updatePalletList();
+                setTimeout(updatePalletList, 100); // Gọi hàm cập nhật danh sách pallets sau 3 giây
             }
         } catch (error) {
             toast.error("Error"); // in thông báo
@@ -115,7 +131,7 @@ const Storage = () => {
                 let getpallet = await ICAPI.getallpallets();
                 setDatalist(getpallet);
                 if (getpallet && getpallet.length > 0) {
-                    const haveproduct = getpallet.filter((IB) => IB.products.length > 0 && IB.validate === true);
+                    let haveproduct = getpallet.filter((IB) => IB.products.length > 0 && IB.validate === true);
                     setDataleftmau(haveproduct);
                     setDataleft(haveproduct)
                 }
@@ -125,27 +141,24 @@ const Storage = () => {
         })();
     }, []);
     // viết effect lấy list trái
-    useEffect(() => {
-        (async () => {
-            if (dataright._id) {
-                try {
-                    let getpallet = await ICAPI.getallpallets();
-                    setDatalist(getpallet);
-                    setTempDatalist(getpallet); // Lưu trữ datalist trong state tạm thời
-                    const haveproduct = getpallet.filter((IB) => IB.products.length > 0 && IB.validate === true);
-                    setDataleftmau(haveproduct);
-                    console.log("2", getpallet);
-                } catch (error) {
-                    setDatalist(null);
-                    setTempDatalist(null); // Đặt state tạm thời thành null nếu có lỗi
-                }
-            }
-        })();
-    }, [updateData]);
-    // lấy pallet có products
     // useEffect(() => {
-
-    // }, [datalist])
+    //     (async () => {
+    //         if (dataright._id) {
+    //             try {
+    //                 let getpallet = await ICAPI.getallpallets();
+    //                 setDatalist(getpallet);
+    //                 console.log(getpallet);
+    //                 setTempDatalist(getpallet); // Lưu trữ datalist trong state tạm thời
+    //                 const haveproduct = getpallet.filter((IB) => IB.products.length > 0 && IB.validate === true);
+    //                 setDataleftmau(haveproduct);
+    //             } catch (error) {
+    //                 setDatalist(null);
+    //                 setTempDatalist(null); // Đặt state tạm thời thành null nếu có lỗi
+    //             }
+    //         }
+    //     })();
+    // }, [updateData]);
+    // lấy pallet có products
     useEffect(() => {
         if (datadetail.shelf) {
             setCheckchange(true)
@@ -155,16 +168,16 @@ const Storage = () => {
         }
     }, [datadetail]);
     useEffect(() => {
-        if (dataright._id) {
-            let b = tempDatalist.filter((item) => item._id === dataright._id)
-            let c = b[0].products.filter((product) => product.quantity !== 0);
-            setRamdetail(c);
-            console.log(c);
+        if (dataright._id && dataleftmau.length > 0) {
+            let b = dataleftmau.filter((item) => item._id === dataright._id)
+            if (b.length > 0) {
+                let c = b[0].products.filter((product) => product.quantity !== 0);
+                setRamdetail(c);
+            }
         }
-    }, [tempDatalist]);
-    useEffect(() => {
-        if (dataright._id) {
-            if (ramdetail.length === 0) {
+        else {
+            if (dataright._id) {
+                console.log("vô gòi", ramdetail);
                 let c = dataleftmau.filter((product) => product._id !== dataright._id);
                 setDataleft(c);
                 setDataright({
@@ -178,10 +191,7 @@ const Storage = () => {
                 setRamdetail([]);
             }
         }
-    }, [ramdetail]);
-    console.log(datalist);
-    console.log(dataleftmau);
-    console.log(dataleft);
+    }, [tempDatalist]);
     return (
         <>
             <div className="Stogare_body" >
