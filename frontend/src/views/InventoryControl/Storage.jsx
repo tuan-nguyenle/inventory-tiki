@@ -109,30 +109,43 @@ const Storage = () => {
             toast.error("Error"); // in thông báo
         }
     }
-    // viết effect lấy list trái
     useEffect(() => {
         (async () => {
             try {
                 let getpallet = await ICAPI.getallpallets();
                 setDatalist(getpallet);
-                setTempDatalist(getpallet); // Lưu trữ datalist trong state tạm thời
-                console.log("2");
+                if (getpallet && getpallet.length > 0) {
+                    const haveproduct = getpallet.filter((IB) => IB.products.length > 0 && IB.validate === true);
+                    setDataleftmau(haveproduct);
+                    setDataleft(haveproduct)
+                }
             } catch (error) {
                 setDatalist(null);
-                setTempDatalist(null); // Đặt state tạm thời thành null nếu có lỗi
+            }
+        })();
+    }, []);
+    // viết effect lấy list trái
+    useEffect(() => {
+        (async () => {
+            if (dataright._id) {
+                try {
+                    let getpallet = await ICAPI.getallpallets();
+                    setDatalist(getpallet);
+                    setTempDatalist(getpallet); // Lưu trữ datalist trong state tạm thời
+                    const haveproduct = getpallet.filter((IB) => IB.products.length > 0 && IB.validate === true);
+                    setDataleftmau(haveproduct);
+                    console.log("2", getpallet);
+                } catch (error) {
+                    setDatalist(null);
+                    setTempDatalist(null); // Đặt state tạm thời thành null nếu có lỗi
+                }
             }
         })();
     }, [updateData]);
     // lấy pallet có products
-    useEffect(() => {
-        console.log(tempDatalist);
-        if (datalist && datalist.length > 0) {
-            const haveproduct = datalist.filter((IB) => IB.products.length > 0 && IB.validate === true);
-            setDataleftmau(haveproduct);
-            setDataleft(haveproduct)
+    // useEffect(() => {
 
-        }
-    }, [datalist])
+    // }, [datalist])
     useEffect(() => {
         if (datadetail.shelf) {
             setCheckchange(true)
@@ -143,17 +156,17 @@ const Storage = () => {
     }, [datadetail]);
     useEffect(() => {
         if (dataright._id) {
-            let b = datalist.filter((item) => item._id === dataright._id)
+            let b = tempDatalist.filter((item) => item._id === dataright._id)
             let c = b[0].products.filter((product) => product.quantity !== 0);
             setRamdetail(c);
             console.log(c);
         }
-    }, [datalist]);
+    }, [tempDatalist]);
     useEffect(() => {
         if (dataright._id) {
             if (ramdetail.length === 0) {
                 let c = dataleftmau.filter((product) => product._id !== dataright._id);
-                setDataleft(dataleftmau);
+                setDataleft(c);
                 setDataright({
                     pallet: "",
                     _id: ""
@@ -166,7 +179,9 @@ const Storage = () => {
             }
         }
     }, [ramdetail]);
-    console.log("dataliset", datalist);
+    console.log(datalist);
+    console.log(dataleftmau);
+    console.log(dataleft);
     return (
         <>
             <div className="Stogare_body" >

@@ -42,7 +42,7 @@ const MainIB = () => {
             number: ""
         },
         {
-            path: "MainOB/ConfirmationInbound",
+            path: "MainOB/ConfirmationOutbound",
             name: "Confirmation OutBound",
             icon: <FaCheckDouble />,
             number: ""

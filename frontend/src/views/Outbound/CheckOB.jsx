@@ -52,38 +52,39 @@ const CheckOB = (props) => {
     const SaveInbound = async () => {
         await saveinbound.forEach((ele) => {
             let obj = {
-                shelf_name: ele.shelf_code,
-                product: {
-                    bar_code: ele.bar_code,
-                    category: ele.category,
-                    product_name: ele.product_name,
-                    quantity: ele.quantity,
-                    sku: ele.sku,
-                    supplier_name: ele.supplier_name,
-                    unit: ele.unit
-                }
+                bar_code: ele.bar_code,
+                category: ele.category,
+                product_name: ele.product_name,
+                quantity: ele.quantity,
+                sku: ele.sku,
+                supplier_name: ele.supplier_name,
+                unit: ele.unit
             };
             handledata.push(obj);
         });
         // console.log(saveinbound);
+        // const combinedJson = JSON.stringify(handledata, null, 2);
+        // console.log(combinedJson);
         // console.log(handledata);
         // set lại biến cho api
         const datainput = {
             name_pallet: contai.bowl,
             products: handledata
         };
+        const combinedJson = JSON.stringify(datainput, null, 2);
+        console.log(combinedJson);
         // const combinedJson = JSON.stringify(datainput, null, 2);
         // console.log(combinedJson);
         // console.log(orderid);
         // // gọi api ngay đây
-        try {
-            await OBAPI.submitOB(datainput, orderid);
-            window.location.assign("http://localhost/MainOB/ConfirmationOutbound");
-            toast.success("Saving process has been completed"); // in thông báo
-        } catch (error) {
-            toast.error("Can't send. Please check again"); // in thông báo
-            toggle();
-        }
+        // try {
+        //     await OBAPI.submitOB(datainput, orderid);
+        //     window.location.assign("http://localhost/MainOB/ConfirmationOutbound");
+        //     toast.success("Saving process has been completed"); // in thông báo
+        // } catch (error) {
+        //     toast.error("Can't send. Please check again"); // in thông báo
+        //     toggle();
+        // }
     }
     return (
         <div>
