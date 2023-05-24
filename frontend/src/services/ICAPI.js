@@ -8,6 +8,14 @@ export const getallpallets = async () => {
         throw error;
     }
 }
+export const getallpallets2 = async () => {
+    try {
+        const response = await axios.get('http://localhost/api/warehouse/pallets');
+        return response.data.pallets;
+    } catch (error) {
+        throw error;
+    }
+}
 export const transfershelf = async (data) => {
     try {
         const response = await axios.post("http://localhost/api/warehouse/shelf", data, {

@@ -78,7 +78,7 @@ const Accountmanagement = () => {
                                                                 return (
                                                                     <tr key={data._id}>
                                                                         <td>{i + 1}</td>
-                                                                        <td>Inbound</td>
+                                                                        <td>Inventory-control</td>
                                                                         <td>{data.fullname}</td>
                                                                         <td>{data.username}</td>
                                                                         <td>{data.phone}</td>
