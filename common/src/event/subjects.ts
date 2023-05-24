@@ -4,4 +4,6 @@ export enum Subjects {
   ProductCreated = "Product:created",
   OrdersExportCreated = "orders:created",
   ProductStatusChecked = "product:checked",
+  ProductExport = "product:export",
+  ShelfExport = "shelf:export"
 }
