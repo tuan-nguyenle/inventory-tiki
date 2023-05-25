@@ -14,10 +14,6 @@ export const findOneShelf = async (shelf_code: any): Promise<Shelf> => {
 };
 
 export const findOneAndUpdate = async (data: Record<string, any>) => {
-    if (mongoose.isValidObjectId(data._id)) {
-        data._id = data._id.toString();
-    }
-
     const shelf = await Shelf.findOneAndUpdate({ _id: data._id }, data);
 
     return shelf;
