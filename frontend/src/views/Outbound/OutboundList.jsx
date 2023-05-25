@@ -57,6 +57,7 @@ const OutboundList = (props) => {
         });
 
         state1.push(...state4);
+        console.log(state1);
         container = step.container_code;
     }
     // Lấy ngày

@@ -71,20 +71,20 @@ const CheckOB = (props) => {
             name_pallet: contai.bowl,
             products: handledata
         };
-        const combinedJson = JSON.stringify(datainput, null, 2);
-        console.log(combinedJson);
+        // const combinedJson = JSON.stringify(datainput, null, 2);
+        // console.log(combinedJson);
         // const combinedJson = JSON.stringify(datainput, null, 2);
         // console.log(combinedJson);
         // console.log(orderid);
         // // gọi api ngay đây
-        // try {
-        //     await OBAPI.submitOB(datainput, orderid);
-        //     window.location.assign("http://localhost/MainOB/ConfirmationOutbound");
-        //     toast.success("Saving process has been completed"); // in thông báo
-        // } catch (error) {
-        //     toast.error("Can't send. Please check again"); // in thông báo
-        //     toggle();
-        // }
+        try {
+            await OBAPI.submitOB(datainput, orderid);
+            window.location.assign("http://localhost/MainOB/ConfirmationOutbound");
+            toast.success("Saving process has been completed"); // in thông báo
+        } catch (error) {
+            toast.error("Can't send. Please check again"); // in thông báo
+            toggle();
+        }
     }
     return (
         <div>
