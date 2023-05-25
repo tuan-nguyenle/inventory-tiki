@@ -1,6 +1,7 @@
 import "express-async-errors";
 import { BadRequestError } from "@microservies-inventory/common";
 import { Shelf } from "../models/shelf.model";
+import mongoose from "mongoose";
 
 export const findOneShelf = async (shelf_code: any): Promise<Shelf> => {
     const shelf = await Shelf.findOne({ shelf_code: shelf_code });
@@ -13,6 +14,10 @@ export const findOneShelf = async (shelf_code: any): Promise<Shelf> => {
 };
 
 export const findOneAndUpdate = async (data: Record<string, any>) => {
+    if (mongoose.isValidObjectId(data._id)) {
+        data._id = data._id.toString();
+    }
+
     const shelf = await Shelf.findOneAndUpdate({ _id: data._id }, data);
 
     return shelf;
