@@ -11,6 +11,7 @@ import { ProductCreatedListener } from "./event/listener/ProductCreatedListener"
 import { OrdersExportCreatedListener } from "./event/listener/OrdersExportCreatedListener";
 import { createServer } from "http";
 import { Server, Socket } from 'socket.io';
+import { OrdersExportListener } from "./event/listener/OrdersExportListener";
 
 const app = express();
 const HOST = "8081";
@@ -87,7 +88,7 @@ const start = async () => {
   try {
     new ProductCreatedListener('amqp://guest:guest@rabbitmq:5672', 'Product', 'fanout', 'inventory-tiki').consumeMessages();
     new OrdersExportCreatedListener('amqp://guest:guest@rabbitmq:5672', 'OrdersOutbound', 'fanout', 'inventory-tiki').consumeMessages(io);
-
+    new OrdersExportListener('amqp://guest:guest@rabbitmq:5672', 'OrdersExport', 'fanout', 'inventory-tiki').consumeMessages();
   } catch (err) {
     console.log(err);
   }

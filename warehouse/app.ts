@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { OrdersCreatedRequestInsetedProductToPalletListener } from "./event/listener/OrderRequestInsertedToPallet";
 import { PalletUpdatedListener } from "./event/listener/PalletUpdatedListener";
+import { ShelfExportListener } from "./event/listener/ShelfExportListener";
 
 const app = express();
 const HOST = "8083";
@@ -61,6 +62,7 @@ const start = async () => {
   try {
     new OrdersCreatedRequestInsetedProductToPalletListener('amqp://guest:guest@rabbitmq:', 'Orders', 'fanout', 'inventory-tiki').consumeMessages();
     new PalletUpdatedListener('amqp://guest:guest@rabbitmq:', 'Pallet', 'fanout', 'inventory-tiki').consumeMessages();
+    new ShelfExportListener('amqp://guest:guest@rabbitmq:5672', 'OrdersExport', 'fanout', 'inventory-tiki').consumeMessages();
   } catch (err) {
     console.log(err);
   }
