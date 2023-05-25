@@ -158,16 +158,18 @@ export const exportProduct = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     throw new RequestValidationError(errors.array());
   }
+  new OrdersCreatedRequestInsetedProductToPalletPublisher('amqp://guest:guest@rabbitmq:5672', 'Orders', 'fanout', 'inventory-tiki')
+    .publishMessage({
+      name_pallet: req.body.name_pallet,
+      product: req.body.products
+    });
 
-  // console.log(req.body);
+  new OrdersExportCreatedPublisher('amqp://guest:guest@rabbitmq:5672', 'OrdersExport', 'fanout', 'inventory-tiki').
+    publishMessage({
+      products: req.body.products
+    });
 
-  // new OrdersCreatedRequestInsetedProductToPalletPublisher('amqp://guest:guest@rabbitmq:5672', 'Orders', 'fanout', 'inventory-tiki')
-  //   .publishMessage({
-  //     name_pallet: req.body.name_pallet,
-  //     product: req.body.products
-  //   });
+  await Order.findOneOrderAndUpdate(req.params.id, { status: "Delivery" });
 
-  // await Order.findOneOrderAndUpdate(req.params.id, { status: "Delivery" });
-
-  res.status(200).send({ msg: "...." });
+  res.status(200).send({ msg: "The Order Export finish, Loading on truck ...." });
 };
