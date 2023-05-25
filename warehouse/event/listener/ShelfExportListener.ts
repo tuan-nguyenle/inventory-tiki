@@ -27,7 +27,7 @@ export class ShelfExportListener extends RabbitMQ<ShelfExport>{
                             // update the quantity of the matching product in the pallet
                             matchingProduct.quantity -= productOrder.quantity;
                         }
-                        await findOneAndUpdate(shelf[0]);
+                        await findOneAndUpdate(shelf);
                     }
                     console.log(shelf);
                 });
