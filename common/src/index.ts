@@ -7,6 +7,7 @@ export * from "./event/interface/InsertProductToPalletPublisher";
 export * from "./event/interface/PalletUpdated";
 export * from "./event/interface/ProductCreated";
 export * from "./event/interface/OrderExportPublisher";
+export * from "./event/interface/ShelfExport";
 export * from "./event/interface/ProductStatusChecked";
 
 export * from "./event/rabbitmq";
