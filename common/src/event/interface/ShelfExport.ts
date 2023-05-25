@@ -3,13 +3,13 @@ import { Subjects } from "../subjects";
 export interface ShelfExport {
     subject: Subjects.ShelfExport;
     data: {
-        product: {
+        products: [{
             product_name: string,
             category: string,
             bar_code: string,
             quantity: string,
             sku: string,
             supplier_name: string
-        };
+        }];
     };
 }
