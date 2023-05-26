@@ -1,6 +1,6 @@
 import "express-async-errors";
 import { RabbitMQ, ShelfExport, Subjects } from "@microservies-inventory/common";
-import { findOneAndUpdate, findOneShelf, findShelf } from "../../services/shelf.services";
+import { findShelf } from "../../services/shelf.services";
 
 export class ShelfExportListener extends RabbitMQ<ShelfExport>{
     readonly queueName!: Subjects.ShelfExport;
@@ -27,10 +27,6 @@ export class ShelfExportListener extends RabbitMQ<ShelfExport>{
                             // update the quantity of the matching product in the pallet
                             matchingProduct.quantity -= productOrder.quantity;
                         }
-                        await shelf.forEach(shelf => {
-                            findOneAndUpdate(shelf);
-                        });
-                        // await findOneAndUpdate(shelf);
                     }
                     console.log(shelf);
                 });
