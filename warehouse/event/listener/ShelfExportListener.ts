@@ -16,23 +16,21 @@ export class ShelfExportListener extends RabbitMQ<ShelfExport>{
                 products.forEach(async (productOrder: any) => {
                     const shelf = await findShelf(productOrder);
                     if (shelf !== null && shelf !== undefined) {
-                        console.log(shelf[0].products);
-
-                        const matchingProduct = shelf[0].products.find(
+                        const detailShelf = await findOneShelf(shelf[0]?.shelf_code);
+                        const matchingProduct = await detailShelf.products.find(
                             (productShelf) => productShelf.bar_code === productOrder.bar_code
                                 && productShelf.supplier_name === productOrder.supplier_name
                                 && productShelf.sku === productOrder.sku
                         );
+
                         if (matchingProduct) {
                             // update the quantity of the matching product in the pallet
                             matchingProduct.quantity -= productOrder.quantity;
                         }
-                        await shelf.forEach(shelf => {
-                            findOneAndUpdate(shelf);
-                        });
-                        // await findOneAndUpdate(shelf);
+
+                        // console.log(shelf[0].products);
+                        await findOneAndUpdate(detailShelf);
                     }
-                    console.log(shelf);
                 });
             }
         }, { noAck: true });

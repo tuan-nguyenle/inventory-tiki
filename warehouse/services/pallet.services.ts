@@ -4,7 +4,7 @@ import { Pallet } from "../models/pallet.model";
 
 export const searchPallet = async (pallet_record: Record<string, any>) => {
     console.log(pallet_record);
-    
+
     const { available, ...searchParams } = pallet_record;
 
     const query = available
@@ -33,6 +33,18 @@ export const findOnePallet = async (name_pallet: any): Promise<Pallet> => {
 };
 
 export const findOneAndUpdate = async (data: Record<string, any>) => {
+    if (data.finish) {
+        const truncPallet = await Pallet.findOneAndUpdate(
+            { _id: data._id }, // Filter: Find the document with the specified _id
+            {
+                $set: {
+                    products: [] // Set the "products" field as an empty array
+                }
+            }
+        );
+
+        return truncPallet;
+    }
     const pallet = await Pallet.findOneAndUpdate({ _id: data._id }, data);
     return pallet;
 };

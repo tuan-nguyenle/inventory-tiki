@@ -158,6 +158,7 @@ export const exportProduct = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     throw new RequestValidationError(errors.array());
   }
+
   new OrdersCreatedRequestInsetedProductToPalletPublisher('amqp://guest:guest@rabbitmq:5672', 'Orders', 'fanout', 'inventory-tiki')
     .publishMessage({
       name_pallet: req.body.name_pallet,
