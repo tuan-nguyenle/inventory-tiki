@@ -31,7 +31,6 @@ const Notification = () => {
                         // Lặp qua mảng "msg" trong đối tượng response
                         response.msg.forEach((item) => {
                             var shelfCode = item.shelves[0].shelf_code;
-
                             if (!shelfObjects.hasOwnProperty(shelfCode)) {
                                 // Nếu shelfCode chưa tồn tại trong shelfObjects, thêm một đối tượng mới
                                 shelfObjects[shelfCode] = {
@@ -70,8 +69,8 @@ const Notification = () => {
                             _id: order,
                             shelve: Object.values(shelfObjects)
                         };
-                        // const combinedJson = JSON.stringify(data, null, 2);
-                        // console.log(Handel);shelfObjects
+                        // const combinedJson = JSON.stringify(Handel, null, 2);
+                        // console.log(combinedJson);
                         // console.log(shelfObjects);
                         // console.log(response);
                         navigate('/MainOB/OutboundList',

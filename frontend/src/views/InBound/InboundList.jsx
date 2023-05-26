@@ -10,6 +10,7 @@ import "../../styles/inbound.scss"
 import ShowListIB from "./ShowListIB";
 import CheckIB from "./modalIB/CheckIB";
 import NextIB from "./modalIB/NextIB";
+import { Alert } from "react-bootstrap";
 const InboundList = (props) => {
     const location = useLocation();
     const step = location.state;
@@ -35,16 +36,6 @@ const InboundList = (props) => {
             }
         }
         container = step.container_code;
-
-        // state1.unshift(container);
-        // const step4 = step3.flatMap(pkg => pkg.products);
-        // container = step2.container_code;
-        // if (step4) {
-        //     state1.unshift(container);
-        //     state1.push(...step4);
-        // }
-        // console.log(step2);
-
     }
     // Lấy ngày
     var dateObj = new Date();
@@ -97,6 +88,42 @@ const InboundList = (props) => {
             [id]: value
         }))
     }
+    const changequantity = (proquan, quan) => {
+        let item = proquan.bar_code;
+        let sup = proquan.supplier_name;
+        let id = proquan.id;
+        let sku = proquan.sku;
+        let sl = quan;
+        // Tìm sản phẩm trong biến data với id và bar_code tương ứng
+        const product = data.find((p) => p.id === id && p.bar_code === item && p.supplier_name === sup && p.sku === sku);
+        if (product) {
+            // Kiểm tra nếu sl > quantity trong biến state1
+            const stateProduct = state1.find((p) => p.package_code === product.package);
+            if (stateProduct) {
+                const productInState = stateProduct.products.find(
+                    (item) =>
+                        item.bar_code === product.bar_code &&
+                        item.supplier_name === product.supplier_name &&
+                        item.sku === product.sku
+                );
+                if (productInState) {
+                    if (sl > productInState.quantity) {
+                        toast.warning(`The maximum quantity is ${productInState.quantity} product`); // in thông báo
+                        return 0;
+                    } else {
+                        product.quantity = sl; // Thay đổi quantity của sản phẩm trong biến state1
+                        setData([...data]);
+                    }
+                } else {
+                    toast.error("Invalid operation"); // in thông báo
+                    return 0;
+                }
+            }
+        } else {
+            toast.error("Invalid operation"); // in thông báo
+            return 0;
+        }
+    }
     const checkexists = (item, pa) => {
         let dt = data;
         let check = false;
@@ -104,12 +131,6 @@ const InboundList = (props) => {
         for (let i = 0; i < data.length; i++) {
             if (dt[i].bar_code === item && dt[i].package === pa) {
                 let product = dt[i];
-                // let productToUpdate = state1.find(p => p.package_code == pa && p.bar_code == item);
-                // if (productToUpdate) {
-                //     console.log("Đã đủ số lượng luôn");
-                //     break;
-                // }
-                // console.log(product.quantity);
                 let productToUpdate = state1.find(p => p.package_code === pa && p.products.some(prod => {
                     return prod.bar_code === item && product.quantity >= prod.quantity;
                 }));
@@ -200,7 +221,6 @@ const InboundList = (props) => {
         }
     }
     const inputProduct = (e) => {
-        // console.log(state1);
         e.preventDefault();
         if (!containerbowl.codecontainervalidate || !newdata.bar_code || !containerbowl.bowl || checkpalletright || checkcontainer || !newdata.package) {
             toast.error("Missing info - The information is incorrect"); // in thông báo
@@ -404,15 +424,6 @@ const InboundList = (props) => {
         const enough = state1.every((p) => checkEnough(newdata.package));
         setEnough(enough);
     }, [data]);
-    // console.log("miss", newmiss);
-    // console.log("miss tổng", misssave);
-    // console.log(miss1);
-    // console.log(state1);
-    // console.log(data);
-    // console.log(step4);
-    // console.log(data);
-    // console.log(isBarcodeScanned);
-    // console.log(orderid);
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
@@ -491,7 +502,7 @@ const InboundList = (props) => {
                         </div>
                     </form>
                     <hr></hr>
-                    <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
+                    <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} changequantity={changequantity} />
                     <div style={{ float: "right" }} className="row">
                         <div className="btn-button">
                             {data && data.length > 0 ?
