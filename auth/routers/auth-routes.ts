@@ -85,8 +85,8 @@ router.post(
 );
 
 // Logout
-router.post("/api/auth/users/logout", userController.logout);
-router.get("/api/auth/users", userController.getUsers);
+router.post("/api/auth/users/logout", userAuthor, requireAuthor, userController.logout);
+router.get("/api/auth/users", userAuthor, requireAuthor, userController.getUsers);
 
 // getProfile
 router.get(
