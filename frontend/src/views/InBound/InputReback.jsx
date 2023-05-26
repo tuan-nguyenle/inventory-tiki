@@ -13,7 +13,6 @@ import NextIB from "./modalIB/NextIB";
 const InputReBack = (props) => {
     const location = useLocation();
     const step = location.state;
-    console.log(step);
     let orderid = "";
     let container = "";
     const state1 = [];
@@ -89,6 +88,44 @@ const InputReBack = (props) => {
             [id]: value
         }))
     }
+    const changequantity = (proquan, quan) => {
+        let item = proquan.bar_code;
+        let sup = proquan.supplier_name;
+        let id = proquan.id;
+        let sku = proquan.sku;
+        let sl = quan;
+        // Tìm sản phẩm trong biến data với id và bar_code tương ứng
+        const product = data.find((p) => p.id === id && p.bar_code === item && p.supplier_name === sup && p.sku === sku);
+        if (product) {
+            // Kiểm tra nếu sl > quantity trong biến state1
+            const stateProduct = state1.find((p) => p.package_code === product.package);
+            if (stateProduct) {
+                const productInState = stateProduct.products.find(
+                    (item) =>
+                        item.bar_code === product.bar_code &&
+                        item.supplier_name === product.supplier_name &&
+                        item.sku === product.sku
+                );
+                if (productInState) {
+                    if (sl > productInState.quantity) {
+                        toast.warning(`The maximum quantity is ${productInState.quantity} product`); // in thông báo
+                        return 0;
+                    } else {
+                        product.quantity = sl; // Thay đổi quantity của sản phẩm trong biến state1
+                        setData([...data]);
+                    }
+                } else {
+                    toast.error("Invalid operation"); // in thông báo
+                    return 0;
+                }
+            }
+        } else {
+            toast.error("Invalid operation"); // in thông báo
+            return 0;
+        }
+    }
+
+    // console.log(state1);
     const checkexists = (item, pa) => {
         let dt = data;
         let check = false;
@@ -215,6 +252,7 @@ const InputReBack = (props) => {
     }
     const checksave = () => {
         if (step4.length > 0) {
+            console.log("vo gòi");
             let missave1 = [];
 
             // Duyệt qua từng sản phẩm trong biến step4
@@ -246,6 +284,7 @@ const InputReBack = (props) => {
                     missave1.push(step4[i]);
                 }
             }
+            console.log(misssave);
             return missave1;
         };
     }
@@ -324,6 +363,7 @@ const InputReBack = (props) => {
     }, [isBarcodeScanned]);
     useEffect(() => {
         if (step) {
+            console.log("Use đã vào");
             const newMisssave = checksave();
             setMisssave(newMisssave);
         }
@@ -397,6 +437,7 @@ const InputReBack = (props) => {
         const enough = state1.every((p) => checkEnough(newdata.package));
         setEnough(enough);
     }, [data]);
+    console.log(misssave);
     return (
         <div className="body_inboundList" >
             <div className="container_inboundList">
@@ -484,7 +525,7 @@ const InputReBack = (props) => {
                             </div>
                         </form>
                         <hr></hr>
-                        <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} />
+                        <ShowListIB ref={componentRef} listinput={data} container={containerbowl.codecontainervalidate} bowl={containerbowl.bowl} changequantity={changequantity} />
                         <div style={{ float: "right" }} className="row">
                             <div className="btn-button">
                                 {data && data.length > 0 ?

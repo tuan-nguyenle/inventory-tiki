@@ -16,7 +16,7 @@ const CheckIB = (props) => {
     const data = { ...contai, id: orderid, miss };
     const handledata = [];
     const saveinbound = props.inbound;
-    console.log(contai);
+    console.log(miss);
     const SaveReback = async () => {
         await saveinbound.forEach((ele) => {
             let products = {

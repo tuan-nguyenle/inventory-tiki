@@ -14,7 +14,6 @@ import {
 const OutboundList = (props) => {
     const location = useLocation();
     const step = location.state;
-    // console.log(step);
     let orderid = "";
     let container = "";
     const state1 = [];
@@ -390,6 +389,7 @@ const OutboundList = (props) => {
             } else {
                 // Tính tổng số lượng các sản phẩm trong biến data có shelf_code trùng với pa
                 const products = dt.filter(p => p.shelf_code == pa);
+                console.log("dang chceck", products);
                 const productsQuantity = products.reduce((acc, cur) => acc + cur.quantity, 0);
                 if (productsQuantity >= state1[packageIndex].products.reduce((acc, cur) => acc + cur.quantity, 0)) {
 
@@ -471,7 +471,7 @@ const OutboundList = (props) => {
     // console.log("miss tổng", misssave);
     // console.log(miss1);
     // console.log(state1);
-    console.log(data);
+    // console.log(data);
     // console.log(step4);
     // console.log(data);
     // console.log(isBarcodeScanned);

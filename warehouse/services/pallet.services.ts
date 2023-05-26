@@ -38,6 +38,7 @@ export const findOneAndUpdate = async (data: Record<string, any>) => {
             { _id: data._id }, // Filter: Find the document with the specified _id
             {
                 $set: {
+                    validate: false,
                     products: [] // Set the "products" field as an empty array
                 }
             }

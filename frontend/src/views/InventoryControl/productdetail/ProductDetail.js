@@ -9,6 +9,8 @@ const ProductDetail = () => {
     const [locproduct, setLocProduct] = useState(null);
     const [products, setProducts] = useState(null);
     const [supplierrr, setSupplierrr] = useState(null);
+    const [productshow, setProductshow] = useState(null);
+    const [supplierrrshow, setSupplierrrshow] = useState(null);
     const [search, setSeach] = useState({
         textsearch: "",
         supplier: "",
@@ -56,15 +58,18 @@ const ProductDetail = () => {
                 });
 
                 setSupplierrr(filteredSuppliers);
+                setSupplierrrshow(filteredSuppliers)
             }
         }
         if (!textsearch) {
             setProducts(locproduct);
+            setProductshow(locproduct)
             setSeach({
                 textsearch: "",
                 supplier: "",
             })
             setSupplierrr(null)
+            setSupplierrrshow(null)
         }
         if (supp) {
             // Sử dụng hàm filter để lọc các đối tượng có productCode bắt đầu bằng searchValue và supplier_name === search.supplier
@@ -74,8 +79,7 @@ const ProductDetail = () => {
 
                 return productCode.startsWith(searchValue) && supplier_name === supp;
             });
-
-            setProducts(filteredShelf);
+            setProductshow(filteredShelf)
         }
         if (!supp) {
             const filteredShelf = products.filter(item => {
@@ -85,9 +89,7 @@ const ProductDetail = () => {
                 return productCode.startsWith(searchValue);
 
             });
-            setProducts(filteredShelf);
-            console.log("fill", filteredShelf);
-
+            setProductshow(filteredShelf)
             // Sử dụng vòng lặp forEach để lấy toàn bộ nhà cung cấp có productCode bắt đầu bằng searchValue
             const filteredSuppliers = [];
             products.forEach((item) => {
@@ -98,7 +100,7 @@ const ProductDetail = () => {
                     filteredSuppliers.push(supplier_name);
                 }
             });
-            setSupplierrr(filteredSuppliers);
+            setSupplierrrshow(filteredSuppliers);
         }
     };
     useEffect(() => {
@@ -129,9 +131,11 @@ const ProductDetail = () => {
                             step4.push(...products);
                         }
                         setProducts(step4)
+                        setProductshow(step4)
                     }
                 } catch (error) {
                     setProducts(null)
+                    setProductshow(null)
                 }
             })();
         }
@@ -139,6 +143,7 @@ const ProductDetail = () => {
     useEffect(() => {
         if (!search.textsearch) {
             setProducts(locproduct);
+            setProductshow(locproduct)
             setSeach({
                 textsearch: "",
                 supplier: "",
@@ -168,6 +173,7 @@ const ProductDetail = () => {
                     }
                     setLocProduct(step4);
                     setProducts(step4)
+                    setProductshow(step4)
                 }
 
             }
@@ -187,7 +193,7 @@ const ProductDetail = () => {
                     <div className="search input-group col-md-3">
                         <select id="supplier" onChange={changeHandler} className="form-control">
                             <option value="">-- SUPPLIER --</option>
-                            {supplierrr && supplierrr.length > 0 && supplierrr.map((data, i) => (
+                            {supplierrrshow && supplierrrshow.length > 0 && supplierrrshow.map((data, i) => (
                                 <option key={i} value={data}>{data}</option>
 
                             ))}
@@ -222,7 +228,7 @@ const ProductDetail = () => {
                                     <tbody id="datarow">
                                         {
 
-                                            products && products.length > 0 && products.map((data, i) => {
+                                            productshow && productshow.length > 0 && productshow.map((data, i) => {
                                                 return (
                                                     <tr key={i++}>
                                                         <td>{i + 1}</td>
