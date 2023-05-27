@@ -19,7 +19,7 @@ const HOST = "8081";
 const http = createServer(app);
 const io: Server = new Server(http, {
   cors: {
-    origin: 'http://localhost',
+    // origin: 'http://localhost',
     methods: ['GET', 'POST']
   }
 });
