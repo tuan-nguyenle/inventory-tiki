@@ -26,7 +26,9 @@ services:
       - inventory_tiki
 
   rabbitmq:
-    image: rabbitmq:3.11-management
+    build:
+      context: ./rabbitmq
+      dockerfile: Dockerfile
     restart: always # because it is routing traffic to our entire app
     ports:
       - 5673:5672
