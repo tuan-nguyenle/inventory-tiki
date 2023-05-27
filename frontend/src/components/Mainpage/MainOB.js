@@ -55,7 +55,7 @@ const MainIB = () => {
         }
     ]
     function handleLogout() {
-        axios.post("http://localhost/api/auth/users/logout/");
+        axios.post(`${window.location.protocol + '//' + window.location.host}`+"/api/auth/users/logout/");
         sessionStorage.removeItem('user');
         // window.location.reload();
         window.location.href = '/login';

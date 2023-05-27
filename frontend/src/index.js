@@ -22,7 +22,7 @@ let Department = null;
 let session = null;
 
 if (getuser) {
-  const socket = io.connect('http://localhost:8081');
+  const socket = io.connect(`${window.location.protocol + '//' + window.location.host + ":8081"}`);
   socket.on("notify", (data) => {
     alert(data.msg);
     console.log(data.msg);
