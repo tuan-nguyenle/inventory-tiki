@@ -8,7 +8,7 @@ function ChatGPT() {
     const [text, settext] = useState(null);
     const [isLoading, setIsLoading] = useState(false); // Thêm biến trạng thái isLoading
 
-    const API_KEY = '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';
+    const API_KEY = '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';
     const handleButtonClick = async () => {
         setIsLoading(true); // Bắt đầu gọi API
         const configuration = new Configuration({
