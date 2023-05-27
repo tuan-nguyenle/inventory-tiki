@@ -26,7 +26,7 @@ router.post("/api/warehouse/findShelfSpecific", userAuthor, requireAuthor, async
                     "products.supplier_name": product.supplier_name,
                     "products.bar_code": product.bar_code,
                     "products.sku": product.sku
-                }
+                }, { shelf_code: 1, "products.$": 1 }
             );
             return { product_name: product.product_name, shelves: shelf };
         })
