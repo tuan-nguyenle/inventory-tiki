@@ -23,8 +23,8 @@ const Notification = () => {
                     products: a
                 }
                 try {
-                    console.log("tést",b);
                     let response = await OBAPI.sendproducts(b)
+                    console.log("res:",response);
                     if (response) {
                         // Tạo một đối tượng từ điển để lưu trữ các đối tượng theo shelf_code
                         var shelfObjects = {};
