@@ -24,14 +24,14 @@ const Notification = () => {
                 }
                 try {
                     let response = await OBAPI.sendproducts(b)
-                    console.log("res:",response);
                     if (response) {
+                        console.log("res:",response);
                         // Tạo một đối tượng từ điển để lưu trữ các đối tượng theo shelf_code
                         var shelfObjects = {};
 
                         // Lặp qua mảng "msg" trong đối tượng response
                         response.msg.forEach((item) => {
-                            var shelfCode = item.shelves[0].shelf_code;
+                            var shelfCode = item.shelves.shelf_code;
                             if (!shelfObjects.hasOwnProperty(shelfCode)) {
                                 // Nếu shelfCode chưa tồn tại trong shelfObjects, thêm một đối tượng mới
                                 shelfObjects[shelfCode] = {
@@ -41,7 +41,7 @@ const Notification = () => {
                             }
 
                             // Lặp qua mảng "products" trong mỗi phần tử của "msg"
-                            item.shelves[0].products.forEach((product) => {
+                            item.shelves.products.forEach((product) => {
                                 // Tìm sản phẩm tương ứng trong biến b
                                 var matchingProduct = b.products.find((p) => (
                                     p.bar_code === product.bar_code &&
