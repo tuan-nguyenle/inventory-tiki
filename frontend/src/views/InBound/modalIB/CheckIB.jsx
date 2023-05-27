@@ -67,7 +67,7 @@ const CheckIB = (props) => {
         // gọi api ngay đây
         try {
             await IBAPI.submitIB(datainput, orderid);
-            window.location.assign("http://localhost/MainIB/Notification");
+            window.location.assign(`${window.location.protocol + '//' + window.location.host}`+"/MainIB/Notification");
             toast.success("Saving process has been completed"); // in thông báo
         } catch (error) {
             toast.error("Can't send. Please check again"); // in thông báo

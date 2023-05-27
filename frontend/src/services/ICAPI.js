@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getallpallets = async () => {
     try {
-        const response = await axios.get('http://localhost/api/warehouse/pallets');
+        const response = await axios.get(`${window.location.protocol + '//' + window.location.host}`+'/api/warehouse/pallets');
         return response.data.pallets;
     } catch (error) {
         throw error;
@@ -10,7 +10,7 @@ export const getallpallets = async () => {
 }
 export const getallpallets2 = async () => {
     try {
-        const response = await axios.get('http://localhost/api/warehouse/pallets');
+        const response = await axios.get(`${window.location.protocol + '//' + window.location.host}`+'/api/warehouse/pallets');
         return response.data.pallets;
     } catch (error) {
         throw error;
@@ -18,7 +18,7 @@ export const getallpallets2 = async () => {
 }
 export const transfershelf = async (data) => {
     try {
-        const response = await axios.post("http://localhost/api/warehouse/shelf", data, {
+        const response = await axios.post(`${window.location.protocol + '//' + window.location.host}`+"/api/warehouse/shelf", data, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -30,7 +30,7 @@ export const transfershelf = async (data) => {
 }
 export const getallshelf = async () => {
     try {
-        const response = await axios.get('http://localhost/api/warehouse/shelf');
+        const response = await axios.get(`${window.location.protocol + '//' + window.location.host}`+'/api/warehouse/shelf');
         return response.data.data;
     } catch (error) {
         throw error;
@@ -38,7 +38,7 @@ export const getallshelf = async () => {
 }
 export const searchproduct = async (id, sup) => {
     try {
-        const response = await axios.get(`http://localhost/api/warehouse/shelf?bar_code=${id}&supplier_name=${sup}`)
+        const response = await axios.get(`${window.location.protocol + '//' + window.location.host}`+`/api/warehouse/shelf?bar_code=${id}&supplier_name=${sup}`)
         return response.data.data;
     } catch (error) {
         throw error;
@@ -46,7 +46,7 @@ export const searchproduct = async (id, sup) => {
 }
 // export const getproducts = async (id) => {
 //     try {
-//         const response = await axios.post(`http://localhost/api/warehouse/pallets/${id}`);
+//         const response = await axios.post(`${window.location.protocol + '//' + window.location.host}`+`/api/warehouse/pallets/${id}`);
 //         return response.data.pallets;
 //     } catch (error) {
 //         throw error;

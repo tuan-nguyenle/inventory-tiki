@@ -79,7 +79,7 @@ const CheckOB = (props) => {
         // // gọi api ngay đây
         try {
             await OBAPI.submitOB(datainput, orderid);
-            window.location.assign("http://localhost/MainOB/ConfirmationOutbound");
+            window.location.assign(`${window.location.protocol + '//' + window.location.host}`+"/MainOB/ConfirmationOutbound");
             toast.success("Saving process has been completed"); // in thông báo
         } catch (error) {
             toast.error("Can't send. Please check again"); // in thông báo
