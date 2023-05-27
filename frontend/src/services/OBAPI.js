@@ -20,7 +20,7 @@ export const sendproducts = async (data) => {
     // const combinedJson = JSON.stringify(data, null, 2);
     // console.log(combinedJson);
     try {
-        const response = await axios.post(`${window.location.protocol + '//' + window.location.host}`+"/api/warehouse/findMultipleShelf", data, {
+        const response = await axios.post(`${window.location.protocol + '//' + window.location.host}`+"/api/warehouse/findShelfSpecific", data, {
             headers: {
                 'Content-Type': 'application/json'
             }
